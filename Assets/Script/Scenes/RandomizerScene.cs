@@ -34,6 +34,8 @@ public class RandomizerScene : MonoBehaviour
     {
         Initialize();
         BindReactive();
+
+        Input.backButtonLeavesApp = true;
     }
 
     void BindReactive()
@@ -138,9 +140,9 @@ public class RandomizerScene : MonoBehaviour
 
     void Randomize()
     {
-        if (items.Count <= 0) return;
+        if (items.Count <= 0 || itemCount <= 0) return;
         
-        var rndNum = Random.Range(0, items.Count);
+        var rndNum = Random.Range(0, itemCount);
         string rndVal = items[rndNum].ItemText;
         resultText.text = rndVal;
 
