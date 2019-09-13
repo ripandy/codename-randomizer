@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using UniRx;
 
 public class RandomizerScene : MonoBehaviour
 {
@@ -11,52 +12,83 @@ public class RandomizerScene : MonoBehaviour
 
     // Unity objects fieldn;
     [SerializeField] RectTransform contentBase;
-    [SerializeField] Button randomizeButton;
-    [SerializeField] RectTransform addItemButton;
-    [SerializeField] TMP_InputField addItemField;
     [SerializeField] GameObject itemPrefab;
+    [SerializeField] GameObject addItemObject;
+    [SerializeField] TMP_InputField addItemField;
+    [SerializeField] GameObject resultObject;
+    [SerializeField] TMP_Text resultText;
+    [SerializeField] Button randomizeButton;
+    [SerializeField] GameObject resetButtonObject;
+    [SerializeField] Button resetButton;
+    [SerializeField] TMP_Text resetButtonText;
 
     // logic field
     List<ListItem> items;
+    Vector2 defaultOffset;
     Vector2 itemPositionOffset;
 
-    // cache
-    GameManager m_GameManager;
+    int state = 0;
+    int itemCount = 0;
 
     void Start()
     {
-        m_GameManager = GameManager.Instance;
+        Initialize();
+        BindReactive();
+    }
 
+    void BindReactive()
+    {
+        this.ObserveEveryValueChanged(_ => state)
+            .Subscribe(value => OnStateChanged(value));
+
+        this.ObserveEveryValueChanged(_ => itemCount)
+            .Subscribe(value => resetButtonObject.SetActive(itemCount > 0));
+    }
+
+    void Initialize()
+    {
         items = new List<ListItem>();
 
         addItemField.onSubmit.AddListener(AddItem);
         addItemField.onSelect.AddListener(_ => {
-            Debug.Log("selected!");
             addItemField.placeholder.gameObject.SetActive(false);
         });
 
         randomizeButton.onClick.AddListener(Randomize);
+        resetButton.onClick.AddListener(OnResetButtonPressed);
 
-        itemPositionOffset = addItemButton.anchoredPosition;
+        defaultOffset = addItemObject.GetComponent<RectTransform>().anchoredPosition;
+        itemPositionOffset = defaultOffset;
     }
 
     void AddItem(string itemName)
     {
         if (!string.IsNullOrEmpty(itemName)) {
-            var obj = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity, contentBase);
-            obj.GetComponent<RectTransform>().anchoredPosition = itemPositionOffset;
-            var item = obj.GetComponent<ListItem>();
-                item.SetItemLabel(itemName);
+            ListItem item = null;
+            if (items.Count <= itemCount)
+            {
+                var obj = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity, contentBase);
+                item = obj.GetComponent<ListItem>();
+            }
+            else
+            {
+                item = items[itemCount];
+                item.gameObject.SetActive(true);
+            }
+            item.GetComponent<RectTransform>().anchoredPosition = itemPositionOffset;
+            item.SetItemLabel(itemName);
 
             items.Add(item);
 
             itemPositionOffset.y -= 120f;
-            addItemButton.anchoredPosition = itemPositionOffset;
+            addItemObject.GetComponent<RectTransform>().anchoredPosition = itemPositionOffset;
 
-            var sizeDelta = itemPositionOffset;
-                sizeDelta.y *= -1;
+            var sizeDelta = Vector2.zero;
+                sizeDelta.y = itemPositionOffset.y * -1;
                 sizeDelta.y += 340;
             contentBase.sizeDelta = sizeDelta;
+
+            itemCount++;
         }
 
         addItemField.placeholder.gameObject.SetActive(true);
@@ -65,12 +97,62 @@ public class RandomizerScene : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
     }
 
+    void ResetItemList()
+    {
+        foreach (var item in items)
+        {
+            item.gameObject.SetActive(false);
+        }
+        itemPositionOffset = defaultOffset;
+
+        addItemObject.GetComponent<RectTransform>().anchoredPosition = itemPositionOffset;
+
+        var sizeDelta = Vector2.zero;
+            sizeDelta.y = itemPositionOffset.y * -1;
+            sizeDelta.y += 340;
+        contentBase.sizeDelta = sizeDelta;
+
+        itemCount = 0;
+    }
+    
+    void SetState(int newState)
+    {
+        state = newState;
+    }
+
+    void OnStateChanged(int newState)
+    {
+        SetShowItemList(newState == 0);
+        resetButtonText.text = (newState == 0 ? "Reset" : "Back");
+    }
+
+    void SetShowItemList(bool show)
+    {
+        addItemObject.SetActive(show);
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].gameObject.SetActive(show && i < itemCount);
+        }
+        resultObject.SetActive(!show);
+    }
+
     void Randomize()
     {
         if (items.Count <= 0) return;
         
         var rndNum = Random.Range(0, items.Count);
         string rndVal = items[rndNum].ItemText;
-        Debug.Log("Random Result : " + rndVal);
+        resultText.text = rndVal;
+
+        if (state == 0)
+            SetState(1);
+    }
+
+    void OnResetButtonPressed()
+    {
+        if (state == 1)
+            SetState(0);
+        else
+            ResetItemList();
     }
 }
