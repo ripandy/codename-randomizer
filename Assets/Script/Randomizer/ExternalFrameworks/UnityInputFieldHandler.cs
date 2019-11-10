@@ -10,7 +10,7 @@ namespace Randomizer.ExternalFrameworks
     {
         [SerializeField] private TMP_InputField inputField;
 
-        private IList<Action<string>> _subscribers = new List<Action<string>>();
+        private readonly IList<Action<string>> _subscribers = new List<Action<string>>();
         private bool _initialized;
 
         private void Start()

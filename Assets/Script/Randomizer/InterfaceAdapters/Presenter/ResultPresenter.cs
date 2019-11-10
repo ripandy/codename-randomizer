@@ -21,6 +21,8 @@ namespace Randomizer.InterfaceAdaptor.Presenter
 
             ViewModelObject.ResultText = response.PickedItemName;
             Visible = response.Success;
+            
+            _randomizablePresenter.HideAllItems();
         }
     }
 }

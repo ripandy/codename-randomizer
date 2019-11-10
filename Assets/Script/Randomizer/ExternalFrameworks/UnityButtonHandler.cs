@@ -11,8 +11,8 @@ namespace Randomizer.ExternalFrameworks
     {
         [SerializeField] private Button button;
 
+        private readonly IList<Action> _subscribers = new List<Action>();
         private IObservable<Unit> _buttonObservable;
-        private IList<Action> _subscribers = new List<Action>();
 
         private void Start()
         {
@@ -22,9 +22,9 @@ namespace Randomizer.ExternalFrameworks
         private void BindReactive()
         {
             _buttonObservable = button.OnClickAsObservable();
-            foreach (var action in _subscribers)
+            foreach (var onPress in _subscribers)
             {
-                _buttonObservable.Subscribe(_ => action.Invoke()).AddTo(this);
+                _buttonObservable.Subscribe(_ => onPress.Invoke()).AddTo(this);
             }
         }
 

@@ -1,8 +1,12 @@
 namespace Randomizer.InterfaceAdapters
 {
-    public interface IPresenter<out T>
+    public interface IPresenter
+    {
+        bool Visible { get; set; }
+    }
+    
+    public interface IPresenter<out T> : IPresenter
     {
         T ViewModelObject { get; }
-        bool Visible { get; set; }
     }
 }

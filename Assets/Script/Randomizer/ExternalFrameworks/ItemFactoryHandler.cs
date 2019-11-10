@@ -1,21 +1,19 @@
 using Randomizer.InterfaceAdapters;
-using Zenject;
 
 namespace Randomizer.ExternalFrameworks
 {
-    public class ItemFactoryHandler : IFactoryHandler<IPresenter<ItemViewModel>>
+    public class ItemFactoryHandler : IFactoryHandler<IPresenter>
     {
-        private ZenjectProducableObject.Factory _factory;
+        private readonly ZenjectProducableObject.Factory _factory;
 
-        [Inject]
-        private void Injection(ZenjectProducableObject.Factory factory)
+        private ItemFactoryHandler(ZenjectProducableObject.Factory factory)
         {
             _factory = factory;
         }
-        
-        public IPresenter<ItemViewModel> Create()
+
+        public IPresenter Create()
         {
-            var item = _factory?.Create() as ItemViewer;
+            var item = _factory.Create() as ItemViewer;
             return item == null ? null : item.Presenter;
         }
     }
