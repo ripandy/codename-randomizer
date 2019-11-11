@@ -38,7 +38,7 @@ namespace Randomizer.ExternalFrameworks
 
         private void ArrangeByOrder(int order)
         {
-            // TODO: arrange position acording to order
+            // TODO: arrange position according to order
             var position = Vector3.zero;
                 position.y += distanceBetweenObject * order;
             transform.localPosition = position;
