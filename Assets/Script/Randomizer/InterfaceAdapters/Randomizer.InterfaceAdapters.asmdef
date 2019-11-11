@@ -1,0 +1,15 @@
+{
+    "name": "Randomizer.InterfaceAdapters",
+    "references": [
+        "GUID:d332f6a6a36624dcc92c0ffffa3a045e",
+        "GUID:b37a1e7c9aad346d5aaf532d4621c499"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
