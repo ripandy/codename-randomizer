@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Randomizer.ExternalFrameworks
 {
-    public class ResetButtonView : UnityButtonHandler
+    public class ClearButtonView : UnityButtonHandler
     {
         [Inject] private readonly IPresenter _presenter;
         

@@ -1,8 +1,7 @@
 namespace Randomizer.InterfaceAdapters.Presenters
 {
-    public class ResetPresenter : IPresenter<ResetViewModel>
+    public class ResetPresenter : IPresenter
     {
-        public bool Visible { get; set; } = true;
-        public ResetViewModel ViewModelObject { get; } = new ResetViewModel { Caption = "Reset" };
+        public bool Visible { get; set; }
     }
 }

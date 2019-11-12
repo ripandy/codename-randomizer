@@ -2,15 +2,15 @@ using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
 {
-    public class RandomizeResponseHandler : IOutputPortInteractor<RandomizeResponseMessage>
+    public class ResetResponseHandler : IOutputPortInteractor<ResetResponseMessage>
     {
         private readonly RandomizablePresenter _randomizablePresenter;
         private readonly AddItemPresenter _addItemPresenter;
         private readonly ResultPresenter _resultPresenter;
         private readonly ClearPresenter _clearPresenter;
         private readonly ResetPresenter _resetPresenter;
-
-        private RandomizeResponseHandler(
+        
+        private ResetResponseHandler(
             RandomizablePresenter randomizablePresenter,
             AddItemPresenter addItemPresenter,
             ResultPresenter resultPresenter,
@@ -24,18 +24,15 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _resetPresenter = resetPresenter;
         }
         
-        public void Handle(RandomizeResponseMessage response)
+        public void Handle(ResetResponseMessage response)
         {
+            // TODO : show response message?
             var success = response.Success;
-            _resultPresenter.Visible = success;
-            _addItemPresenter.Visible = !success;
-            _randomizablePresenter.ShowAllItems(!success);
-            _clearPresenter.Visible = !success;
-            _resetPresenter.Visible = success;
-            
-            if (!response.Success) return; // TODO: show response message?
-
-            _resultPresenter.ViewModelObject.ResultText = response.PickedItemName;
+            _randomizablePresenter.ShowAllItems(success);
+            _addItemPresenter.Visible = success;
+            _resultPresenter.Visible = !success;
+            _clearPresenter.Visible = success;
+            _resetPresenter.Visible = !success;
         }
     }
 }
