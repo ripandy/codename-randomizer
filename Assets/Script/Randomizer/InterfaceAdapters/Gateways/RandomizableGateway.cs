@@ -8,8 +8,6 @@ namespace Randomizer.InterfaceAdapters.Gateways
         private readonly IDataStore<RandomizableData> _cachedDataStore;
         private readonly IList<Randomizable> _randomizables = new List<Randomizable>();
 
-        public Randomizable this[int index] => _randomizables[index];
-
         private RandomizableGateway(IDataStore<RandomizableData> cachedDataStore)
         {
             _cachedDataStore = cachedDataStore;
@@ -31,7 +29,21 @@ namespace Randomizer.InterfaceAdapters.Gateways
         
         public Randomizable GetById(int id)
         {
-            return this[id];
+            return _randomizables[id];
+        }
+
+        public void Save(int id)
+        {
+            var randomizable = _randomizables[id];
+            var data = _cachedDataStore[id];
+            var names = new List<string>();
+            
+            foreach (var item in randomizable.Items)
+            {
+                names.Add(item.Name);
+            }
+
+            data.items = names.ToArray();
         }
     }
 }

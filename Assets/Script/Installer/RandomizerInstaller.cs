@@ -4,6 +4,7 @@ using Randomizer.InterfaceAdapters.Controllers;
 using Randomizer.InterfaceAdapters.Gateways;
 using Randomizer.InterfaceAdapters.Presenters;
 using Randomizer.UseCases;
+using Script.Randomizer.UseCases.ResetUseCase;
 using UnityEngine;
 using Zenject;
 
@@ -27,9 +28,11 @@ public class RandomizerInstaller : MonoInstaller
 
     private void InstallUseCases()
     {
-        Container.BindInterfacesTo<AddItemInteractor>().AsSingle();
-        Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
         Container.BindInterfacesTo<LoadSessionInteractor>().AsSingle();
+        Container.BindInterfacesTo<AddItemInteractor>().AsSingle();
+        Container.BindInterfacesTo<RandomizeInteractor>().AsSingle().WhenInjectedInto<RandomizeInputController>();
+        Container.BindInterfacesTo<ClearItemInteractor>().AsSingle().WhenInjectedInto<ClearItemInputController>();
+        Container.BindInterfacesTo<ResetInteractor>().AsSingle().WhenInjectedInto<ResetInputController>();
     }
 
     private void InstallInterfaceAdapters()
@@ -37,14 +40,23 @@ public class RandomizerInstaller : MonoInstaller
         // controllers
         Container.BindInterfacesTo<AddItemInputController>().AsSingle().WhenInjectedInto<AddItemInputFieldView>();
         Container.BindInterfacesTo<RandomizeInputController>().AsSingle().WhenInjectedInto<RandomizeButtonView>();
+        Container.BindInterfacesTo<ClearItemInputController>().AsSingle().WhenInjectedInto<ClearButtonView>();
+        Container.BindInterfacesTo<ResetInputController>().AsSingle().WhenInjectedInto<ResetButtonView>();
         
         // gateways
         Container.BindInterfacesTo<RandomizableGateway>().AsSingle();
         Container.BindInterfacesTo<SessionGateway>().AsSingle();
         
+        // response handler
+        Container.BindInterfacesTo<AddItemResponseHandler>().AsSingle();
+        Container.BindInterfacesTo<RandomizeResponseHandler>().AsSingle();
+        Container.BindInterfacesTo<ReloadRandomizableResponseHandler>().AsSingle();
+        
         // presenters
         Container.BindInterfacesAndSelfTo<AddItemPresenter>().AsSingle();
-        Container.BindInterfacesTo<ResultPresenter>().AsSingle();
+        Container.BindInterfacesAndSelfTo<ResultPresenter>().AsSingle();
+        Container.BindInterfacesAndSelfTo<ResetPresenter>().AsSingle().WhenNotInjectedInto<ClearButtonView>();
+        Container.BindInterfacesAndSelfTo<ClearPresenter>().AsSingle().WhenNotInjectedInto<ResetButtonView>();
         Container.Bind<RandomizablePresenter>().AsSingle();
     }
 

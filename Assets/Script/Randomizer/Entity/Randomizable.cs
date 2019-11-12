@@ -9,10 +9,8 @@ namespace Randomizer.Entity
         public int ItemCount => _items.Count;
         public IList<Item> Items => _items;
 
-        public void AddItem(Item newItem)
-        {
-            _items.Add(newItem);
-        }
+        public void AddItem(Item newItem) => _items.Add(newItem);
+        public void Clear() => _items.Clear();
 
         public Item Randomize()
         {
