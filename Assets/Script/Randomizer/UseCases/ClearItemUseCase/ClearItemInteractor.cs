@@ -23,7 +23,7 @@ namespace Randomizer.UseCases
             var randomizable = _randomizableGateway.GetById(_session.ActiveRandomizableId);
                 randomizable.Clear();
                 
-            _clearItemOutputPortInteractor.Handle(new ReloadRandomizableResponseMessage ());
+            _clearItemOutputPortInteractor.Handle(new ReloadRandomizableResponseMessage {Success = true});
         }
     }
 }

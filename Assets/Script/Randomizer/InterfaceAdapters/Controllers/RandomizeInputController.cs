@@ -2,18 +2,10 @@ using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Controllers
 {
-    public class RandomizeInputController : IActionHandler
+    public class RandomizeInputController : BaseInputController
     {
-        private readonly IInputPortInteractor _randomizeRequestHandler;
-        
-        private RandomizeInputController(IInputPortInteractor randomizeRequestHandler)
+        protected RandomizeInputController(IInputPortInteractor inputPortInteractor) : base(inputPortInteractor)
         {
-            _randomizeRequestHandler = randomizeRequestHandler;
-        }
-        
-        public void Handle()
-        {
-            _randomizeRequestHandler.Handle();
         }
     }
 }

@@ -2,12 +2,12 @@ using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
 {
-    public class ReloadRandomizablePresenter : IOutputPortInteractor<ReloadRandomizableResponseMessage>
+    public class ReloadRandomizableResponseHandler : IOutputPortInteractor<ReloadRandomizableResponseMessage>
     {
         private readonly RandomizablePresenter _randomizablePresenter;
         private readonly AddItemPresenter _addItemPresenter;
 
-        private ReloadRandomizablePresenter(
+        private ReloadRandomizableResponseHandler(
             RandomizablePresenter randomizablePresenter,
             AddItemPresenter addItemPresenter)
         {
@@ -20,10 +20,13 @@ namespace Randomizer.InterfaceAdapters.Presenters
             if (!response.Success) return; // TODO : show response message?
 
             _randomizablePresenter.Clear();
-            for (int i = 0; i < response.ItemNames.Length; i++)
+            if (response.ItemNames != null)
             {
-                var itemName = response.ItemNames[i];
-                _randomizablePresenter.AddItem(itemName, i);
+                for (int i = 0; i < response.ItemNames.Length; i++)
+                {
+                    var itemName = response.ItemNames[i];
+                    _randomizablePresenter.AddItem(itemName, i);
+                }
             }
 
             _addItemPresenter.ViewModelObject.Order = _randomizablePresenter.ItemCount;

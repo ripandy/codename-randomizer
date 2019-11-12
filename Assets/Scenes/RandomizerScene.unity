@@ -394,6 +394,7 @@ MonoBehaviour:
   - {fileID: 118161699}
   - {fileID: 4801734711955626342}
   - {fileID: 2054528748578589808}
+  - {fileID: 1862389998}
   _identifier: 
   _useSceneContext: 0
   _context: {fileID: 0}
@@ -2562,13 +2563,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1862389997}
+  - component: {fileID: 1862389998}
   m_Layer: 5
   m_Name: ResetButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1862389997
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2589,6 +2591,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 270}
   m_SizeDelta: {x: 1080, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1862389998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862389996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9e36b762444fec83c06a54b46940ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 792982822}
 --- !u!1 &1901821080
 GameObject:
   m_ObjectHideFlags: 0
