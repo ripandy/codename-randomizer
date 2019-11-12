@@ -1,54 +1,52 @@
 using System;
-using System.Collections.Generic;
 using Randomizer.InterfaceAdapters;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Zenject;
 
 namespace Randomizer.ExternalFrameworks
 {
-    public class UnityInputFieldHandler : MonoBehaviour, IActionHandler<string>
+    public class UnityInputFieldHandler : MonoBehaviour
     {
         [SerializeField] private TMP_InputField inputField;
 
-        private readonly IList<Action<string>> _subscribers = new List<Action<string>>();
-        private bool _initialized;
+        [Inject] private IActionHandler<string> _actionHandler;
+        private EventSystem _eventSystem;
+
+        protected virtual void Awake()
+        {
+            _eventSystem = EventSystem.current;
+        }
 
         private void Start()
         {
             BindReactive();
-            _initialized = true;
         }
 
-        private void BindReactive()
+        protected virtual void BindReactive()
         {
-            foreach (var action in _subscribers)
-            {
-                inputField.onSubmit.AddListener(action.Invoke);
-            }
-            inputField.onSubmit.AddListener(_ =>
-            {
-                ShowPlaceholder(true);
-            });
-            inputField.onSelect.AddListener(_ =>
-            {
-                ShowPlaceholder(false);
-            });
-
+            inputField.onSubmit.AddListener(OnSubmit);
+            inputField.onSelect.AddListener(OnSelect);
         }
 
+        private void OnSubmit(string value)
+        {
+            _actionHandler.Handle(value);
+            inputField.text = "";
+            ShowPlaceholder(true);
+            _eventSystem.SetSelectedGameObject(null);
+        }
+
+        private void OnSelect(string value)
+        {
+            Debug.Log("on select..");
+            ShowPlaceholder(false);
+        }
+        
         private void ShowPlaceholder(bool show)
         {
             inputField.placeholder.gameObject.SetActive(show);
-        }
-
-        public void Subscribe(Action<string> onAction)
-        {
-            if (_initialized)
-            {
-                inputField.onSubmit.AddListener(onAction.Invoke);
-                Debug.Log("Subscription happened after initialization!!");
-            }
-            _subscribers.Add(onAction);
         }
     }
 }

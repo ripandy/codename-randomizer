@@ -22,9 +22,5 @@ namespace Randomizer.ExternalFrameworks
         {
             _pool = pool;
         }
-
-        public class Factory : PlaceholderFactory<ZenjectProducableObject>
-        {
-        }
     }
 }

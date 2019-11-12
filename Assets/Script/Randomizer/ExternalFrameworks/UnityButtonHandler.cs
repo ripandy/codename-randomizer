@@ -1,41 +1,24 @@
-using System;
-using System.Collections.Generic;
 using Randomizer.InterfaceAdapters;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Randomizer.ExternalFrameworks
 {
-    public class UnityButtonHandler : MonoBehaviour, IButtonHandler
+    public class UnityButtonHandler : MonoBehaviour
     {
-        [SerializeField] private Button button;
+        [SerializeField] protected Button button;
 
-        private readonly IList<Action> _subscribers = new List<Action>();
-        private IObservable<Unit> _buttonObservable;
+        [Inject] private IActionHandler _actionHandler;
 
         private void Start()
         {
             BindReactive();
         }
 
-        private void BindReactive()
+        protected virtual void BindReactive()
         {
-            _buttonObservable = button.OnClickAsObservable();
-            foreach (var onPress in _subscribers)
-            {
-                _buttonObservable.Subscribe(_ => onPress.Invoke()).AddTo(this);
-            }
-        }
-
-        public void Subscribe(Action onPress)
-        {
-            if (_buttonObservable != null)
-            {
-                _buttonObservable.Subscribe(_ => onPress.Invoke()).AddTo(this);
-                Debug.Log("Subscription happened after initialization!!");
-            }
-            _subscribers.Add(onPress);
+            button.onClick.AddListener(() => _actionHandler.Handle());
         }
     }
 }

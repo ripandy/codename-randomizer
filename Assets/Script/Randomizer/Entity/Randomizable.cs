@@ -7,6 +7,7 @@ namespace Randomizer.Entity
     {
         private readonly IList<Item> _items = new List<Item>();
         public int ItemCount => _items.Count;
+        public IList<Item> Items => _items;
 
         public void AddItem(Item newItem)
         {

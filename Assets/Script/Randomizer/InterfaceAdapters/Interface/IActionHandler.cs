@@ -1,9 +1,12 @@
-using System;
-
 namespace Randomizer.InterfaceAdapters
 {
-    public interface IActionHandler<out T>
+    public interface IActionHandler
     {
-        void Subscribe(Action<T> onAction);
+        void Handle();
+    }
+    
+    public interface IActionHandler<in TParams>
+    {
+        void Handle(TParams args);
     }
 }
