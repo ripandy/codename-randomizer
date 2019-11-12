@@ -21,8 +21,14 @@ namespace Randomizer.UseCases
         public void Handle()
         {
             var randomizable = _randomizableGateway.GetById(_session.ActiveRandomizableId);
-            var item = randomizable.Randomize();
-            var response = new RandomizeResponseMessage { Success = true, PickedItemName = item.Name };
+            var success = randomizable.ItemCount > 0;
+            var response = new RandomizeResponseMessage { Success = success };
+            
+            if (success)
+            {
+                var item = randomizable.Randomize();
+                response.PickedItemName = item.Name;
+            }
                 
             _resultPresenter.Handle(response);
         }
