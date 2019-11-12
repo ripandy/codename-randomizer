@@ -20,10 +20,12 @@ namespace Randomizer.UseCases
 
         public void Handle(AddItemRequestMessage request)
         {
-            var randomizable = _randomizableGateway.GetById(_session.ActiveRandomizableId);
+            var id = _session.ActiveRandomizableId;
+            var randomizable = _randomizableGateway.GetById(id);
             var newItem = new Item { Name = request.ItemName };
             var order = randomizable.ItemCount;
             randomizable.AddItem(newItem);
+            _randomizableGateway.Save(id);
 
             var responseMessage = new AddItemResponseMessage { Success = true, NewItemOrder = order, NewItemName = newItem.Name };
             _addItemOutputPortInteractor.Handle(responseMessage);

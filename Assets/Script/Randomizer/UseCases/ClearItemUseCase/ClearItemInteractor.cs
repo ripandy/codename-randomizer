@@ -20,8 +20,10 @@ namespace Randomizer.UseCases
         
         public void Handle()
         {
-            var randomizable = _randomizableGateway.GetById(_session.ActiveRandomizableId);
+            var id = _session.ActiveRandomizableId;
+            var randomizable = _randomizableGateway.GetById(id);
                 randomizable.Clear();
+            _randomizableGateway.Save(id);
                 
             _clearItemOutputPortInteractor.Handle(new ReloadRandomizableResponseMessage {Success = true});
         }
