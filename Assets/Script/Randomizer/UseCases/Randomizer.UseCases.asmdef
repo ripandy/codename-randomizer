@@ -1,0 +1,14 @@
+{
+    "name": "Randomizer.UseCases",
+    "references": [
+        "GUID:b37a1e7c9aad346d5aaf532d4621c499"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
