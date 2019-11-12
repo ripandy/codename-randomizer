@@ -51,13 +51,12 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<AddItemResponseHandler>().AsSingle();
         Container.BindInterfacesTo<RandomizeResponseHandler>().AsSingle();
         Container.BindInterfacesTo<ReloadRandomizableResponseHandler>().AsSingle();
-        Container.BindInterfacesTo<ResetResponseHandler>().AsSingle();
         
         // presenters
         Container.BindInterfacesAndSelfTo<AddItemPresenter>().AsSingle();
         Container.BindInterfacesAndSelfTo<ResultPresenter>().AsSingle();
-        Container.BindInterfacesAndSelfTo<ResetPresenter>().AsSingle().WhenInjectedInto<ResetButtonView>();
-        Container.BindInterfacesAndSelfTo<ClearPresenter>().AsSingle().WhenInjectedInto<ClearButtonView>();
+        Container.BindInterfacesAndSelfTo<ResetPresenter>().AsSingle().WhenNotInjectedInto<ClearButtonView>();
+        Container.BindInterfacesAndSelfTo<ClearPresenter>().AsSingle().WhenNotInjectedInto<ResetButtonView>();
         Container.Bind<RandomizablePresenter>().AsSingle();
     }
 

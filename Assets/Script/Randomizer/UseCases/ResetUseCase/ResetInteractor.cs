@@ -4,16 +4,16 @@ namespace Script.Randomizer.UseCases.ResetUseCase
 {
     public class ResetInteractor : IInputPortInteractor
     {
-        private readonly IOutputPortInteractor<ResetResponseMessage> _resetOutputPortInteractor;
+        private readonly IOutputPortInteractor<RandomizeResponseMessage> _resetOutputPortInteractor;
 
-        private ResetInteractor(IOutputPortInteractor<ResetResponseMessage> resetOutputPortInteractor)
+        private ResetInteractor(IOutputPortInteractor<RandomizeResponseMessage> resetOutputPortInteractor)
         {
             _resetOutputPortInteractor = resetOutputPortInteractor;
         }
         
         public void Handle()
         {
-            _resetOutputPortInteractor.Handle(new ResetResponseMessage { Success = true });
+            _resetOutputPortInteractor.Handle(new RandomizeResponseMessage { Success = false });
         }
     }
 }

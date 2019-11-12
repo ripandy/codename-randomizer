@@ -8,13 +8,9 @@ namespace Randomizer.ExternalFrameworks
     {
         [Inject] private readonly IPresenter _presenter;
         
-        private void Start()
+        protected override void BindReactive()
         {
-            BindReactive();
-        }
-
-        private void BindReactive()
-        {
+            base.BindReactive();
             this.ObserveEveryValueChanged(_ => _presenter.Visible)
                 .Subscribe(value => gameObject.SetActive(value))
                 .AddTo(this);

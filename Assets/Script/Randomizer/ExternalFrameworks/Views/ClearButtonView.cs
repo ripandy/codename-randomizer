@@ -7,14 +7,10 @@ namespace Randomizer.ExternalFrameworks
     public class ClearButtonView : UnityButtonHandler
     {
         [Inject] private readonly IPresenter _presenter;
-        
-        private void Start()
-        {
-            BindReactive();
-        }
 
-        private void BindReactive()
+        protected override void BindReactive()
         {
+            base.BindReactive();
             this.ObserveEveryValueChanged(_ => _presenter.Visible)
                 .Subscribe(value => gameObject.SetActive(value))
                 .AddTo(this);
