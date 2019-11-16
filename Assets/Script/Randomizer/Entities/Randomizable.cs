@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Randomizer.Entity
+namespace Randomizer.Entities
 {
     public class Randomizable
     {

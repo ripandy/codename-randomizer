@@ -1,4 +1,4 @@
-﻿namespace Randomizer.Entity
+﻿namespace Randomizer.Entities
 {
     public class Item
     {

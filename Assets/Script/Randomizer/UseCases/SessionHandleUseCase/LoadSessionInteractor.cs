@@ -1,9 +1,8 @@
-using System.Collections.Generic;
-using Randomizer.Entity;
+using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
-    public class LoadSessionInteractor : IInputPortInteractor<LoadSessionRequestMessage>
+    public class LoadSessionInteractor : IInputPortInteractor<int>
     {
         private readonly Session _session;
         private readonly IGateway<Randomizable> _randomizableGateway;
@@ -19,19 +18,20 @@ namespace Randomizer.UseCases
             _loadSessionOutputPortInteractor = loadSessionOutputPortInteractor;
         }
         
-        public void Handle(LoadSessionRequestMessage request)
+        public void Handle(int request)
         {
-            var id = request.CurrentSessionId;
-            _session.ActiveRandomizableId = id;
+            _session.ActiveRandomizableId = request;
 
-            var randomizable = _randomizableGateway.GetById(id);
-            var itemNames = new List<string>();
-            foreach (var item in randomizable.Items)
+            var randomizable = _randomizableGateway.GetById(request);
+            var itemCount = randomizable.ItemCount;
+            var itemNames = new string[itemCount];
+            for (var i = 0; i < itemCount; i++)
             {
-                itemNames.Add(item.Name);
+                var item = randomizable.Items[i];
+                itemNames[i] = (item.Name);
             }
 
-            var responseMessage = new ReloadRandomizableResponseMessage { Success = true, ItemNames = itemNames.ToArray() };
+            var responseMessage = new ReloadRandomizableResponseMessage { Success = true, ItemNames = itemNames };
             _loadSessionOutputPortInteractor.Handle(responseMessage);
         }
     }

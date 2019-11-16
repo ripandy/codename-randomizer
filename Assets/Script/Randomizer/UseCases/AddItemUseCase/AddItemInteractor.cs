@@ -1,8 +1,8 @@
-using Randomizer.Entity;
+using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
-    public class AddItemInteractor : IInputPortInteractor<AddItemRequestMessage>
+    public class AddItemInteractor : IInputPortInteractor<string>
     {
         private readonly Session _session;
         private readonly IGateway<Randomizable> _randomizableGateway;
@@ -18,11 +18,11 @@ namespace Randomizer.UseCases
             _addItemOutputPortInteractor = addItemOutputPortInteractor;
         }
 
-        public void Handle(AddItemRequestMessage request)
+        public void Handle(string request)
         {
             var id = _session.ActiveRandomizableId;
             var randomizable = _randomizableGateway.GetById(id);
-            var newItem = new Item { Name = request.ItemName };
+            var newItem = new Item { Name = request };
             var order = randomizable.ItemCount;
             randomizable.AddItem(newItem);
             _randomizableGateway.Save(id);

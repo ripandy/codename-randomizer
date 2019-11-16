@@ -1,6 +1,4 @@
-using Randomizer.UseCases;
-
-namespace Script.Randomizer.UseCases.ResetUseCase
+namespace Randomizer.UseCases
 {
     public class ResetInteractor : IInputPortInteractor
     {
@@ -13,7 +11,7 @@ namespace Script.Randomizer.UseCases.ResetUseCase
         
         public void Handle()
         {
-            _resetOutputPortInteractor.Handle(new RandomizeResponseMessage { Success = false });
+            _resetOutputPortInteractor.Handle(new RandomizeResponseMessage { Success = false, Message = "Reset Randomizer.."});
         }
     }
 }

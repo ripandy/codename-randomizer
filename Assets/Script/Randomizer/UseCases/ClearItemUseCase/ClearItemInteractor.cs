@@ -1,4 +1,4 @@
-using Randomizer.Entity;
+using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
