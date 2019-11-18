@@ -7,21 +7,18 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly RandomizablePresenter _randomizablePresenter;
         private readonly AddItemPresenter _addItemPresenter;
         private readonly ResultPresenter _resultPresenter;
-        private readonly ClearPresenter _clearPresenter;
-        private readonly ResetPresenter _resetPresenter;
+        private readonly ResetClearPresenter _resetClearPresenter;
 
         private RandomizeResponseHandler(
             RandomizablePresenter randomizablePresenter,
             AddItemPresenter addItemPresenter,
             ResultPresenter resultPresenter,
-            ClearPresenter clearPresenter,
-            ResetPresenter resetPresenter)
+            ResetClearPresenter resetClearPresenter)
         {
             _randomizablePresenter = randomizablePresenter;
             _addItemPresenter = addItemPresenter;
             _resultPresenter = resultPresenter;
-            _clearPresenter = clearPresenter;
-            _resetPresenter = resetPresenter;
+            _resetClearPresenter = resetClearPresenter;
         }
         
         public void Handle(RandomizeResponseMessage response)
@@ -30,12 +27,14 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _resultPresenter.Visible = success;
             _addItemPresenter.Visible = !success;
             _randomizablePresenter.ShowAllItems(!success);
-            _clearPresenter.Visible = !success;
-            _resetPresenter.Visible = success;
+            _resetClearPresenter.Visible = !success;
+            _resetClearPresenter.ViewModelObject.State = response.Success
+                ? ResetClearViewModel.ButtonState.Reset
+                : ResetClearViewModel.ButtonState.Clear;
             
             if (!response.Success) return; // TODO: show response message?
 
-            _resultPresenter.ViewModelObject.ResultText = response.PickedItemName;
+            _resultPresenter.ViewModelObject.ResultText = response.Message;
         }
     }
 }

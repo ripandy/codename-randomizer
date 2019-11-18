@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
 
-namespace Randomizer.ExternalFrameworks
+namespace Randomizer.ExternalFrameworks.Handlers
 {
     public class UnityInputFieldHandler : MonoBehaviour
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Randomizer.ExternalFrameworks
+namespace Randomizer.ExternalFrameworks.Handlers
 {
     public class UnityButtonHandler : MonoBehaviour
     {

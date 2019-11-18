@@ -1,10 +1,10 @@
 using System;
-using UnityEngine;
+using Randomizer.ExternalFrameworks.Views;
 using Zenject;
 
 namespace Randomizer.ExternalFrameworks
 {
-    public class ZenjectProducableObject : MonoBehaviour, IPoolable<IMemoryPool>, IDisposable
+    public class ZenjectProducableObject : BaseView, IPoolable<IMemoryPool>, IDisposable
     {
         private IMemoryPool _pool;
 

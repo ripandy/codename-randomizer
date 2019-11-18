@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Randomizer.InterfaceAdapters;
 
-namespace Randomizer.ExternalFrameworks
+namespace Randomizer.ExternalFrameworks.Handlers
 {
     public class ZenjectInitializers : Zenject.IInitializable
     {

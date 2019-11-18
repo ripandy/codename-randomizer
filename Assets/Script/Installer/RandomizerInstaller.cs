@@ -1,18 +1,31 @@
-using Randomizer.Entity;
-using Randomizer.ExternalFrameworks;
+using Randomizer.Entities;
+using Randomizer.ExternalFrameworks.Factories;
+using Randomizer.ExternalFrameworks.Handlers;
+using Randomizer.ExternalFrameworks.Views;
 using Randomizer.InterfaceAdapters.Controllers;
 using Randomizer.InterfaceAdapters.Gateways;
 using Randomizer.InterfaceAdapters.Presenters;
 using Randomizer.UseCases;
-using Script.Randomizer.UseCases.ResetUseCase;
 using UnityEngine;
 using Zenject;
 
 public class RandomizerInstaller : MonoInstaller
 {
+    [Header("Factories")]
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private Transform itemContainer;
     
+    [Header("Handlers")]
+    [SerializeField] private UnityInputFieldHandler addItemInputFieldHandler;
+    [SerializeField] private UnityButtonHandler randomizeButtonHandler;
+    [SerializeField] private UnityButtonHandler clearButtonHandler;
+    [SerializeField] private UnityButtonHandler resetButtonHandler;
+
+    [Header("Views")]
+    [SerializeField] private BaseView addItemInputFieldView;
+    [SerializeField] private BaseView resultView;
+    [SerializeField] private BaseView resetClearButtonView;
+
     public override void InstallBindings()
     {
         InstallEntities();
@@ -38,26 +51,25 @@ public class RandomizerInstaller : MonoInstaller
     private void InstallInterfaceAdapters()
     {
         // controllers
-        Container.BindInterfacesTo<AddItemInputController>().AsSingle().WhenInjectedInto<AddItemInputFieldView>();
-        Container.BindInterfacesTo<RandomizeInputController>().AsSingle().WhenInjectedInto<RandomizeButtonView>();
-        Container.BindInterfacesTo<ClearItemInputController>().AsSingle().WhenInjectedInto<ClearButtonView>();
-        Container.BindInterfacesTo<ResetInputController>().AsSingle().WhenInjectedInto<ResetButtonView>();
+        Container.BindInterfacesTo<AddItemInputController>().AsSingle().WhenInjectedIntoInstance(addItemInputFieldHandler);
+        Container.BindInterfacesTo<RandomizeInputController>().AsSingle().WhenInjectedIntoInstance(randomizeButtonHandler);
+        Container.BindInterfacesTo<ClearItemInputController>().AsSingle().WhenInjectedIntoInstance(clearButtonHandler);
+        Container.BindInterfacesTo<ResetInputController>().AsSingle().WhenInjectedIntoInstance(resetButtonHandler);
+        
+        // presenters
+        Container.BindInterfacesAndSelfTo<AddItemPresenter>().AsSingle().WhenInjectedIntoInstance(addItemInputFieldView);
+        Container.BindInterfacesAndSelfTo<ResultPresenter>().AsSingle().WhenInjectedIntoInstance(resultView);
+        Container.BindInterfacesAndSelfTo<ResetClearPresenter>().AsSingle().WhenInjectedIntoInstance(resetClearButtonView);
+        Container.Bind<RandomizablePresenter>().AsSingle();
         
         // gateways
         Container.BindInterfacesTo<RandomizableGateway>().AsSingle();
         Container.BindInterfacesTo<SessionGateway>().AsSingle();
         
-        // response handler
+        // response handlers
         Container.BindInterfacesTo<AddItemResponseHandler>().AsSingle();
         Container.BindInterfacesTo<RandomizeResponseHandler>().AsSingle();
         Container.BindInterfacesTo<ReloadRandomizableResponseHandler>().AsSingle();
-        
-        // presenters
-        Container.BindInterfacesAndSelfTo<AddItemPresenter>().AsSingle();
-        Container.BindInterfacesAndSelfTo<ResultPresenter>().AsSingle();
-        Container.BindInterfacesAndSelfTo<ResetPresenter>().AsSingle().WhenNotInjectedInto<ClearButtonView>();
-        Container.BindInterfacesAndSelfTo<ClearPresenter>().AsSingle().WhenNotInjectedInto<ResetButtonView>();
-        Container.Bind<RandomizablePresenter>().AsSingle();
     }
 
     private void InstallExternalFrameworks()

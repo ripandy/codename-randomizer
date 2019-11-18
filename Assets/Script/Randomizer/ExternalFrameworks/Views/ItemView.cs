@@ -4,7 +4,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Randomizer.ExternalFrameworks
+namespace Randomizer.ExternalFrameworks.Views
 {
     public class ItemView : ZenjectProducableObject
     {
@@ -13,15 +13,16 @@ namespace Randomizer.ExternalFrameworks
         
         [SerializeField] private TMP_Text text;
 
-        [Inject] public IPresenter<ItemViewModel> Presenter { get; }
+        public IPresenter<ItemViewModel> Presenter => _presenter as IPresenter<ItemViewModel>;
 
         private void Start()
         {
             BindReactive();
         }
 
-        private void BindReactive()
+        protected override void BindReactive()
         {
+            base.BindReactive();
             var vm = Presenter.ViewModelObject;
             this.ObserveEveryValueChanged(_ => vm.Text)
                 .Subscribe(value => text.text = value)
@@ -29,10 +30,6 @@ namespace Randomizer.ExternalFrameworks
             
             this.ObserveEveryValueChanged(_ => vm.Order)
                 .Subscribe(ArrangeByOrder)
-                .AddTo(this);
-            
-            this.ObserveEveryValueChanged(_ => Presenter.Visible)
-                .Subscribe(value => gameObject.SetActive(value))
                 .AddTo(this);
         }
 

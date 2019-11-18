@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Randomizer.Entity;
+using Randomizer.Entities;
 
 namespace Randomizer.InterfaceAdapters.Gateways
 {

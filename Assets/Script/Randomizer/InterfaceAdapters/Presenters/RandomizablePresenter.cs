@@ -21,7 +21,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 _itemPresenters.Add(newItem);
             }
 
-            _itemPresenters[ItemCount].Visible = true;
             var vm = _itemPresenters[ItemCount].ViewModelObject;
                 vm.Order = order;
                 vm.Text = itemName;
