@@ -2,7 +2,7 @@ using System;
 using Randomizer.InterfaceAdapters;
 using UnityEngine;
 
-namespace Randomizer.ExternalFrameworks
+namespace Randomizer.ExternalFrameworks.DataStores
 {
     [Serializable]
     public class RandomizableDataStore : IDataStore<RandomizableData>

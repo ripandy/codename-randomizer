@@ -1,34 +1,28 @@
 using Randomizer.InterfaceAdapters;
-using UniRx;
 using UnityEngine;
-using Zenject;
 
-namespace Randomizer.ExternalFrameworks
+namespace Randomizer.ExternalFrameworks.Views
 {
-    public class AddItemInputFieldView : UnityInputFieldHandler
+    public class AddItemInputFieldView : BaseView, IOrderedView
     {
-        private Vector3 _defaultPosition;
         private const float DefaultDistanceBetweenObject = -120f;
         
-        [Inject] private readonly IPresenter<AddItemViewModel> _presenter;
+        private Vector3 _defaultPosition;
+        private int _order;
 
-        protected override void Awake()
+        public int Order
         {
-            base.Awake();
-            _defaultPosition = transform.localPosition;
+            get => _order;
+            set
+            {
+                _order = value;
+                AdjustPosition(_order);
+            }
         }
 
-        protected override void BindReactive()
+        private void Awake()
         {
-            base.BindReactive();
-            
-            this.ObserveEveryValueChanged(_ => _presenter.ViewModelObject.Order)
-                .Subscribe(AdjustPosition)
-                .AddTo(this);
-            
-            this.ObserveEveryValueChanged(_ => _presenter.Visible)
-                .Subscribe(value => gameObject.SetActive(value))
-                .AddTo(this);
+            _defaultPosition = transform.localPosition;
         }
 
         private void AdjustPosition(int order)

@@ -1,7 +1,23 @@
+using System.Collections.Generic;
+using Randomizer.UseCases;
+
 namespace Randomizer.InterfaceAdapters.Presenters
 {
-    public class ResetPresenter : IPresenter
+    public class ResetPresenter  : BasePresenter
     {
-        public bool Visible { get; set; }
+        private readonly IView _resetButtonView;
+
+        private ResetPresenter(
+            IView resetButtonView,
+            IList<IOutputPortInteractor> responses)
+            : base(responses)
+        {
+            _resetButtonView = resetButtonView;
+        }
+
+        protected override void OnRandomize(RandomizeResponseMessage responseMessage)
+        {
+            _resetButtonView.Visible = responseMessage.Success;
+        }
     }
 }

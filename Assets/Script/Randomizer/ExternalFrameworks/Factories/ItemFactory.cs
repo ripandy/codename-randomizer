@@ -1,8 +1,9 @@
+using Randomizer.ExternalFrameworks.Views;
 using Randomizer.InterfaceAdapters;
 
-namespace Randomizer.ExternalFrameworks
+namespace Randomizer.ExternalFrameworks.Factories
 {
-    public class ItemFactory : IFactoryHandler<IPresenter>
+    public class ItemFactory : IFactoryHandler<IItemView>
     {
         private readonly ItemView.Factory _factory;
 
@@ -11,10 +12,10 @@ namespace Randomizer.ExternalFrameworks
             _factory = factory;
         }
 
-        public IPresenter Create()
+        public IItemView Create()
         {
             var item = _factory.Create();
-            return item.Presenter;
+            return item;
         }
     }
 }

@@ -1,8 +1,8 @@
 namespace Randomizer.UseCases
 {
-    public class RandomizeResponseMessage
+    public class ReloadResponseMessage
     {
         public bool Success;
-        public string Message;
+        public string[] ItemNames;
     }
 }

@@ -1,48 +1,76 @@
 using System.Collections.Generic;
+using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
 {
-    public class RandomizablePresenter
+    public class RandomizablePresenter : BasePresenter
     {
-        private readonly IFactoryHandler<IPresenter> _itemFactory;
-        private readonly IList<ItemPresenter> _itemPresenters = new List<ItemPresenter>();
-        public int ItemCount { get; private set; }
+        private readonly IFactoryHandler<IItemView> _itemFactory;
+        private readonly IList<IItemView> _itemViews = new List<IItemView>();
 
-        private RandomizablePresenter(IFactoryHandler<IPresenter> itemFactory)
+        private RandomizablePresenter(
+            IFactoryHandler<IItemView> itemFactory,
+            IList<IOutputPortInteractor> responses)
+        : base(responses)
         {
             _itemFactory = itemFactory;
         }
-
-        public void AddItem(string itemName, int order)
+        
+        protected override void OnAddItem(AddItemResponseMessage responseMessage)
         {
-            if (_itemPresenters.Count <= ItemCount)
-            {
-                var newItem = _itemFactory.Create() as ItemPresenter;
-                _itemPresenters.Add(newItem);
-            }
-
-            _itemPresenters[ItemCount].Visible = true;
-            var vm = _itemPresenters[ItemCount].ViewModelObject;
-                vm.Order = order;
-                vm.Text = itemName;
-
-            ItemCount++;
+            if (!responseMessage.Success) return;
+            
+            AddItem(responseMessage.NewItemName, responseMessage.NewItemOrder);
         }
 
-        public void Clear()
+        protected override void OnRandomize(RandomizeResponseMessage responseMessage)
         {
-            HideAllItems();
-            ItemCount = 0;
+            ShowAllItems(!responseMessage.Success);
         }
 
-        public void ShowAllItems(bool show = true)
+        protected override void OnReload(ReloadResponseMessage responseMessage)
         {
-            for (var i = 0; i < _itemPresenters.Count; i++)
+            if (!responseMessage.Success) return;
+
+            ClearItems();
+            
+            var items = responseMessage.ItemNames;
+            for (var i = 0; i < items.Length; i++)
             {
-                var itemPresenter = _itemPresenters[i];
-                itemPresenter.Visible = show && i < ItemCount;
+                var item = items[i];
+                AddItem(item, i);
             }
         }
-        public void HideAllItems() => ShowAllItems(false);
+
+        private void AddItem(string itemName, int order)
+        {
+            var newItem = _itemFactory.Create();
+                newItem.Text = itemName;
+                newItem.Order = order;
+            _itemViews.Add(newItem);
+        }
+
+        private void ClearItems()
+        {
+            foreach (var itemView in _itemViews)
+            {
+                itemView.Dispose();
+            }
+            _itemViews.Clear();
+        }
+
+        private void RemoveItem(int order)
+        {
+            _itemViews[order].Dispose();
+            _itemViews.RemoveAt(order);
+        }
+
+        private void ShowAllItems(bool show = true)
+        {
+            foreach (var item in _itemViews)
+            {
+                item.Visible = show;
+            }
+        }
     }
 }
