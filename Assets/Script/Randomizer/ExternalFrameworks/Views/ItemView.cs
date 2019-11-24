@@ -1,42 +1,37 @@
 using Randomizer.InterfaceAdapters;
 using TMPro;
-using UniRx;
 using UnityEngine;
 using Zenject;
 
 namespace Randomizer.ExternalFrameworks.Views
 {
-    public class ItemView : ZenjectProducableObject
+    public class ItemView : ZenjectProducableObject, IItemView
     {
-        private readonly Vector3 DefaultPosition = new Vector3(540f, -140f, 0f);
+        private readonly Vector3 _defaultPosition = new Vector3(540f, -140f, 0f);
         private const float DefaultDistanceBetweenObject = -120f;
         
         [SerializeField] private TMP_Text text;
-
-        public IPresenter<ItemViewModel> Presenter => _presenter as IPresenter<ItemViewModel>;
-
-        private void Start()
+        
+        private int _order;
+        public int Order
         {
-            BindReactive();
+            get => _order;
+            set
+            {
+                _order = value;
+                ArrangeByOrder(_order);
+            }
         }
 
-        protected override void BindReactive()
+        public string Text
         {
-            base.BindReactive();
-            var vm = Presenter.ViewModelObject;
-            this.ObserveEveryValueChanged(_ => vm.Text)
-                .Subscribe(value => text.text = value)
-                .AddTo(this);
-            
-            this.ObserveEveryValueChanged(_ => vm.Order)
-                .Subscribe(ArrangeByOrder)
-                .AddTo(this);
+            get => text.text;
+            set => text.text = value;
         }
 
         private void ArrangeByOrder(int order)
         {
-            Debug.Log("Order? " + order);
-            var position = DefaultPosition;
+            var position = _defaultPosition;
                 position.y += DefaultDistanceBetweenObject * order;
             transform.localPosition = position;
         }

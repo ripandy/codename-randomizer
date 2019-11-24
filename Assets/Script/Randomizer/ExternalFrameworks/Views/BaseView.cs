@@ -1,24 +1,14 @@
 using Randomizer.InterfaceAdapters;
-using UniRx;
 using UnityEngine;
-using Zenject;
 
 namespace Randomizer.ExternalFrameworks.Views
 {
-    public class BaseView : MonoBehaviour
+    public class BaseView : MonoBehaviour, IView
     {
-        [Inject] protected readonly IPresenter _presenter;
-
-        private void Start()
+        public bool Visible
         {
-            BindReactive();
-        }
-
-        protected virtual void BindReactive()
-        {
-            this.ObserveEveryValueChanged(_ => _presenter.Visible)
-                .Subscribe(value => gameObject.SetActive(value))
-                .AddTo(this);
+            get => gameObject.activeInHierarchy;
+            set => gameObject.SetActive(value);
         }
     }
 }

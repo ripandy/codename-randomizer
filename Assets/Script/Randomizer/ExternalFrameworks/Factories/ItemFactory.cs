@@ -3,7 +3,7 @@ using Randomizer.InterfaceAdapters;
 
 namespace Randomizer.ExternalFrameworks.Factories
 {
-    public class ItemFactory : IFactoryHandler<IPresenter>
+    public class ItemFactory : IFactoryHandler<IItemView>
     {
         private readonly ItemView.Factory _factory;
 
@@ -12,10 +12,10 @@ namespace Randomizer.ExternalFrameworks.Factories
             _factory = factory;
         }
 
-        public IPresenter Create()
+        public IItemView Create()
         {
             var item = _factory.Create();
-            return item.Presenter;
+            return item;
         }
     }
 }

@@ -1,7 +1,13 @@
+using System;
+
 namespace Randomizer.UseCases
 {
-    public interface IOutputPortInteractor<in T>
+    public interface IOutputPortInteractor
     {
-        void Handle(T response);
+    }
+
+    public interface IOutputPortInteractor<T> : IOutputPortInteractor
+    {
+        Action<T> OutputHandler { get; set; }
     }
 }

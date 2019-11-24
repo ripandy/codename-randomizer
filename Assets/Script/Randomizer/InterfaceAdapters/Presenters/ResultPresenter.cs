@@ -1,10 +1,26 @@
+using System.Collections.Generic;
 using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
 {
-    public class ResultPresenter : IPresenter<ResultViewModel>
+    public class ResultPresenter : BasePresenter
     {
-        public ResultViewModel ViewModelObject { get; } = new ResultViewModel();
-        public bool Visible { get; set; }
+        private readonly ITextView _resultView;
+        private ResultPresenter(
+            ITextView resultView,
+            IList<IOutputPortInteractor> responses)
+        : base(responses)
+        {
+            _resultView = resultView;
+        }
+
+        protected override void OnRandomize(RandomizeResponseMessage responseMessage)
+        {
+            _resultView.Visible = responseMessage.Success;
+
+            if (!responseMessage.Success) return;
+            
+            _resultView.Text = responseMessage.Message;
+        }
     }
 }

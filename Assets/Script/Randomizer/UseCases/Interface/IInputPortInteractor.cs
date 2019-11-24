@@ -1,12 +1,14 @@
+using System;
+
 namespace Randomizer.UseCases
 {
     public interface IInputPortInteractor
     {
-        void Handle();
+        Action InputHandler { get; }
     }
     
-    public interface IInputPortInteractor<in T>
+    public interface IInputPortInteractor<in T> : IInputPortInteractor
     {
-        void Handle(T request);
+        new Action<T> InputHandler { get; }
     }
 }

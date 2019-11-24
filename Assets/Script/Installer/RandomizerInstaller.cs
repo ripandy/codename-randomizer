@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Randomizer.Entities;
 using Randomizer.ExternalFrameworks.Factories;
 using Randomizer.ExternalFrameworks.Handlers;
 using Randomizer.ExternalFrameworks.Views;
+using Randomizer.InterfaceAdapters;
 using Randomizer.InterfaceAdapters.Controllers;
 using Randomizer.InterfaceAdapters.Gateways;
 using Randomizer.InterfaceAdapters.Presenters;
@@ -14,17 +17,12 @@ public class RandomizerInstaller : MonoInstaller
     [Header("Factories")]
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private Transform itemContainer;
-    
-    [Header("Handlers")]
-    [SerializeField] private UnityInputFieldHandler addItemInputFieldHandler;
-    [SerializeField] private UnityButtonHandler randomizeButtonHandler;
-    [SerializeField] private UnityButtonHandler clearButtonHandler;
-    [SerializeField] private UnityButtonHandler resetButtonHandler;
 
     [Header("Views")]
-    [SerializeField] private BaseView addItemInputFieldView;
-    [SerializeField] private BaseView resultView;
-    [SerializeField] private BaseView resetClearButtonView;
+    [SerializeField] private AddItemInputFieldView addItemInputFieldView;
+    [SerializeField] private TextView resultView;
+    [SerializeField] private BaseView clearButtonView;
+    [SerializeField] private BaseView resetButtonView;
 
     public override void InstallBindings()
     {
@@ -41,49 +39,54 @@ public class RandomizerInstaller : MonoInstaller
 
     private void InstallUseCases()
     {
-        Container.BindInterfacesTo<LoadSessionInteractor>().AsSingle();
+        // Use case interactors
+        Container.BindInterfacesTo<LoadSessionInteractor>().AsSingle().WhenInjectedInto<SessionGateway>();
         Container.BindInterfacesTo<AddItemInteractor>().AsSingle();
-        Container.BindInterfacesTo<RandomizeInteractor>().AsSingle().WhenInjectedInto<RandomizeInputController>();
-        Container.BindInterfacesTo<ClearItemInteractor>().AsSingle().WhenInjectedInto<ClearItemInputController>();
-        Container.BindInterfacesTo<ResetInteractor>().AsSingle().WhenInjectedInto<ResetInputController>();
+        Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
+        Container.BindInterfacesTo<ClearItemInteractor>().AsSingle();
+        Container.BindInterfacesTo<ResetInteractor>().AsSingle();
+        
+        // Use case shared response interactor
+        Container.BindInterfacesTo<RandomizeInteractor.RandomizeResponseInteractor>().AsSingle();
+        Container.BindInterfacesTo<LoadSessionInteractor.ReloadResponseInteractor>().AsSingle();
     }
 
     private void InstallInterfaceAdapters()
     {
         // controllers
-        Container.BindInterfacesTo<AddItemInputController>().AsSingle().WhenInjectedIntoInstance(addItemInputFieldHandler);
-        Container.BindInterfacesTo<RandomizeInputController>().AsSingle().WhenInjectedIntoInstance(randomizeButtonHandler);
-        Container.BindInterfacesTo<ClearItemInputController>().AsSingle().WhenInjectedIntoInstance(clearButtonHandler);
-        Container.BindInterfacesTo<ResetInputController>().AsSingle().WhenInjectedIntoInstance(resetButtonHandler);
+        var inputTypeCodes = new List<TypeCode> {TypeCode.String, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty};
+        Container.BindInterfacesTo<InputController>().AsSingle().WithArguments(inputTypeCodes);
         
         // presenters
-        Container.BindInterfacesAndSelfTo<AddItemPresenter>().AsSingle().WhenInjectedIntoInstance(addItemInputFieldView);
-        Container.BindInterfacesAndSelfTo<ResultPresenter>().AsSingle().WhenInjectedIntoInstance(resultView);
-        Container.BindInterfacesAndSelfTo<ResetClearPresenter>().AsSingle().WhenInjectedIntoInstance(resetClearButtonView);
-        Container.Bind<RandomizablePresenter>().AsSingle();
+        Container.BindInterfacesTo<RandomizablePresenter>().AsSingle();
+        Container.BindInterfacesTo<AddItemPresenter>().AsSingle();
+        Container.BindInterfacesTo<ResultPresenter>().AsSingle();
+        Container.BindInterfacesTo<ClearPresenter>().AsSingle();
+        Container.BindInterfacesTo<ResetPresenter>().AsSingle();
         
         // gateways
         Container.BindInterfacesTo<RandomizableGateway>().AsSingle();
         Container.BindInterfacesTo<SessionGateway>().AsSingle();
-        
-        // response handlers
-        Container.BindInterfacesTo<AddItemResponseHandler>().AsSingle();
-        Container.BindInterfacesTo<RandomizeResponseHandler>().AsSingle();
-        Container.BindInterfacesTo<ReloadRandomizableResponseHandler>().AsSingle();
     }
 
     private void InstallExternalFrameworks()
     {
+        // Factory
         Container.BindFactory<ItemView, ItemView.Factory>()
             .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
-                .ByNewPrefabInstaller<ItemInstaller>(itemPrefab)
+                .ByNewContextPrefab(itemPrefab)
                 .UnderTransform(itemContainer)
             );
 
         Container.BindInterfacesAndSelfTo<ItemFactory>().AsSingle();
         Container.BindInterfacesTo<ZenjectInitializers>().AsSingle();
+
+        Container.Bind<IOrderedView>().FromInstance(addItemInputFieldView).WhenInjectedInto<AddItemPresenter>();
+        Container.Bind<ITextView>().FromInstance(resultView).WhenInjectedInto<ResultPresenter>();
+        Container.Bind<IView>().FromInstance(clearButtonView).WhenInjectedInto<ClearPresenter>();
+        Container.Bind<IView>().FromInstance(resetButtonView).WhenInjectedInto<ResetPresenter>();
     }
     
     private class ItemViewerPool : MonoPoolableMemoryPool<IMemoryPool, ItemView>

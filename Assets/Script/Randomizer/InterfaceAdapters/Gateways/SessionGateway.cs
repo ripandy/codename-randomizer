@@ -17,7 +17,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         public void Initialize()
         {
-            _sessionLoaderInteractor.Handle(_dataStore[0].RandomizableId);
+            _sessionLoaderInteractor.InputHandler(_dataStore[0].RandomizableId);
         }
     }
 }

@@ -1,15 +1,15 @@
+using System;
 using Randomizer.InterfaceAdapters;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace Randomizer.ExternalFrameworks.Handlers
 {
-    public class UnityButtonHandler : MonoBehaviour
+    public class UnityButtonHandler : MonoBehaviour, IActionHandler
     {
         [SerializeField] protected Button button;
 
-        [Inject] private IActionHandler _actionHandler;
+        public Action OnAction { get; set; }
 
         private void Start()
         {
@@ -18,7 +18,11 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         protected virtual void BindReactive()
         {
-            button.onClick.AddListener(() => _actionHandler.Handle());
+            button.onClick.AddListener(() =>
+            {
+                if (gameObject.activeInHierarchy)
+                    OnAction.Invoke();
+            });
         }
     }
 }
