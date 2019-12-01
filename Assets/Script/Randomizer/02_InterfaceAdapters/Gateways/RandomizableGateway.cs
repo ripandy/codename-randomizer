@@ -18,7 +18,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
         {
             foreach (var data in _cachedDataStore.Data)
             {
-                var randomizable = new Randomizable();
+                var randomizable = new Randomizable{ Name = data.name };
                 foreach (var item in data.items)
                 {
                     randomizable.AddItem(new Item { Name = item });

@@ -5,6 +5,7 @@ namespace Randomizer.InterfaceAdapters
     [Serializable]
     public class RandomizableData
     {
+        public string name;
         public string[] items;
     }
 }
