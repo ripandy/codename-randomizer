@@ -5,15 +5,20 @@ namespace Randomizer.InterfaceAdapters.Presenters
 {
     public class RandomizablePresenter : BasePresenter
     {
+        private const string DefaultTitle = "Randomizer";
+
         private readonly IFactoryHandler<IItemView> _itemFactory;
         private readonly IList<IItemView> _itemViews = new List<IItemView>();
+        private readonly ITextView _title;
 
         private RandomizablePresenter(
             IFactoryHandler<IItemView> itemFactory,
-            IList<IOutputPortInteractor> responses)
+            IList<IOutputPortInteractor> responses,
+            ITextView title)
         : base(responses)
         {
             _itemFactory = itemFactory;
+            _title = title;
         }
         
         protected override void OnAddItem(AddItemResponseMessage responseMessage)
@@ -33,6 +38,11 @@ namespace Randomizer.InterfaceAdapters.Presenters
             if (!responseMessage.Success) return;
 
             ClearItems();
+
+            var title = responseMessage.Title;
+            if (string.IsNullOrEmpty(title))
+                title = DefaultTitle;
+            _title.Text = title;
             
             var items = responseMessage.ItemNames;
             for (var i = 0; i < items.Length; i++)

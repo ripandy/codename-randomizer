@@ -37,7 +37,7 @@ namespace Randomizer.UseCases
                 itemNames[i] = (item.Name);
             }
 
-            var response = new ReloadResponseMessage { Success = true, ItemNames = itemNames };
+            var response = new ReloadResponseMessage { Success = true, Title = randomizable.Name, ItemNames = itemNames };
             _reloadResponseInteractor.OutputHandler.Invoke(response);
         }
         

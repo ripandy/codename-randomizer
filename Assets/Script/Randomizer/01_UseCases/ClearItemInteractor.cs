@@ -28,7 +28,7 @@ namespace Randomizer.UseCases
                 randomizable.Clear();
             _randomizableGateway.Save(id);
 
-            var response = new ReloadResponseMessage {Success = true, ItemNames = new string[0]};
+            var response = new ReloadResponseMessage {Success = true, Title = randomizable.Name, ItemNames = new string[0]};
             _reloadResponseInteractor.OutputHandler.Invoke(response);
         }
     }
