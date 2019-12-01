@@ -7,9 +7,6 @@ namespace Randomizer.ExternalFrameworks.Views
 {
     public class ItemView : ZenjectProducableObject, IItemView
     {
-        private readonly Vector3 _defaultPosition = new Vector3(540f, -140f, 0f);
-        private const float DefaultDistanceBetweenObject = -120f;
-        
         [SerializeField] private TMP_Text text;
         
         private int _order;
@@ -31,9 +28,7 @@ namespace Randomizer.ExternalFrameworks.Views
 
         private void ArrangeByOrder(int order)
         {
-            var position = _defaultPosition;
-                position.y += DefaultDistanceBetweenObject * order;
-            transform.localPosition = position;
+            transform.SetSiblingIndex(order);
         }
         
         public class Factory : PlaceholderFactory<ItemView>

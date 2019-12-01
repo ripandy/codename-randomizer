@@ -47,7 +47,6 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         private void OnSelect(string value)
         {
-            Debug.Log("on select..");
             ShowPlaceholder(false);
         }
         
