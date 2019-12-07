@@ -16,11 +16,17 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnRandomize(RandomizeResponseMessage responseMessage)
         {
-            _resultView.Visible = responseMessage.Success;
-
-            if (!responseMessage.Success) return;
+            var success = responseMessage.Success;
+            _resultView.Visible = success;
+            
+            if (!success) return;
             
             _resultView.Text = responseMessage.Message;
+        }
+        
+        protected override void OnReload(ReloadResponseMessage responseMessage)
+        {
+            _resultView.Visible = false;
         }
     }
 }

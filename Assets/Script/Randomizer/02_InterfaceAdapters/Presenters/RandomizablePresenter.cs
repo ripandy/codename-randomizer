@@ -35,14 +35,18 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnReload(ReloadResponseMessage responseMessage)
         {
-            if (!responseMessage.Success) return;
-
-            ClearItems();
-
             var title = responseMessage.Title;
             if (string.IsNullOrEmpty(title))
                 title = DefaultTitle;
             _title.Text = title;
+
+            if (!responseMessage.Success)
+            {
+                ShowAllItems(false);
+                return;
+            }
+
+            ClearItems();
             
             var items = responseMessage.ItemNames;
             for (var i = 0; i < items.Length; i++)

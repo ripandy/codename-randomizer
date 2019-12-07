@@ -27,6 +27,14 @@ namespace Randomizer.UseCases
         private void Handle(int request)
         {
             _session.ActiveRandomizableId = request;
+            var response = new ReloadResponseMessage();
+            
+            if (request == -1)
+            {
+                response.Success = false;
+                _reloadResponseInteractor.OutputHandler.Invoke(response);
+                return;
+            }
 
             var randomizable = _randomizableGateway.GetById(request);
             var itemCount = randomizable.ItemCount;
@@ -37,7 +45,9 @@ namespace Randomizer.UseCases
                 itemNames[i] = (item.Name);
             }
 
-            var response = new ReloadResponseMessage { Success = true, Title = randomizable.Name, ItemNames = itemNames };
+            response.Success = true;
+            response.Title = randomizable.Name;
+            response.ItemNames = itemNames;
             _reloadResponseInteractor.OutputHandler.Invoke(response);
         }
         

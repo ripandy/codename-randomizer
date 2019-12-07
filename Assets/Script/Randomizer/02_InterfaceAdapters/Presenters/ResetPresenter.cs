@@ -19,5 +19,10 @@ namespace Randomizer.InterfaceAdapters.Presenters
         {
             _resetButtonView.Visible = responseMessage.Success;
         }
+        
+        protected override void OnReload(ReloadResponseMessage responseMessage)
+        {
+            _resetButtonView.Visible = false;
+        }
     }
 }

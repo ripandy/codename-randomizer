@@ -6,9 +6,9 @@ namespace Randomizer.InterfaceAdapters.Controllers
 {
     public class InputController : IInitializable
     {
-        private IList<IInputPortInteractor> _inputPortInteractors;
-        private IList<IActionHandler> _actionHandlers;
-        private IList<TypeCode> _types;
+        private readonly IList<IInputPortInteractor> _inputPortInteractors;
+        private readonly IList<IActionHandler> _actionHandlers;
+        private readonly IList<TypeCode> _types;
 
         protected InputController (
             IList<IInputPortInteractor> inputPortInteractors,

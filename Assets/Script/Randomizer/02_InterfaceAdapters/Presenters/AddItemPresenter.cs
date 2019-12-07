@@ -28,7 +28,11 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnReload(ReloadResponseMessage responseMessage)
         {
-            _addItemView.Order = responseMessage.ItemNames.Length;
+            var success = responseMessage.Success;
+            _addItemView.Visible = success;
+            
+            if (success)
+                _addItemView.Order = responseMessage.ItemNames.Length;
         }
     }
 }

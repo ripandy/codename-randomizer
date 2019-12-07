@@ -20,7 +20,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         {
             _addItemResponse.OutputHandler += OnAddItem;
             _randomizeResponse.OutputHandler += OnRandomize;
-            _reloadResponse.OutputHandler += OnReload;            
+            _reloadResponse.OutputHandler += OnReload;
         }
 
         protected virtual void OnAddItem(AddItemResponseMessage responseMessage)

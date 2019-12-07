@@ -1,5 +1,4 @@
 using Randomizer.InterfaceAdapters;
-using UnityEngine;
 
 namespace Randomizer.ExternalFrameworks.Views
 {

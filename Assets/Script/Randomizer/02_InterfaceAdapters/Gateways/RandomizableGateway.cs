@@ -29,11 +29,13 @@ namespace Randomizer.InterfaceAdapters.Gateways
         
         public Randomizable GetById(int id)
         {
-            return _randomizables[id];
+            return id < _randomizables.Count ? _randomizables[id] : null;
         }
 
         public void Save(int id)
         {
+            if (id >= _randomizables.Count) return;
+            
             var randomizable = _randomizables[id];
             var data = _cachedDataStore[id];
             var names = new List<string>();

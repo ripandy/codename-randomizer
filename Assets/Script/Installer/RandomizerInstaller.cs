@@ -22,6 +22,8 @@ public class RandomizerInstaller : MonoInstaller
     [SerializeField] private AddItemInputFieldView addItemInputFieldView;
     [SerializeField] private TextView titleView;
     [SerializeField] private TextView resultView;
+    [SerializeField] private BaseView randomizeButtonView;
+    [SerializeField] private BaseView addRandomizableButtonView;
     [SerializeField] private BaseView clearButtonView;
     [SerializeField] private BaseView resetButtonView;
 
@@ -85,8 +87,11 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<ZenjectInitializers>().AsSingle();
 
         Container.Bind<IOrderedView>().FromInstance(addItemInputFieldView).WhenInjectedInto<AddItemPresenter>();
-        Container.Bind<ITextView>().FromInstance(titleView).WhenInjectedInto<RandomizablePresenter>();
+        Container.Bind<ITextView>().FromInstance(titleView)
+            .WhenInjectedInto(typeof(RandomizablePresenter), typeof(RandomizePresenter));
         Container.Bind<ITextView>().FromInstance(resultView).WhenInjectedInto<ResultPresenter>();
+        Container.Bind<IView>().FromInstance(randomizeButtonView).WhenInjectedInto<RandomizePresenter>();
+        Container.Bind<IView>().FromInstance(addRandomizableButtonView).WhenInjectedInto<AddRandomizablePresenter>();
         Container.Bind<IView>().FromInstance(clearButtonView).WhenInjectedInto<ClearPresenter>();
         Container.Bind<IView>().FromInstance(resetButtonView).WhenInjectedInto<ResetPresenter>();
     }
