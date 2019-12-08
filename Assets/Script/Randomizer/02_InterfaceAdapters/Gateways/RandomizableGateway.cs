@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using Randomizer.Entities;
 
 namespace Randomizer.InterfaceAdapters.Gateways
 {
-    public class RandomizableGateway : IGateway<Randomizable>
+    public class RandomizableGateway : IGateway<Randomizable>, IInitializable
     {
         private readonly IDataStore<RandomizableData> _cachedDataStore;
         private readonly IList<Randomizable> _randomizables = new List<Randomizable>();
@@ -11,7 +12,6 @@ namespace Randomizer.InterfaceAdapters.Gateways
         private RandomizableGateway(IDataStore<RandomizableData> cachedDataStore)
         {
             _cachedDataStore = cachedDataStore;
-            Initialize();
         }
 
         public void Initialize()
@@ -26,11 +26,10 @@ namespace Randomizer.InterfaceAdapters.Gateways
                 _randomizables.Add(randomizable);
             }
         }
-        
-        public Randomizable GetById(int id)
-        {
-            return id < _randomizables.Count ? _randomizables[id] : null;
-        }
+
+        public Randomizable[] GetAll() => _randomizables.ToArray();
+
+        public Randomizable GetById(int id) => id < _randomizables.Count ? _randomizables[id] : null;
 
         public void Save(int id)
         {

@@ -4,10 +4,14 @@ namespace Randomizer.UseCases
 {
     public interface IOutputPortInteractor
     {
-    }
-
-    public interface IOutputPortInteractor<T> : IOutputPortInteractor
-    {
-        Action<T> OutputHandler { get; set; }
+        event Action OnResponse;
+        void RaiseResponseEvent();
+        
+        ResponseType ResponseType { get; set; }
+        string Title { get; set; }
+        string[] Values { get; }
+        int ValueCount { get; }
+        void AddValue(string value);
+        void ClearValue();
     }
 }

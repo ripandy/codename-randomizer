@@ -7,18 +7,18 @@ namespace Randomizer.UseCases
     {
         private readonly Session _session;
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor<ReloadResponseMessage> _reloadResponseInteractor;
+        private readonly IOutputPortInteractor _responseInteractor;
 
         public Action InputHandler => Handle;
 
         private ClearItemInteractor(
             Session session,
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor<ReloadResponseMessage> reloadResponseInteractor)
+            IOutputPortInteractor responseInteractor)
         {
             _session = session;
             _randomizableGateway = randomizableGateway;
-            _reloadResponseInteractor = reloadResponseInteractor;
+            _responseInteractor = responseInteractor;
         }
         
         private void Handle()
@@ -28,8 +28,10 @@ namespace Randomizer.UseCases
                 randomizable.Clear();
             _randomizableGateway.Save(id);
 
-            var response = new ReloadResponseMessage {Success = true, Title = randomizable.Name, ItemNames = new string[0]};
-            _reloadResponseInteractor.OutputHandler.Invoke(response);
+            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
+            _responseInteractor.Title = randomizable.Name;
+            _responseInteractor.ClearValue();
+            _responseInteractor.RaiseResponseEvent();
         }
     }
 }

@@ -4,19 +4,19 @@ namespace Randomizer.UseCases
 {
     public class ResetInteractor : IInputPortInteractor
     {
-        private readonly IOutputPortInteractor<RandomizeResponseMessage> _randomizeResponseInteractor;
+        private readonly IOutputPortInteractor _responseInteractor;
         
         public Action InputHandler => Handle;
 
-        private ResetInteractor(IOutputPortInteractor<RandomizeResponseMessage> randomizeResponseInteractor)
+        private ResetInteractor(IOutputPortInteractor responseInteractor)
         {
-            _randomizeResponseInteractor = randomizeResponseInteractor;
+            _responseInteractor = responseInteractor;
         }
 
         private void Handle()
         {
-            var response = new RandomizeResponseMessage {Success = false, Message = "Reset Randomizer.."};
-            _randomizeResponseInteractor.OutputHandler.Invoke(response);
+            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
+            _responseInteractor.RaiseResponseEvent();
         }
     }
 }

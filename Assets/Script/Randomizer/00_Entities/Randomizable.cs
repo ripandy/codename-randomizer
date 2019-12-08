@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Randomizer.Entities
 {
@@ -8,9 +9,10 @@ namespace Randomizer.Entities
         private readonly IList<Item> _items = new List<Item>();
         public string Name { get; set; }
         public int ItemCount => _items.Count;
-        public IList<Item> Items => _items;
+        public Item[] Items => _items.ToArray();
 
         public void AddItem(Item newItem) => _items.Add(newItem);
+        public void RemoveItem(int index) => _items.RemoveAt(index);
         public void Clear() => _items.Clear();
 
         public Item Randomize()

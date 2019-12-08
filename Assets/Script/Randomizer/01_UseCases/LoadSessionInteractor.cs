@@ -6,8 +6,9 @@ namespace Randomizer.UseCases
     public class LoadSessionInteractor : IInputPortInteractor<int>
     {
         private readonly Session _session;
+        private readonly IGateway<Group> _groupGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor<ReloadResponseMessage> _reloadResponseInteractor;
+        private readonly IOutputPortInteractor _responseInteractor;
 
         public Action<int> InputHandler => Handle;
         
@@ -16,44 +17,55 @@ namespace Randomizer.UseCases
 
         private LoadSessionInteractor(
             Session session,
+            IGateway<Group> groupGateway,
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor<ReloadResponseMessage> reloadResponseInteractor)
+            IOutputPortInteractor responseInteractor)
         {
             _session = session;
+            _groupGateway = groupGateway;
             _randomizableGateway = randomizableGateway;
-            _reloadResponseInteractor = reloadResponseInteractor;
+            _responseInteractor = responseInteractor;
         }
         
         private void Handle(int request)
         {
             _session.ActiveRandomizableId = request;
-            var response = new ReloadResponseMessage();
             
+            _responseInteractor.Title = "";
+            _responseInteractor.ClearValue();
             if (request == -1)
             {
-                response.Success = false;
-                _reloadResponseInteractor.OutputHandler.Invoke(response);
-                return;
+                _responseInteractor.ResponseType = ResponseType.DisplayGroup;
+                var randomizables = _randomizableGateway.GetAll();
+                var groupId = _session.ActiveGroupId;
+                if (groupId != -1)
+                {
+                    var group = _groupGateway.GetById(groupId);
+                    _responseInteractor.Title = group.Name;
+                    foreach (var rId in group.RandomizeableIds)
+                    {
+                        _responseInteractor.AddValue(randomizables[rId].Name);
+                    }
+                }
+                else
+                {
+                    foreach (var randomizable in randomizables)
+                    {
+                        _responseInteractor.AddValue(randomizable.Name);
+                    }
+                }
             }
-
-            var randomizable = _randomizableGateway.GetById(request);
-            var itemCount = randomizable.ItemCount;
-            var itemNames = new string[itemCount];
-            for (var i = 0; i < itemCount; i++)
+            else
             {
-                var item = randomizable.Items[i];
-                itemNames[i] = (item.Name);
+                var randomizable = _randomizableGateway.GetById(request);
+                
+                _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
+                _responseInteractor.Title = randomizable.Name;
+                foreach (var item in randomizable.Items)
+                {
+                    _responseInteractor.AddValue(item.Name);
+                }
             }
-
-            response.Success = true;
-            response.Title = randomizable.Name;
-            response.ItemNames = itemNames;
-            _reloadResponseInteractor.OutputHandler.Invoke(response);
-        }
-        
-        public class ReloadResponseInteractor : IOutputPortInteractor<ReloadResponseMessage>
-        {
-            public Action<ReloadResponseMessage> OutputHandler { get; set; }
         }
     }
 }

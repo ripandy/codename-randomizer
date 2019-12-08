@@ -6,43 +6,53 @@ namespace Randomizer.UseCases
     public class RandomizeInteractor : IInputPortInteractor
     {
         private readonly Session _session;
+        private readonly IGateway<Group> _groupGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor<RandomizeResponseMessage> _randomizeResponseInteractor;
+        private readonly IOutputPortInteractor _responseInteractor;
 
         public Action InputHandler => Handle;
 
         private RandomizeInteractor(
             Session session,
+            IGateway<Group> groupGateway,
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor<RandomizeResponseMessage> randomizeResponseInteractor)
+            IOutputPortInteractor responseInteractor)
         {
             _session = session;
+            _groupGateway = groupGateway;
             _randomizableGateway = randomizableGateway;
-            _randomizeResponseInteractor = randomizeResponseInteractor;
+            _responseInteractor = responseInteractor;
         }
         
         private void Handle()
         {
-            var randomizable = _randomizableGateway.GetById(_session.ActiveRandomizableId);
-            var success = randomizable.ItemCount > 1;
-            var response = new RandomizeResponseMessage { Success = success };
+            _responseInteractor.ResponseType = ResponseType.DisplayResult;
+            _responseInteractor.ClearValue();
             
-            if (success)
+            var groupId = _session.ActiveGroupId;
+            var ids = new[] { _session.ActiveRandomizableId };
+            if (groupId >= 0)
             {
-                var item = randomizable.Randomize();
-                response.Message = item.Name;
+                var group = _groupGateway.GetById(groupId);
+                ids = group.RandomizeableIds;
+                _responseInteractor.Title = group.Name;
             }
             else
             {
-                response.Message = "Not enough item to Randomize..";
+                _responseInteractor.Title = _randomizableGateway.GetById(ids[0]).Name;
             }
-                
-            _randomizeResponseInteractor.OutputHandler.Invoke(response);
-        }
-        
-        public class RandomizeResponseInteractor : IOutputPortInteractor<RandomizeResponseMessage>
-        {
-            public Action<RandomizeResponseMessage> OutputHandler { get; set; }
+            
+            foreach (var id in ids)
+            {
+                var randomizable = _randomizableGateway.GetById(id);
+                if (randomizable.ItemCount > 0)
+                {
+                    var result = randomizable.Randomize();
+                    _responseInteractor.AddValue(result.Name);
+                }
+            }
+
+            _responseInteractor.RaiseResponseEvent();
         }
     }
 }
