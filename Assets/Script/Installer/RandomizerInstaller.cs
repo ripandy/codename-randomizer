@@ -24,7 +24,6 @@ public class RandomizerInstaller : MonoInstaller
     [Header("Views")]
     [SerializeField] private OrderedView orderedView;
     [SerializeField] private TextView titleView;
-    [SerializeField] private TextView resultView;
     [SerializeField] private BaseView randomizeButtonView;
     [SerializeField] private BaseView addRandomizableButtonView;
     [SerializeField] private BaseView clearButtonView;
@@ -70,7 +69,6 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<ContentPresenter>().AsSingle();
         Container.BindInterfacesTo<AddItemPresenter>().AsSingle();
         Container.BindInterfacesTo<AddRandomizablePresenter>().AsSingle();
-        Container.BindInterfacesTo<ResultPresenter>().AsSingle();
         Container.BindInterfacesTo<ClearPresenter>().AsSingle();
         Container.BindInterfacesTo<ResetPresenter>().AsSingle();
         
@@ -106,7 +104,6 @@ public class RandomizerInstaller : MonoInstaller
         // Bind Views
         Container.Bind<IOrderedView>().FromInstance(orderedView).WhenInjectedInto<AddItemPresenter>();
         Container.Bind<ITextView>().FromInstance(titleView).WhenInjectedInto<TitlePresenter>();
-        Container.Bind<ITextView>().FromInstance(resultView).WhenInjectedInto<ResultPresenter>();
         Container.Bind<IView>().FromInstance(randomizeButtonView).WhenInjectedInto<RandomizePresenter>();
         Container.Bind<IView>().FromInstance(addRandomizableButtonView).WhenInjectedInto<AddRandomizablePresenter>();
         Container.Bind<IView>().FromInstance(clearButtonView).WhenInjectedInto<ClearPresenter>();
