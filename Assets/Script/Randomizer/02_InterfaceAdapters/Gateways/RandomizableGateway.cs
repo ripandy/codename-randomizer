@@ -46,5 +46,11 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
             data.items = names.ToArray();
         }
+
+        public int AddNew(Randomizable newInstance)
+        {
+            _randomizables.Add(newInstance);
+            return _randomizables.Count - 1;
+        }
     }
 }

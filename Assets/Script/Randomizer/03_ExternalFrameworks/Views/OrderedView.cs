@@ -2,7 +2,7 @@ using Randomizer.InterfaceAdapters;
 
 namespace Randomizer.ExternalFrameworks.Views
 {
-    public class AddItemInputFieldView : BaseView, IOrderedView
+    public class OrderedView : BaseView, IOrderedView
     {
         private int _order;
 

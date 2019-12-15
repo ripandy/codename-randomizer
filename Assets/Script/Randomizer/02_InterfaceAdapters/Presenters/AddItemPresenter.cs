@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
@@ -8,31 +7,22 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly IOrderedView _addItemView;
 
         private AddItemPresenter(
-            IOrderedView addItemView,
-            IList<IOutputPortInteractor> responses)
-        : base(responses)
+            IOutputPortInteractor responseInteractor,
+            IOrderedView addItemView)
+            : base(responseInteractor)
         {
             _addItemView = addItemView;
         }
 
-        protected override void OnAddItem(AddItemResponseMessage response)
+        protected override void OnResponse()
         {
-            if (!response.Success) return; // TODO : show response message?
-            _addItemView.Order = response.NewItemOrder + 1;
-        }
-        
-        protected override void OnRandomize(RandomizeResponseMessage responseMessage)
-        {
-            _addItemView.Visible = !responseMessage.Success;
+            base.OnResponse();
+            _addItemView.Visible = ResponseInteractor.ResponseType == ResponseType.DisplayRandomizable;
         }
 
-        protected override void OnReload(ReloadResponseMessage responseMessage)
+        protected override void OnDisplayRandomizableResponse()
         {
-            var success = responseMessage.Success;
-            _addItemView.Visible = success;
-            
-            if (success)
-                _addItemView.Order = responseMessage.ItemNames.Length;
+            _addItemView.Order = ResponseInteractor.ValueCount; 
         }
     }
 }

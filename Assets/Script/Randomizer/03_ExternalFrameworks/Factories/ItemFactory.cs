@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Randomizer.ExternalFrameworks.Views;
 using Randomizer.InterfaceAdapters;
 
@@ -5,16 +6,16 @@ namespace Randomizer.ExternalFrameworks.Factories
 {
     public class ItemFactory : IFactoryHandler<IItemView>
     {
-        private readonly ItemView.Factory _factory;
+        private readonly IList<ItemView.Factory> _factories;
 
-        private ItemFactory(ItemView.Factory factory)
+        private ItemFactory(IList<ItemView.Factory> factories)
         {
-            _factory = factory;
+            _factories = factories;
         }
 
-        public IItemView Create()
+        public IItemView Create(int variant)
         {
-            var item = _factory.Create();
+            var item = _factories[variant].Create();
             return item;
         }
     }

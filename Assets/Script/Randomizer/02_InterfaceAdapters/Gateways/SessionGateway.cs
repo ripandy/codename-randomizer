@@ -1,7 +1,6 @@
 using System;
 using Randomizer.Entities;
 using Randomizer.UseCases;
-using UnityEngine;
 
 namespace Randomizer.InterfaceAdapters.Gateways
 {
@@ -10,6 +9,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
         private readonly Session _session;
         private readonly IDataStore<UserPreferencesData> _dataStore;
         private readonly IInputPortInteractor<int> _sessionLoaderInteractor;
+
+        private const int DefaultIndex = 0;
         
         private SessionGateway(
             Session session,
@@ -23,12 +24,11 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         public void Initialize()
         {
-            _sessionLoaderInteractor.InputHandler(_dataStore[0].RandomizableId);
+            _sessionLoaderInteractor.InputHandler(_dataStore[DefaultIndex].RandomizableId);
         }
 
         public void Dispose()
         {
-            Debug.Log("disposed...");
             _dataStore[0].RandomizableId = _session.ActiveRandomizableId;
         }
     }

@@ -26,6 +26,8 @@ namespace Randomizer.InterfaceAdapters.Controllers
             {
                 if (_types[i] == TypeCode.Empty)
                     ConnectAction(i);
+                else if (_types[i] == TypeCode.Int32)
+                    ConnectAction<int>(i);
                 else if (_types[i] == TypeCode.String)
                     ConnectAction<string>(i);
             }

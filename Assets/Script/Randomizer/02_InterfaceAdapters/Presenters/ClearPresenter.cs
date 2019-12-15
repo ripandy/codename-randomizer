@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
@@ -8,27 +7,17 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly IView _clearButtonView;
 
         private ClearPresenter(
-            IView clearButtonView,
-            IList<IOutputPortInteractor> responses)
-        : base(responses)
+            IOutputPortInteractor responseInteractor,
+            IView clearButtonView)
+            : base(responseInteractor)
         {
             _clearButtonView = clearButtonView;
         }
 
-        protected override void OnAddItem(AddItemResponseMessage responseMessage)
+        protected override void OnResponse()
         {
-            if (!responseMessage.Success) return;
-            _clearButtonView.Visible = true;
-        }
-
-        protected override void OnRandomize(RandomizeResponseMessage responseMessage)
-        {
-            _clearButtonView.Visible = !responseMessage.Success;
-        }
-
-        protected override void OnReload(ReloadResponseMessage response)
-        {
-            _clearButtonView.Visible = response.Success && response.ItemNames.Length > 0;
+            _clearButtonView.Visible = ResponseInteractor.ResponseType == ResponseType.DisplayRandomizable &&
+                                       ResponseInteractor.ValueCount > 0;
         }
     }
 }

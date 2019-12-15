@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
@@ -6,27 +5,24 @@ namespace Randomizer.InterfaceAdapters.Presenters
     public class ResultPresenter : BasePresenter
     {
         private readonly ITextView _resultView;
+
         private ResultPresenter(
-            ITextView resultView,
-            IList<IOutputPortInteractor> responses)
-        : base(responses)
+            IOutputPortInteractor responseInteractor,
+            ITextView resultView)
+            : base(responseInteractor)
         {
             _resultView = resultView;
         }
 
-        protected override void OnRandomize(RandomizeResponseMessage responseMessage)
+        protected override void OnResponse()
         {
-            var success = responseMessage.Success;
-            _resultView.Visible = success;
-            
-            if (!success) return;
-            
-            _resultView.Text = responseMessage.Message;
+            base.OnResponse();
+            _resultView.Visible = ResponseInteractor.ResponseType == ResponseType.DisplayResult;
         }
-        
-        protected override void OnReload(ReloadResponseMessage responseMessage)
+
+        protected override void OnDisplayResultResponse()
         {
-            _resultView.Visible = false;
+            _resultView.Text = ResponseInteractor.Values[0];
         }
     }
 }

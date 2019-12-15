@@ -35,36 +35,48 @@ namespace Randomizer.UseCases
             _responseInteractor.ClearValue();
             if (request == -1)
             {
-                _responseInteractor.ResponseType = ResponseType.DisplayGroup;
-                var randomizables = _randomizableGateway.GetAll();
-                var groupId = _session.ActiveGroupId;
-                if (groupId != -1)
+                ResponseAsGroup();
+            }
+            else
+            {
+                ResponseAsRandomizable();
+            }
+            _responseInteractor.RaiseResponseEvent();
+        }
+
+        private void ResponseAsGroup()
+        {
+            _responseInteractor.ResponseType = ResponseType.DisplayGroup;
+            var groupId = _session.ActiveGroupId;
+            var randomizables = _randomizableGateway.GetAll();
+            if (groupId != -1)
+            {
+                var group = _groupGateway.GetById(groupId);
+                _responseInteractor.Title = group.Name;
+                foreach (var rId in group.RandomizeableIds)
                 {
-                    var group = _groupGateway.GetById(groupId);
-                    _responseInteractor.Title = group.Name;
-                    foreach (var rId in group.RandomizeableIds)
-                    {
-                        _responseInteractor.AddValue(randomizables[rId].Name);
-                    }
-                }
-                else
-                {
-                    foreach (var randomizable in randomizables)
-                    {
-                        _responseInteractor.AddValue(randomizable.Name);
-                    }
+                    _responseInteractor.AddValue(randomizables[rId].Name);
                 }
             }
             else
             {
-                var randomizable = _randomizableGateway.GetById(request);
-                
-                _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
-                _responseInteractor.Title = randomizable.Name;
-                foreach (var item in randomizable.Items)
+                foreach (var randomizable in randomizables)
                 {
-                    _responseInteractor.AddValue(item.Name);
+                    _responseInteractor.AddValue(randomizable.Name);
                 }
+            }
+        }
+
+        private void ResponseAsRandomizable()
+        {
+            var randomizableId = _session.ActiveRandomizableId;
+            var randomizable = _randomizableGateway.GetById(randomizableId);
+                
+            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
+            _responseInteractor.Title = randomizable.Name;
+            foreach (var item in randomizable.Items)
+            {
+                _responseInteractor.AddValue(item.Name);
             }
         }
     }

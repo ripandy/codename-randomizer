@@ -4,22 +4,14 @@ using System.Linq;
 
 namespace Randomizer.UseCases
 {
-    public enum ResponseType
-    {
-        None = -1,
-        DisplayResult,
-        DisplayRandomizable,
-        DisplayGroup,
-    }
-    
-    public class ResponseMessageHandler : IOutputPortInteractor
+    public class ResponseInteractor : IOutputPortInteractor
     {
         private readonly IList<string> _values = new List<string>();
      
-        public event Action OnResponse;   
+        public event Action OnResponse;
         public void RaiseResponseEvent() => OnResponse?.Invoke();
-        
-        public ResponseType ResponseType { get; set; } = ResponseType.None;
+
+        public ResponseType ResponseType { get; set; }
         public string Title { get; set; }
         public string[] Values => _values.ToArray();
         public int ValueCount => _values.Count;
