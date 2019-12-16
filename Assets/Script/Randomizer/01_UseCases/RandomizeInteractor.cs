@@ -52,7 +52,8 @@ namespace Randomizer.UseCases
                 }
             }
 
-            _responseInteractor.RaiseResponseEvent();
+            if (_responseInteractor.ValueCount > 0)
+                _responseInteractor.RaiseResponseEvent();
         }
     }
 }
