@@ -6,6 +6,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
 {
     public class GroupGateway : IGateway<Group>, IInitializable
     {
+        public bool IsInitialized { get; private set; }
+        
         private readonly IDataStore<GroupData> _cachedDataStore;
         private readonly IList<Group> _groups = new List<Group>();
 
@@ -16,6 +18,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         public void Initialize()
         {
+            if (IsInitialized) return;
+                IsInitialized = true;
             foreach (var data in _cachedDataStore.Data)
             {
                 var group = new Group { Name = data.name };

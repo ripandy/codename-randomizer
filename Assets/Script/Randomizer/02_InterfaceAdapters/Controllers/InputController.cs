@@ -6,6 +6,8 @@ namespace Randomizer.InterfaceAdapters.Controllers
 {
     public class InputController : IInitializable
     {
+        public bool IsInitialized { get; private set; }
+        
         private readonly IList<IInputPortInteractor> _inputPortInteractors;
         private readonly IList<IActionHandler> _actionHandlers;
         private readonly IList<TypeCode> _types;
@@ -22,6 +24,8 @@ namespace Randomizer.InterfaceAdapters.Controllers
 
         public void Initialize()
         {
+            if (IsInitialized) return;
+                IsInitialized = true;
             for (int i = 0; i < _types.Count; i++)
             {
                 if (_types[i] == TypeCode.Empty)

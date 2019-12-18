@@ -4,6 +4,8 @@ namespace Randomizer.InterfaceAdapters.Controllers
 {
     public class SelectRandomizableInputController : IInitializable
     {
+        public bool IsInitialized { get; private set; }
+        
         private readonly IInputPortInteractor<int> _sessionLoaderInteractor;
         private readonly IActionHandler<int> _actionHandler;
         
@@ -17,6 +19,8 @@ namespace Randomizer.InterfaceAdapters.Controllers
 
         public void Initialize()
         {
+            if (IsInitialized) return;
+                IsInitialized = true;
             _actionHandler.OnAction = _sessionLoaderInteractor.InputHandler;
         }
     }

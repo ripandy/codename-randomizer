@@ -6,11 +6,14 @@ namespace Randomizer.InterfaceAdapters.Gateways
 {
     public class SessionGateway : IInitializable, IDisposable
     {
+        public bool IsInitialized { get; private set; }
+        
         private readonly Session _session;
         private readonly IDataStore<UserPreferencesData> _dataStore;
         private readonly IInputPortInteractor<int> _sessionLoaderInteractor;
 
         private const int DefaultIndex = 0;
+        private UserPreferencesData DefaultData => _dataStore[DefaultIndex];
         
         private SessionGateway(
             Session session,
@@ -24,12 +27,16 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         public void Initialize()
         {
-            _sessionLoaderInteractor.InputHandler(_dataStore[DefaultIndex].RandomizableId);
+            if (IsInitialized) return;
+                IsInitialized = true;
+            var param = DefaultData.RandomizableId;
+            _sessionLoaderInteractor.InputHandler(param);
         }
 
         public void Dispose()
         {
-            _dataStore[0].RandomizableId = _session.ActiveRandomizableId;
+            DefaultData.GroupId = _session.ActiveGroupId;
+            DefaultData.RandomizableId = _session.ActiveRandomizableId;
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
 {
     public class RandomizableGateway : IGateway<Randomizable>, IInitializable
     {
+        public bool IsInitialized { get; private set; }
+        
         private readonly IDataStore<RandomizableData> _cachedDataStore;
         private readonly IList<Randomizable> _randomizables = new List<Randomizable>();
 
@@ -16,6 +18,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         public void Initialize()
         {
+            if (IsInitialized) return;
+                IsInitialized = true;
             foreach (var data in _cachedDataStore.Data)
             {
                 var randomizable = new Randomizable{ Name = data.name };

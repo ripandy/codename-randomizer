@@ -5,6 +5,8 @@ namespace Randomizer.InterfaceAdapters.Presenters
 {
     public abstract class BasePresenter : IInitializable, IDisposable
     {
+        public bool IsInitialized { get; private set; }
+        
         protected readonly IOutputPortInteractor ResponseInteractor;
 
         protected BasePresenter(IOutputPortInteractor responseInteractor)
@@ -14,6 +16,8 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         public virtual void Initialize()
         {
+            if (IsInitialized) return;
+                IsInitialized = true;
             ResponseInteractor.OnResponse += OnResponse;
         }
 
