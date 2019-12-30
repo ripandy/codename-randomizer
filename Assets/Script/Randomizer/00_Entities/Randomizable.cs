@@ -8,6 +8,7 @@ namespace Randomizer.Entities
     {
         private readonly IList<Item> _items = new List<Item>();
         public string Name { get; set; }
+        
         public int ItemCount => _items.Count;
         public Item[] Items => _items.ToArray();
 

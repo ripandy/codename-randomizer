@@ -22,10 +22,11 @@ namespace Randomizer.ExternalFrameworks.Views
         [SerializeField] private Button addButton;
         [SerializeField] private RectTransform captionTransform;
 
-        private const float AnimationDuration = 0.6f;
+        private const float AnimationDuration = 0.2f;
         
         private EventSystem _eventSystem;
         private ButtonState _state;
+        private bool _animate;
         
         private void Awake()
         {
@@ -40,6 +41,7 @@ namespace Randomizer.ExternalFrameworks.Views
         private void BindReactive()
         {
             addButton.onClick.AddListener(OnClick);
+            inputField.onDeselect.AddListener((s) => SetState(ButtonState.Inactive));
             this.ObserveEveryValueChanged(_ => inputFieldView.Visible)
                 .Subscribe(gameObject.SetActive)
                 .AddTo(this);
@@ -47,21 +49,41 @@ namespace Randomizer.ExternalFrameworks.Views
 
         private void OnClick()
         {
-            var newState = (int) ++_state;
+            var newState = (int) _state + 1;
             var len = Enum.GetValues(typeof(ButtonState)).Length;
-            _state = (ButtonState) (newState % len);
-            
-            // animate input field
-            var targetY = _state == ButtonState.Active ? 0 : -inputFieldContainer.rect.height;
-            var ease = _state == ButtonState.Active ? Ease.InQuad : Ease.OutQuad;
-            inputFieldContainer.DOMoveY(targetY, AnimationDuration)
-                .SetEase(ease)
-                .OnComplete(() => SelectInputField(_state == ButtonState.Active));
-            
-            // animate button
-            var targetRotation = _state == ButtonState.Inactive ? 0 : 45;
+            SetState((ButtonState) (newState % len));
+        }
+        
+        private void SetState(ButtonState newState)
+        {
+            if (_state == newState || _animate) return;
+            AnimateButton(newState == ButtonState.Active);
+            ShowInputField(newState == ButtonState.Active);
+            _animate = true;
+            _state = newState;
+        }
+
+        private void AnimateButton(bool active)
+        {
+            // var targetRotation = active ? -45 : 0;
+            var targetRotation = captionTransform.rotation.eulerAngles.z + 45;
+            var ease = active ? Ease.InQuad : Ease.OutQuad;
             captionTransform.DORotate(new Vector3(0f, 0f, targetRotation), AnimationDuration)
-                .SetEase(ease);
+                .SetEase(ease)
+                .OnComplete(AnimationDone);
+        }
+
+        private void ShowInputField(bool show)
+        {
+            var targetY = show ? 0 : -inputFieldContainer.rect.height;
+            var ease = show ? Ease.InQuad : Ease.OutQuad;
+            var targetPos = inputFieldContainer.anchoredPosition;
+            targetPos.y = targetY;
+            
+            DOTween.To(() => inputFieldContainer.anchoredPosition,
+                    value => inputFieldContainer.anchoredPosition = value, targetPos, AnimationDuration)
+                .SetEase(ease)
+                .OnComplete(() => SelectInputField(show));
         }
 
         private void SelectInputField(bool select)
@@ -70,6 +92,11 @@ namespace Randomizer.ExternalFrameworks.Views
                 inputField.Select();
             else
                 _eventSystem.SetSelectedGameObject(null);
+        }
+
+        private void AnimationDone()
+        {
+            _animate = false;
         }
     }
 }

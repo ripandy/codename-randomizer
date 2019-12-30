@@ -41,20 +41,20 @@ namespace Randomizer.InterfaceAdapters.Gateways
             
             var randomizable = _randomizables[id];
             var data = _cachedDataStore[id];
-            var names = new List<string>();
-            
-            foreach (var item in randomizable.Items)
-            {
-                names.Add(item.Name);
-            }
 
-            data.items = names.ToArray();
+            data.name = randomizable.Name;
+            data.items = randomizable.Items
+                .Select(item => item.Name)
+                .ToArray();
         }
 
         public int AddNew(Randomizable newInstance)
         {
             _randomizables.Add(newInstance);
-            return _randomizables.Count - 1;
+            _cachedDataStore.Create();
+            var index = _randomizables.Count - 1;
+            Save(index);
+            return index;
         }
     }
 }

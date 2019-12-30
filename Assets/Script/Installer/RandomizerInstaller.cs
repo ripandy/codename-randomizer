@@ -69,6 +69,7 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<ContentPresenter>().AsSingle();
         Container.BindInterfacesTo<AddItemPresenter>().AsSingle();
         Container.BindInterfacesTo<AddRandomizablePresenter>().AsSingle();
+        Container.BindInterfacesTo<RandomizePresenter>().AsSingle();
         Container.BindInterfacesTo<ClearPresenter>().AsSingle();
         Container.BindInterfacesTo<ResetPresenter>().AsSingle();
         
