@@ -35,20 +35,25 @@ namespace Randomizer.ExternalFrameworks.Handlers
         {
             inputField.onSubmit.AddListener(OnSubmit);
             inputField.onSelect.AddListener(OnSelect);
+            inputField.onDeselect.AddListener(OnDeselect);
         }
 
         private void OnSubmit(string value)
         {
             _value = value;
             OnAction.Invoke(value);
-            inputField.text = "";
-            ShowPlaceholder(true);
             _eventSystem.SetSelectedGameObject(null);
         }
 
         private void OnSelect(string value)
         {
             ShowPlaceholder(showPlaceholderWhenActiveAndEmpty && string.IsNullOrEmpty(value));
+        }
+        
+        private void OnDeselect(string value)
+        {
+            inputField.text = "";
+            ShowPlaceholder(true);
         }
         
         private void ShowPlaceholder(bool show)

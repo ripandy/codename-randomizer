@@ -27,7 +27,6 @@ public class RandomizerInstaller : MonoInstaller
     [SerializeField] private BaseView randomizeButtonView;
     [SerializeField] private BaseView addRandomizableButtonView;
     [SerializeField] private BaseView clearButtonView;
-    [SerializeField] private BaseView resetButtonView;
     [SerializeField] private BaseView upNavigationView;
 
     public override void InstallBindings()
@@ -52,7 +51,6 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<AddItemInteractor>().AsSingle();
         Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
         Container.BindInterfacesTo<ClearItemInteractor>().AsSingle();
-        Container.BindInterfacesTo<ResetInteractor>().AsSingle();
         Container.BindInterfacesTo<UpNavigationInteractor>().AsSingle();
         
         // Use case shared response interactor
@@ -63,7 +61,7 @@ public class RandomizerInstaller : MonoInstaller
     {
         // controllers
         // must to be in order -> check for the order of IActionHandler too!!
-        var inputTypeCodes = new List<TypeCode> {TypeCode.String, TypeCode.String, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty};
+        var inputTypeCodes = new List<TypeCode> {TypeCode.String, TypeCode.String, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty};
         Container.BindInterfacesTo<InputController>().AsSingle().WithArguments(inputTypeCodes);
         
         // presenters
@@ -73,7 +71,6 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<AddRandomizablePresenter>().AsSingle();
         Container.BindInterfacesTo<RandomizePresenter>().AsSingle();
         Container.BindInterfacesTo<ClearPresenter>().AsSingle();
-        Container.BindInterfacesTo<ResetPresenter>().AsSingle();
         Container.BindInterfacesTo<UpNavigationPresenter>().AsSingle();
         
         // gateways
@@ -111,7 +108,6 @@ public class RandomizerInstaller : MonoInstaller
         Container.Bind<IView>().FromInstance(randomizeButtonView).WhenInjectedInto<RandomizePresenter>();
         Container.Bind<IView>().FromInstance(addRandomizableButtonView).WhenInjectedInto<AddRandomizablePresenter>();
         Container.Bind<IView>().FromInstance(clearButtonView).WhenInjectedInto<ClearPresenter>();
-        Container.Bind<IView>().FromInstance(resetButtonView).WhenInjectedInto<ResetPresenter>();
         Container.Bind<IView>().FromInstance(upNavigationView).WhenInjectedInto<UpNavigationPresenter>();
     }
     
