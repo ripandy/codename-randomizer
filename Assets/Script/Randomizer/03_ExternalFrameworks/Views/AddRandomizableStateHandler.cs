@@ -41,6 +41,7 @@ namespace Randomizer.ExternalFrameworks.Views
         private void BindReactive()
         {
             addButton.onClick.AddListener(OnClick);
+            inputField.onSubmit.AddListener(s => SetState(ButtonState.Inactive));
             inputField.onDeselect.AddListener((s) => SetState(ButtonState.Inactive));
             this.ObserveEveryValueChanged(_ => inputFieldView.Visible)
                 .Subscribe(gameObject.SetActive)

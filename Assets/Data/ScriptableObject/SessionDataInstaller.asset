@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataStore:
     userData:
-    - GroupId: 0
+    - GroupId: -1
       RandomizableId: -1

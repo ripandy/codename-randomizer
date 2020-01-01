@@ -9,6 +9,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
     public class UnityInputFieldHandler : MonoBehaviour, IActionHandler<string>
     {
         [SerializeField] private TMP_InputField inputField;
+        [SerializeField] private bool showPlaceholderWhenActiveAndEmpty;
 
         private EventSystem _eventSystem;
         private string _value;
@@ -47,7 +48,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         private void OnSelect(string value)
         {
-            ShowPlaceholder(false);
+            ShowPlaceholder(showPlaceholderWhenActiveAndEmpty && string.IsNullOrEmpty(value));
         }
         
         private void ShowPlaceholder(bool show)
