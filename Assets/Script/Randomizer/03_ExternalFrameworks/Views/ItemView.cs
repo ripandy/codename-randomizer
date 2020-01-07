@@ -9,6 +9,17 @@ namespace Randomizer.ExternalFrameworks.Views
     {
         [SerializeField] private TMP_Text text;
         
+        [SerializeField] private bool handleEmpty;
+        [SerializeField] private string emptyText = "(Untitled)";
+        [SerializeField] private Color emptyColor = Color.gray;
+        
+        private Color activeColor;
+
+        private void Awake()
+        {
+            activeColor = text.color;
+        }
+
         private int _order;
         public int Order
         {
@@ -23,12 +34,25 @@ namespace Randomizer.ExternalFrameworks.Views
         public string Text
         {
             get => text.text;
-            set => text.text = value;
+            set => UpdateText(value);
         }
 
         private void ArrangeByOrder(int order)
         {
             transform.SetSiblingIndex(order);
+        }
+
+        private void UpdateText(string value)
+        {
+            if (!handleEmpty)
+            {
+                text.text = value;
+                return;
+            }
+            
+            var isEmpty = string.IsNullOrEmpty(value);
+            text.text = isEmpty ? emptyText : value;
+            text.color = isEmpty ? emptyColor : activeColor;
         }
         
         public class Factory : PlaceholderFactory<ItemView>

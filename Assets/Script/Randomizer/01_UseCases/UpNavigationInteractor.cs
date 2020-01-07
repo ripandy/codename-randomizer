@@ -29,7 +29,8 @@ namespace Randomizer.UseCases
             _responseInteractor.Title = "";
             _responseInteractor.ClearValue();
             
-            if (_session.ActiveRandomizableId >= 0)
+            var currentState = _responseInteractor.ResponseType;
+            if (_session.ActiveRandomizableId >= 0 && currentState == ResponseType.DisplayResult)
                 RespondAsRandomizable();
             else
                 RespondAsGroup();
@@ -52,6 +53,14 @@ namespace Randomizer.UseCases
 
         private void RespondAsGroup()
         {
+            if (_session.ActiveRandomizableId >= 0)
+            {
+                var id = _session.ActiveRandomizableId;
+                var randomizable = _randomizableGateway.GetById(id);
+                if (string.IsNullOrEmpty(randomizable.Name) && randomizable.ItemCount == 0)
+                    _randomizableGateway.Remove(id);
+            }
+            
             _session.ActiveRandomizableId = -1;
             _responseInteractor.ResponseType = ResponseType.DisplayGroup;
             var groupId = _session.ActiveGroupId;

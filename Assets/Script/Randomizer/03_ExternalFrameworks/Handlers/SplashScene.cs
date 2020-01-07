@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SplashScene : MonoBehaviour
+namespace Randomizer.ExternalFrameworks.Handlers
 {
-    private void Awake()
+    public class SplashScene : MonoBehaviour
     {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 24;
-    }
+        private void Awake()
+        {
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 24;
+        }
 
-    private void Start()
-    {
-        SceneManager.LoadScene("RandomizerScene");
+        private void Start()
+        {
+            SceneManager.LoadScene("RandomizerScene");
+        }
     }
 }
