@@ -42,20 +42,24 @@ namespace Randomizer.InterfaceAdapters.Gateways
             
             var group = _groups[id];
             var data = _cachedDataStore[id];
-            var ids = new List<int>();
-            
-            foreach (var randomizableId in group.RandomizeableIds)
-            {
-                ids.Add(randomizableId);
-            }
 
-            data.randomizableIds = ids.ToArray();
+            data.name = group.Name;
+            data.randomizableIds = group.RandomizeableIds;
         }
 
         public int AddNew(Group newInstance)
         {
             _groups.Add(newInstance);
-            return _groups.Count - 1;
+            _cachedDataStore.Create();
+            var index = _groups.Count - 1;
+            Save(index);
+            return index;
+        }
+        
+        public void Remove(int id)
+        {
+            _groups.RemoveAt(id);
+            _cachedDataStore.Delete(id);
         }
     }
 }

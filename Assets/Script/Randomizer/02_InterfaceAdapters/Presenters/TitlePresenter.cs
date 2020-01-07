@@ -18,7 +18,11 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse()
         {
-            _title.Text = string.IsNullOrEmpty(ResponseInteractor.Title) ? DefaultTitle : ResponseInteractor.Title;
+            _title.Text =
+                string.IsNullOrEmpty(ResponseInteractor.Title) &&
+                ResponseInteractor.ResponseType != ResponseType.DisplayRandomizable
+                    ? DefaultTitle
+                    : ResponseInteractor.Title;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         private readonly IDataStore<RandomizableData> _cachedDataStore;
         private readonly IList<Randomizable> _randomizables = new List<Randomizable>();
-        
+
         public int Length => _randomizables.Count;
 
         private RandomizableGateway(IDataStore<RandomizableData> cachedDataStore)
@@ -57,6 +57,12 @@ namespace Randomizer.InterfaceAdapters.Gateways
             var index = _randomizables.Count - 1;
             Save(index);
             return index;
+        }
+
+        public void Remove(int id)
+        {
+            _randomizables.RemoveAt(id);
+            _cachedDataStore.Delete(id);
         }
     }
 }

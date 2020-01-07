@@ -11,6 +11,7 @@ using Randomizer.InterfaceAdapters.Presenters;
 using Randomizer.UseCases;
 using Script.Installer;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 public class RandomizerInstaller : MonoInstaller
@@ -22,10 +23,10 @@ public class RandomizerInstaller : MonoInstaller
     [SerializeField] private Transform gridItemContainer;
 
     [Header("Views")]
-    [SerializeField] private OrderedView orderedView;
+    [SerializeField] private OrderedView addItemButtonView;
+    [SerializeField] private OrderedView addRandomizableButtonView;
     [SerializeField] private TextView titleView;
     [SerializeField] private TextView randomizeButtonView;
-    [SerializeField] private BaseView addRandomizableButtonView;
     [SerializeField] private BaseView clearButtonView;
     [SerializeField] private BaseView upNavigationView;
 
@@ -47,8 +48,8 @@ public class RandomizerInstaller : MonoInstaller
         // Use case interactors
         Container.BindInterfacesTo<LoadSessionInteractor>().AsSingle().WhenNotInjectedInto<InputController>();
         // must to be in order -> check for the order of IActionHandler too!!
-        Container.BindInterfacesTo<AddRandomizableInteractor>().AsSingle();
         Container.BindInterfacesTo<AddItemInteractor>().AsSingle();
+        Container.BindInterfacesTo<AddRandomizableInteractor>().AsSingle();
         Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
         Container.BindInterfacesTo<ClearItemInteractor>().AsSingle();
         Container.BindInterfacesTo<UpNavigationInteractor>().AsSingle();
@@ -61,7 +62,7 @@ public class RandomizerInstaller : MonoInstaller
     {
         // controllers
         // must to be in order -> check for the order of IActionHandler too!!
-        var inputTypeCodes = new List<TypeCode> {TypeCode.String, TypeCode.String, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty};
+        var inputTypeCodes = new List<TypeCode> {TypeCode.String, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty};
         Container.BindInterfacesTo<InputController>().AsSingle().WithArguments(inputTypeCodes);
         
         // presenters
@@ -103,10 +104,10 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<ZenjectInitializers>().AsSingle();
         
         // Bind Views
-        Container.Bind<IOrderedView>().FromInstance(orderedView).WhenInjectedInto<AddItemPresenter>();
+        Container.Bind<IOrderedView>().FromInstance(addItemButtonView).WhenInjectedInto<AddItemPresenter>();
+        Container.Bind<IOrderedView>().FromInstance(addRandomizableButtonView).WhenInjectedInto<AddRandomizablePresenter>();
         Container.Bind<ITextView>().FromInstance(titleView).WhenInjectedInto<TitlePresenter>();
         Container.Bind<ITextView>().FromInstance(randomizeButtonView).WhenInjectedInto<RandomizePresenter>();
-        Container.Bind<IView>().FromInstance(addRandomizableButtonView).WhenInjectedInto<AddRandomizablePresenter>();
         Container.Bind<IView>().FromInstance(clearButtonView).WhenInjectedInto<ClearPresenter>();
         Container.Bind<IView>().FromInstance(upNavigationView).WhenInjectedInto<UpNavigationPresenter>();
     }

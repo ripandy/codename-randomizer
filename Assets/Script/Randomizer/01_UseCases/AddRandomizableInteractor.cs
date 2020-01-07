@@ -3,15 +3,13 @@ using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
-    public class AddRandomizableInteractor : IInputPortInteractor<string>
+    public class AddRandomizableInteractor : IInputPortInteractor
     {
         private readonly Session _session;
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IOutputPortInteractor _responseInteractor;
 
-        public Action<string> InputHandler => Handle;
-        private const string Data = "";
-        Action IInputPortInteractor.InputHandler => () => InputHandler(Data);
+        public Action InputHandler => Handle;
 
         private AddRandomizableInteractor(
             Session session,
@@ -23,9 +21,9 @@ namespace Randomizer.UseCases
             _responseInteractor = responseInteractor;
         }
 
-        private void Handle(string request)
+        private void Handle()
         {
-            var randomizable = new Randomizable { Name = request };
+            var randomizable = new Randomizable();
             _session.ActiveRandomizableId = _randomizableGateway.AddNew(randomizable);
 
             _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
