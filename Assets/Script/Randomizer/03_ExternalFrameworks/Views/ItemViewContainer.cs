@@ -8,7 +8,6 @@ namespace Randomizer.ExternalFrameworks.Views
     public class ItemViewContainer : MonoBehaviour, IViewContainer
     {
         public ContentType Type { get; set; }
-        public ContentAnchor Anchor { get; set; }
 
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private RectTransform[] contentContainers;
@@ -25,10 +24,6 @@ namespace Randomizer.ExternalFrameworks.Views
             this.ObserveEveryValueChanged(_ => Type)
                 .Subscribe(UpdateContentType)
                 .AddTo(this);
-            
-            this.ObserveEveryValueChanged(_ => Anchor)
-                .Subscribe(UpdateContentAnchor)
-                .AddTo(this);
         }
 
         private void UpdateContentType(ContentType type)
@@ -40,14 +35,6 @@ namespace Randomizer.ExternalFrameworks.Views
             }
 
             scrollRect.content = contentContainers[contentIdx];
-        }
-
-        private void UpdateContentAnchor(ContentAnchor anchor)
-        {
-            var container = contentContainers[(int) Type];
-            var pivot = container.pivot;
-                pivot.y = _anchors[(int) anchor];
-            container.pivot = pivot;
         }
     }
 }

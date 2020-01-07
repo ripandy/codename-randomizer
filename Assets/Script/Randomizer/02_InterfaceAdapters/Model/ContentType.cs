@@ -5,10 +5,4 @@ namespace Randomizer.InterfaceAdapters
         Vertical,
         Grid
     }
-
-    public enum ContentAnchor
-    {
-        Top,
-        Center
-    }
 }

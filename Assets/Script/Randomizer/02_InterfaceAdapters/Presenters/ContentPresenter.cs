@@ -24,7 +24,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
             base.OnResponse();
             var prevType = _viewContainer.Type;
             _viewContainer.Type = ResponseInteractor.ResponseType == ResponseType.DisplayGroup ? ContentType.Grid : ContentType.Vertical;
-            _viewContainer.Anchor = ResponseInteractor.ResponseType == ResponseType.DisplayResult ? ContentAnchor.Center : ContentAnchor.Top;
             if (prevType != _viewContainer.Type)
                 ClearItems();
             UpdateContents();
