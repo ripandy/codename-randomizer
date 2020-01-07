@@ -24,7 +24,7 @@ public class RandomizerInstaller : MonoInstaller
     [Header("Views")]
     [SerializeField] private OrderedView orderedView;
     [SerializeField] private TextView titleView;
-    [SerializeField] private BaseView randomizeButtonView;
+    [SerializeField] private TextView randomizeButtonView;
     [SerializeField] private BaseView addRandomizableButtonView;
     [SerializeField] private BaseView clearButtonView;
     [SerializeField] private BaseView upNavigationView;
@@ -105,7 +105,7 @@ public class RandomizerInstaller : MonoInstaller
         // Bind Views
         Container.Bind<IOrderedView>().FromInstance(orderedView).WhenInjectedInto<AddItemPresenter>();
         Container.Bind<ITextView>().FromInstance(titleView).WhenInjectedInto<TitlePresenter>();
-        Container.Bind<IView>().FromInstance(randomizeButtonView).WhenInjectedInto<RandomizePresenter>();
+        Container.Bind<ITextView>().FromInstance(randomizeButtonView).WhenInjectedInto<RandomizePresenter>();
         Container.Bind<IView>().FromInstance(addRandomizableButtonView).WhenInjectedInto<AddRandomizablePresenter>();
         Container.Bind<IView>().FromInstance(clearButtonView).WhenInjectedInto<ClearPresenter>();
         Container.Bind<IView>().FromInstance(upNavigationView).WhenInjectedInto<UpNavigationPresenter>();

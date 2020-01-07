@@ -26,19 +26,14 @@ namespace Randomizer.UseCases
 
         private void Handle()
         {
-            var currentState = _responseInteractor.ResponseType;
-            
             _responseInteractor.Title = "";
             _responseInteractor.ClearValue();
-            switch (currentState)
-            {
-                case ResponseType.DisplayResult:
-                    RespondAsRandomizable();
-                    break;
-                case ResponseType.DisplayRandomizable:
-                    RespondAsGroup();
-                    break;
-            }
+            
+            if (_session.ActiveRandomizableId >= 0)
+                RespondAsRandomizable();
+            else
+                RespondAsGroup();
+
             _responseInteractor.RaiseResponseEvent();
         }
 

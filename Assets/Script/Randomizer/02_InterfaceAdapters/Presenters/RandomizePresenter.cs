@@ -4,11 +4,11 @@ namespace Randomizer.InterfaceAdapters.Presenters
 {
     public class RandomizePresenter : BasePresenter
     {
-        private readonly IView _button;
+        private readonly ITextView _button;
 
         private RandomizePresenter(
             IOutputPortInteractor responseInteractor,
-            IView button)
+            ITextView button)
             : base(responseInteractor)
         {
             _button = button;
@@ -16,8 +16,15 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse()
         {
-            _button.Visible = ResponseInteractor.ResponseType == ResponseType.DisplayRandomizable ||
-                              ResponseInteractor.ResponseType == ResponseType.DisplayResult;
+            switch (ResponseInteractor.ResponseType)
+            {
+                case ResponseType.DisplayRandomizable:
+                    _button.Text = "Randomize";
+                    break;
+                case ResponseType.DisplayGroup:
+                    _button.Text = "Randomize All";
+                    break;
+            }
         }
     }
 }

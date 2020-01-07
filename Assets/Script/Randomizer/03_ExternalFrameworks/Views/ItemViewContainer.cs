@@ -11,6 +11,7 @@ namespace Randomizer.ExternalFrameworks.Views
 
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private RectTransform[] contentContainers;
+        [SerializeField] private RectTransform title;
 
         private readonly float[] _anchors = {1f, 0.5f};
 
@@ -33,6 +34,8 @@ namespace Randomizer.ExternalFrameworks.Views
             {
                 contentContainers[i].gameObject.SetActive(i == contentIdx);
             }
+            title.SetParent(contentContainers[contentIdx]);
+            title.SetAsFirstSibling();
 
             scrollRect.content = contentContainers[contentIdx];
         }

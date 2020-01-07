@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Randomizer.Entities;
 
 namespace Randomizer.UseCases
@@ -28,18 +29,26 @@ namespace Randomizer.UseCases
         {
             _responseInteractor.ResponseType = ResponseType.DisplayResult;
             _responseInteractor.ClearValue();
-            
+
+            var randomizableId = _session.ActiveRandomizableId;
             var groupId = _session.ActiveGroupId;
-            var ids = new[] { _session.ActiveRandomizableId };
-            if (groupId >= 0)
+            var ids = new[] { randomizableId };
+            if (randomizableId >= 0)
             {
-                var group = _groupGateway.GetById(groupId);
-                ids = group.RandomizeableIds;
-                _responseInteractor.Title = group.Name;
+                _responseInteractor.Title = _randomizableGateway.GetById(randomizableId).Name;
             }
             else
             {
-                _responseInteractor.Title = _randomizableGateway.GetById(ids[0]).Name;
+                if (groupId >= 0)
+                {
+                    var group = _groupGateway.GetById(groupId);
+                    ids = group.RandomizeableIds;
+                    _responseInteractor.Title = group.Name;
+                }
+                else
+                {
+                    ids = Enumerable.Range(0, _randomizableGateway.Length).ToArray();
+                }
             }
             
             foreach (var id in ids)
