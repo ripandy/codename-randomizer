@@ -6,5 +6,6 @@ namespace Randomizer.Entities
         T GetById(int id);
         void Save(int id);
         int AddNew(T newInstance);
+        int Length { get; }
     }
 }

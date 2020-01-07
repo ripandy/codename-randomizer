@@ -10,6 +10,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
         
         private readonly IDataStore<GroupData> _cachedDataStore;
         private readonly IList<Group> _groups = new List<Group>();
+        
+        public int Length => _groups.Count;
 
         public GroupGateway(IDataStore<GroupData> cachedDataStore)
         {

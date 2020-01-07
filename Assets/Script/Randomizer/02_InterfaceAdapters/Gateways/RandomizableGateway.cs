@@ -7,9 +7,11 @@ namespace Randomizer.InterfaceAdapters.Gateways
     public class RandomizableGateway : IGateway<Randomizable>, IInitializable
     {
         public bool IsInitialized { get; private set; }
-        
+
         private readonly IDataStore<RandomizableData> _cachedDataStore;
         private readonly IList<Randomizable> _randomizables = new List<Randomizable>();
+        
+        public int Length => _randomizables.Count;
 
         private RandomizableGateway(IDataStore<RandomizableData> cachedDataStore)
         {
