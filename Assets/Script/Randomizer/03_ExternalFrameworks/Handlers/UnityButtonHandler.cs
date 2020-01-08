@@ -14,6 +14,8 @@ namespace Randomizer.ExternalFrameworks.Handlers
         private void Start()
         {
             BindReactive();
+            button.enabled = false;
+            button.enabled = true;
         }
 
         protected virtual void BindReactive()
