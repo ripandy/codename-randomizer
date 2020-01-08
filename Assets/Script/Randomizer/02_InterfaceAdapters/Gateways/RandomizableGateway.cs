@@ -25,10 +25,17 @@ namespace Randomizer.InterfaceAdapters.Gateways
             foreach (var data in _cachedDataStore.Data)
             {
                 var randomizable = new Randomizable{ Name = data.name };
+                
                 foreach (var item in data.items)
                 {
                     randomizable.AddItem(new Item { Name = item });
                 }
+
+                foreach (var labelId in data.labelIds)
+                {
+                    randomizable.AddLabel(labelId);
+                }
+                
                 _randomizables.Add(randomizable);
             }
         }
@@ -48,6 +55,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
             data.items = randomizable.Items
                 .Select(item => item.Name)
                 .ToArray();
+            data.labelIds = randomizable.LabelIds;
         }
 
         public int AddNew(Randomizable newInstance)

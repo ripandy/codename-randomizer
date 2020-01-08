@@ -7,7 +7,7 @@ namespace Randomizer.UseCases
     public class RandomizeInteractor : IInputPortInteractor
     {
         private readonly Session _session;
-        private readonly IGateway<Group> _groupGateway;
+        private readonly IGateway<Label> _labelGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IOutputPortInteractor _responseInteractor;
 
@@ -15,12 +15,12 @@ namespace Randomizer.UseCases
 
         private RandomizeInteractor(
             Session session,
-            IGateway<Group> groupGateway,
+            IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
             IOutputPortInteractor responseInteractor)
         {
             _session = session;
-            _groupGateway = groupGateway;
+            _labelGateway = labelGateway;
             _randomizableGateway = randomizableGateway;
             _responseInteractor = responseInteractor;
         }
@@ -31,29 +31,27 @@ namespace Randomizer.UseCases
             _responseInteractor.ClearValue();
 
             var randomizableId = _session.ActiveRandomizableId;
-            var groupId = _session.ActiveGroupId;
-            var ids = new[] { randomizableId };
+            var labelId = _session.ActiveLabelId;
+            var randomizables = _randomizableGateway.GetAll();
             if (randomizableId >= 0)
             {
-                _responseInteractor.Title = _randomizableGateway.GetById(randomizableId).Name;
+                _responseInteractor.Title = randomizables[0].Name;
+                randomizables = new [] { _randomizableGateway.GetById(randomizableId) };
             }
             else
             {
-                if (groupId >= 0)
+                if (labelId >= 0)
                 {
-                    var group = _groupGateway.GetById(groupId);
-                    ids = group.RandomizeableIds;
-                    _responseInteractor.Title = group.Name;
-                }
-                else
-                {
-                    ids = Enumerable.Range(0, _randomizableGateway.Length).ToArray();
+                    var label = _labelGateway.GetById(labelId);
+                    _responseInteractor.Title = label.Name;
+                    randomizables = _randomizableGateway.GetAll().Select(randomizable => randomizable)
+                        .Where(randomizable => randomizable.HasLabel(labelId))
+                        .ToArray();
                 }
             }
             
-            foreach (var id in ids)
+            foreach (var randomizable in randomizables)
             {
-                var randomizable = _randomizableGateway.GetById(id);
                 if (randomizable.ItemCount > 0)
                 {
                     var result = randomizable.Randomize();

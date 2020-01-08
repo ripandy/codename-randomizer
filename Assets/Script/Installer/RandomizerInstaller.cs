@@ -76,7 +76,7 @@ public class RandomizerInstaller : MonoInstaller
         
         // gateways
         Container.BindInterfacesTo<RandomizableGateway>().AsSingle();
-        Container.BindInterfacesTo<GroupGateway>().AsSingle();
+        Container.BindInterfacesTo<LabelGateway>().AsSingle();
         Container.BindInterfacesTo<SessionGateway>().AsSingle();
     }
 

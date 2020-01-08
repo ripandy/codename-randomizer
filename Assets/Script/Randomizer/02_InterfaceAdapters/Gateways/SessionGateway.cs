@@ -35,7 +35,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         public void Dispose()
         {
-            DefaultData.GroupId = _session.ActiveGroupId;
+            DefaultData.GroupId = _session.ActiveLabelId;
             DefaultData.RandomizableId = _session.ActiveRandomizableId;
         }
     }
