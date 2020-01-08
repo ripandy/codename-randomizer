@@ -7,7 +7,7 @@ namespace Randomizer.UseCases
     {
         private readonly Session _session;
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IGateway<Group> _groupGateway;
+        private readonly IGateway<Label> _labelGateway;
         private readonly IOutputPortInteractor _responseInteractor;
         
         public Action InputHandler => Handle;
@@ -15,12 +15,12 @@ namespace Randomizer.UseCases
         private UpNavigationInteractor(
             Session session,
             IGateway<Randomizable> randomizableGateway,
-            IGateway<Group> groupGateway,
+            IGateway<Label> labelGateway,
             IOutputPortInteractor responseInteractor)
         {
             _session = session;
             _randomizableGateway = randomizableGateway;
-            _groupGateway = groupGateway;
+            _labelGateway = labelGateway;
             _responseInteractor = responseInteractor;
         }
 
@@ -33,7 +33,7 @@ namespace Randomizer.UseCases
             if (_session.ActiveRandomizableId >= 0 && currentState == ResponseType.DisplayResult)
                 RespondAsRandomizable();
             else
-                RespondAsGroup();
+                RespondShowLabel();
 
             _responseInteractor.RaiseResponseEvent();
         }
@@ -51,7 +51,7 @@ namespace Randomizer.UseCases
             }
         }
 
-        private void RespondAsGroup()
+        private void RespondShowLabel()
         {
             if (_session.ActiveRandomizableId >= 0)
             {
@@ -63,23 +63,18 @@ namespace Randomizer.UseCases
             
             _session.ActiveRandomizableId = -1;
             _responseInteractor.ResponseType = ResponseType.DisplayGroup;
-            var groupId = _session.ActiveGroupId;
+            var labelId = _session.ActiveLabelId;
             var randomizables = _randomizableGateway.GetAll();
-            if (groupId != -1)
+            if (labelId >= 0)
             {
-                var group = _groupGateway.GetById(groupId);
-                _responseInteractor.Title = group.Name;
-                foreach (var rId in group.RandomizeableIds)
-                {
-                    _responseInteractor.AddValue(randomizables[rId].Name);
-                }
+                var label = _labelGateway.GetById(labelId);
+                _responseInteractor.Title = label.Name;
             }
-            else
+            
+            foreach (var randomizable in randomizables)
             {
-                foreach (var randomizable in randomizables)
-                {
+                if (randomizable.HasLabel(labelId) || labelId == -1)
                     _responseInteractor.AddValue(randomizable.Name);
-                }
             }
         }
     }

@@ -7,5 +7,6 @@ namespace Randomizer.InterfaceAdapters
     {
         public string name;
         public string[] items;
+        public int[] labelIds;
     }
 }

@@ -5,9 +5,9 @@ using Zenject;
 [CreateAssetMenu(fileName = "GroupDataInstaller", menuName = "Installers/GroupDataInstaller")]
 public class GroupDataInstaller : ScriptableObjectInstaller<GroupDataInstaller>
 {
-    [SerializeField] private GroupDataStore dataStore;
+    [SerializeField] private LabelDataStore dataStore;
     public override void InstallBindings()
     {
-        Container.BindInterfacesTo<GroupDataStore>().FromInstance(dataStore);
+        Container.BindInterfacesTo<LabelDataStore>().FromInstance(dataStore);
     }
 }

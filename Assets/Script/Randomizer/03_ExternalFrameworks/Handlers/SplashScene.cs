@@ -9,6 +9,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
         {
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 24;
+            Input.backButtonLeavesApp = true;
         }
 
         private void Start()
