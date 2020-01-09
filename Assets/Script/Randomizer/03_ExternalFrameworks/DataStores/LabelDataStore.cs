@@ -8,10 +8,19 @@ namespace Randomizer.ExternalFrameworks.DataStores
     [Serializable]
     public class LabelDataStore : IDataStore<LabelData>
     {
+        [SerializeField] private int activeIndex;
         [SerializeField] private List<LabelData> labelData;
+
+        public int ActiveIndex
+        {
+            get => activeIndex;
+            set => activeIndex = value;
+        }
+
         public LabelData this[int index] => labelData[index];
         public LabelData[] Data => labelData.ToArray();
-        
+        public LabelData ActiveData => labelData[activeIndex];
+
         public int Create()
         {
             labelData.Add(new LabelData());

@@ -5,7 +5,6 @@ namespace Randomizer.UseCases
 {
     public class UpNavigationInteractor : IInputPortInteractor
     {
-        private readonly Session _session;
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IGateway<Label> _labelGateway;
         private readonly IOutputPortInteractor _responseInteractor;
@@ -13,12 +12,10 @@ namespace Randomizer.UseCases
         public Action InputHandler => Handle;
 
         private UpNavigationInteractor(
-            Session session,
             IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
             IOutputPortInteractor responseInteractor)
         {
-            _session = session;
             _randomizableGateway = randomizableGateway;
             _labelGateway = labelGateway;
             _responseInteractor = responseInteractor;
@@ -30,7 +27,7 @@ namespace Randomizer.UseCases
             _responseInteractor.ClearValue();
             
             var currentState = _responseInteractor.ResponseType;
-            if (_session.ActiveRandomizableId >= 0 && currentState == ResponseType.DisplayResult)
+            if (_randomizableGateway.ActiveId >= 0 && currentState == ResponseType.DisplayResult)
                 RespondAsRandomizable();
             else
                 RespondShowLabel();
@@ -40,8 +37,7 @@ namespace Randomizer.UseCases
 
         private void RespondAsRandomizable()
         {
-            var randomizableId = _session.ActiveRandomizableId;
-            var randomizable = _randomizableGateway.GetById(randomizableId);
+            var randomizable = _randomizableGateway.GetActive();
             
             _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
             _responseInteractor.Title = randomizable.Name;
@@ -53,17 +49,17 @@ namespace Randomizer.UseCases
 
         private void RespondShowLabel()
         {
-            if (_session.ActiveRandomizableId >= 0)
+            if (_randomizableGateway.ActiveId >= 0)
             {
-                var id = _session.ActiveRandomizableId;
+                var id = _randomizableGateway.ActiveId;
                 var randomizable = _randomizableGateway.GetById(id);
                 if (string.IsNullOrEmpty(randomizable.Name) && randomizable.ItemCount == 0)
                     _randomizableGateway.Remove(id);
             }
             
-            _session.ActiveRandomizableId = -1;
+            _randomizableGateway.ActiveId = -1;
             _responseInteractor.ResponseType = ResponseType.DisplayGroup;
-            var labelId = _session.ActiveLabelId;
+            var labelId = _labelGateway.ActiveId;
             var randomizables = _randomizableGateway.GetAll();
             if (labelId >= 0)
             {

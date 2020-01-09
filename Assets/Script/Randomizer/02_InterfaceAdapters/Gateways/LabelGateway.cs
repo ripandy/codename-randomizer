@@ -7,44 +7,54 @@ namespace Randomizer.InterfaceAdapters.Gateways
     public class LabelGateway : IGateway<Label>, IInitializable
     {
         public bool IsInitialized { get; private set; }
+        public int ActiveId
+        {
+            get => _dataStore.ActiveIndex;
+            set => _dataStore.ActiveIndex = value;
+        }
         
-        private readonly IDataStore<LabelData> _cachedDataStore;
+        private readonly IDataStore<LabelData> _dataStore;
         private readonly IList<Label> _labels = new List<Label>();
         
         public int Length => _labels.Count;
 
-        public LabelGateway(IDataStore<LabelData> cachedDataStore)
+        public LabelGateway(IDataStore<LabelData> dataStore)
         {
-            _cachedDataStore = cachedDataStore;
+            _dataStore = dataStore;
         }
 
         public void Initialize()
         {
             if (IsInitialized) return;
                 IsInitialized = true;
-            foreach (var data in _cachedDataStore.Data)
+            foreach (var data in _dataStore.Data)
             {
                 var label = new Label { Name = data.name };
                 _labels.Add(label);
             }
+
+            ActiveId = _dataStore.ActiveIndex;
         }
         
         public Label[] GetAll() => _labels.ToArray();
         public Label GetById(int id) => id < _labels.Count ? _labels[id] : null;
+        public Label GetActive() => _labels[ActiveId];
 
         public void Save(int id)
         {
             if (id >= _labels.Count) return;
             
             var label = _labels[id];
-            var data = _cachedDataStore[id];
+            var data = _dataStore[id];
                 data.name = label.Name;
         }
+        
+        public void SaveActive() => Save(ActiveId);
 
         public int AddNew(Label newInstance)
         {
             _labels.Add(newInstance);
-            _cachedDataStore.Create();
+            _dataStore.Create();
             var index = _labels.Count - 1;
             Save(index);
             return index;
@@ -53,7 +63,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
         public void Remove(int id)
         {
             _labels.RemoveAt(id);
-            _cachedDataStore.Delete(id);
+            _dataStore.Delete(id);
         }
     }
 }
