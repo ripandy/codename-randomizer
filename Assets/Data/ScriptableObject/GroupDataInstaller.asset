@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: GroupDataInstaller
   m_EditorClassIdentifier: 
   dataStore:
-    groupData:
-    - name: YesNo Color
-      randomizableIds: 0100000000000000
-    - name: Color Counter
-      randomizableIds: 0200000001000000
+    activeIndex: -1
+    labelData:
+    - name: Simple
+    - name: Color-Number
