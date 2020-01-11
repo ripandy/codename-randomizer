@@ -37,7 +37,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 case ResponseType.DisplayRandomizable:
                     OnDisplayRandomizableResponse();
                     break;
-                case ResponseType.DisplayGroup:
+                case ResponseType.DisplayLabel:
                     OnDisplayGroupResponse();
                     break;
             }

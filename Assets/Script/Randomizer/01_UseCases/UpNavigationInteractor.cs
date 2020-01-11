@@ -58,7 +58,7 @@ namespace Randomizer.UseCases
             }
             
             _randomizableGateway.ActiveId = -1;
-            _responseInteractor.ResponseType = ResponseType.DisplayGroup;
+            _responseInteractor.ResponseType = ResponseType.DisplayLabel;
             var labelId = _labelGateway.ActiveId;
             var randomizables = _randomizableGateway.GetAll();
             if (labelId >= 0)

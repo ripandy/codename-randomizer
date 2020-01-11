@@ -4,6 +4,6 @@ namespace Randomizer.UseCases
     {
         DisplayResult,
         DisplayRandomizable,
-        DisplayGroup
+        DisplayLabel
     }
 }
