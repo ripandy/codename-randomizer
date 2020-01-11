@@ -6,7 +6,6 @@ namespace Randomizer.UseCases
 {
     public class RandomizeInteractor : IInputPortInteractor
     {
-        private readonly Session _session;
         private readonly IGateway<Label> _labelGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IOutputPortInteractor _responseInteractor;
@@ -14,12 +13,10 @@ namespace Randomizer.UseCases
         public Action InputHandler => Handle;
 
         private RandomizeInteractor(
-            Session session,
             IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
             IOutputPortInteractor responseInteractor)
         {
-            _session = session;
             _labelGateway = labelGateway;
             _randomizableGateway = randomizableGateway;
             _responseInteractor = responseInteractor;
@@ -30,13 +27,13 @@ namespace Randomizer.UseCases
             _responseInteractor.ResponseType = ResponseType.DisplayResult;
             _responseInteractor.ClearValue();
 
-            var randomizableId = _session.ActiveRandomizableId;
-            var labelId = _session.ActiveLabelId;
+            var randomizableId = _randomizableGateway.ActiveId;
+            var labelId = _labelGateway.ActiveId;
             var randomizables = _randomizableGateway.GetAll();
             if (randomizableId >= 0)
             {
-                _responseInteractor.Title = randomizables[0].Name;
                 randomizables = new [] { _randomizableGateway.GetById(randomizableId) };
+                _responseInteractor.Title = randomizables[0].Name;
             }
             else
             {

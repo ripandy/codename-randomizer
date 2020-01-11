@@ -5,7 +5,6 @@ namespace Randomizer.UseCases
 {
     public class LoadSessionInteractor : IInputPortInteractor<int>
     {
-        private readonly Session _session;
         private readonly IGateway<Label> _labelGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IOutputPortInteractor _responseInteractor;
@@ -16,12 +15,10 @@ namespace Randomizer.UseCases
         Action IInputPortInteractor.InputHandler => () => Handle(Data);
 
         private LoadSessionInteractor(
-            Session session,
             IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
             IOutputPortInteractor responseInteractor)
         {
-            _session = session;
             _labelGateway = labelGateway;
             _randomizableGateway = randomizableGateway;
             _responseInteractor = responseInteractor;
@@ -29,7 +26,7 @@ namespace Randomizer.UseCases
         
         private void Handle(int request)
         {
-            _session.ActiveRandomizableId = request;
+            _randomizableGateway.ActiveId = request;
             
             _responseInteractor.Title = "";
             _responseInteractor.ClearValue();
@@ -47,7 +44,7 @@ namespace Randomizer.UseCases
         private void RespondShowLabel()
         {
             _responseInteractor.ResponseType = ResponseType.DisplayGroup;
-            var labelId = _session.ActiveLabelId;
+            var labelId = _labelGateway.ActiveId;
             var randomizables = _randomizableGateway.GetAll();
             if (labelId >= 0)
             {
@@ -64,8 +61,7 @@ namespace Randomizer.UseCases
 
         private void RespondAsRandomizable()
         {
-            var randomizableId = _session.ActiveRandomizableId;
-            var randomizable = _randomizableGateway.GetById(randomizableId);
+            var randomizable = _randomizableGateway.GetActive();
                 
             _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
             _responseInteractor.Title = randomizable.Name;

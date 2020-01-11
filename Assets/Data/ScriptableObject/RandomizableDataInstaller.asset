@@ -13,16 +13,19 @@ MonoBehaviour:
   m_Name: RandomizableDataInstaller
   m_EditorClassIdentifier: 
   dataStore:
+    activeIndex: -1
     randomizableData:
     - name: Simple Yes-No
       items:
       - Yes
       - No
+      labelIds: 0000000001000000
     - name: Colors
       items:
       - Red
       - Green
       - Blue
+      labelIds: 01000000
     - name: Simple Numbers
       items:
       - 1
@@ -45,3 +48,4 @@ MonoBehaviour:
       - 18
       - 19
       - 20
+      labelIds: 00000000

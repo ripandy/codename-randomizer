@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Randomizer.Entities;
 using Randomizer.ExternalFrameworks.Factories;
 using Randomizer.ExternalFrameworks.Handlers;
 using Randomizer.ExternalFrameworks.Views;
@@ -11,7 +10,6 @@ using Randomizer.InterfaceAdapters.Presenters;
 using Randomizer.UseCases;
 using Script.Installer;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 public class RandomizerInstaller : MonoInstaller
@@ -32,17 +30,11 @@ public class RandomizerInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        InstallEntities();
         InstallUseCases();
         InstallInterfaceAdapters();
         InstallExternalFrameworks();
     }
-
-    private void InstallEntities()
-    {
-        Container.Bind<Session>().AsSingle();
-    }
-
+    
     private void InstallUseCases()
     {
         // Use case interactors
