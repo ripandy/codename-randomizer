@@ -23,7 +23,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         {
             base.OnResponse();
             var prevType = _viewContainer.Type;
-            _viewContainer.Type = ResponseInteractor.ResponseType == ResponseType.DisplayGroup ? ContentType.Grid : ContentType.Vertical;
+            _viewContainer.Type = ResponseInteractor.ResponseType == ResponseType.DisplayLabel ? ContentType.Grid : ContentType.Vertical;
             if (prevType != _viewContainer.Type)
                 ClearItems();
             UpdateContents();

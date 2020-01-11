@@ -21,7 +21,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 case ResponseType.DisplayRandomizable:
                     _button.Text = "Randomize";
                     break;
-                case ResponseType.DisplayGroup:
+                case ResponseType.DisplayLabel:
                     _button.Text = "Randomize All";
                     break;
             }

@@ -16,7 +16,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse()
         {
-            _upButtonView.Visible = ResponseInteractor.ResponseType != ResponseType.DisplayGroup;
+            _upButtonView.Visible = ResponseInteractor.ResponseType != ResponseType.DisplayLabel;
         }
     }
 }
