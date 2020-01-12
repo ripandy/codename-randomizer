@@ -6,7 +6,7 @@ namespace Randomizer.UseCases
     public class AddItemInteractor : IInputPortInteractor<string>
     {
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor _responseInteractor;
+        private readonly IResponseInteractor _responseInteractor;
 
         public Action<string> InputHandler => Handle;
         private const string Data = "";
@@ -14,7 +14,7 @@ namespace Randomizer.UseCases
 
         private AddItemInteractor(
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor responseInteractor)
+            IResponseInteractor responseInteractor)
         {
             _randomizableGateway = randomizableGateway;
             _responseInteractor = responseInteractor;
@@ -22,15 +22,13 @@ namespace Randomizer.UseCases
 
         private void Handle(string request)
         {
-            var randomizable = _randomizableGateway.GetActive();
+            var id = _randomizableGateway.ActiveId;
+            var randomizable = _randomizableGateway.GetById(id);
             var newItem = new Item { Name = request };
             randomizable.AddItem(newItem);
-            _randomizableGateway.SaveActive();
-
-            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
-            _responseInteractor.Title = randomizable.Name;
-            _responseInteractor.AddValue(newItem.Name);
-            _responseInteractor.RaiseResponseEvent();
+            _randomizableGateway.Save(id);
+            
+            _responseInteractor.RespondDisplayRandomizable(id);
         }
     }
 }

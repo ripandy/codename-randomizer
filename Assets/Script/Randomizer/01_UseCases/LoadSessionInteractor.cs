@@ -7,7 +7,7 @@ namespace Randomizer.UseCases
     {
         private readonly IGateway<Label> _labelGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor _responseInteractor;
+        private readonly IResponseInteractor _responseInteractor;
 
         public Action<int> InputHandler => Handle;
         
@@ -17,7 +17,7 @@ namespace Randomizer.UseCases
         private LoadSessionInteractor(
             IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor responseInteractor)
+            IResponseInteractor responseInteractor)
         {
             _labelGateway = labelGateway;
             _randomizableGateway = randomizableGateway;
@@ -28,46 +28,13 @@ namespace Randomizer.UseCases
         {
             _randomizableGateway.ActiveId = request;
             
-            _responseInteractor.Title = "";
-            _responseInteractor.ClearValue();
             if (request == -1)
             {
-                RespondShowLabel();
+                _responseInteractor.RespondDisplayLabel(_labelGateway.ActiveId);
             }
             else
             {
-                RespondAsRandomizable();
-            }
-            _responseInteractor.RaiseResponseEvent();
-        }
-
-        private void RespondShowLabel()
-        {
-            _responseInteractor.ResponseType = ResponseType.DisplayLabel;
-            var labelId = _labelGateway.ActiveId;
-            var randomizables = _randomizableGateway.GetAll();
-            if (labelId >= 0)
-            {
-                var label = _labelGateway.GetById(labelId);
-                _responseInteractor.Title = label.Name;
-            }
-            
-            foreach (var randomizable in randomizables)
-            {
-                if (randomizable.HasLabel(labelId) || labelId == -1)
-                    _responseInteractor.AddValue(randomizable.Name);
-            }
-        }
-
-        private void RespondAsRandomizable()
-        {
-            var randomizable = _randomizableGateway.GetActive();
-                
-            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
-            _responseInteractor.Title = randomizable.Name;
-            foreach (var item in randomizable.Items)
-            {
-                _responseInteractor.AddValue(item.Name);
+                _responseInteractor.RespondDisplayRandomizable(_randomizableGateway.ActiveId);
             }
         }
     }

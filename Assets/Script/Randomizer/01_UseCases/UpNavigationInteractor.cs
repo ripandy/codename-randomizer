@@ -7,14 +7,14 @@ namespace Randomizer.UseCases
     {
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IGateway<Label> _labelGateway;
-        private readonly IOutputPortInteractor _responseInteractor;
+        private readonly IResponseInteractor _responseInteractor;
         
         public Action InputHandler => Handle;
 
         private UpNavigationInteractor(
             IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
-            IOutputPortInteractor responseInteractor)
+            IResponseInteractor responseInteractor)
         {
             _randomizableGateway = randomizableGateway;
             _labelGateway = labelGateway;
@@ -23,28 +23,11 @@ namespace Randomizer.UseCases
 
         private void Handle()
         {
-            _responseInteractor.Title = "";
-            _responseInteractor.ClearValue();
-            
             var currentState = _responseInteractor.ResponseType;
             if (_randomizableGateway.ActiveId >= 0 && currentState == ResponseType.DisplayResult)
-                RespondAsRandomizable();
+                _responseInteractor.RespondDisplayRandomizable(_randomizableGateway.ActiveId);
             else
                 RespondShowLabel();
-
-            _responseInteractor.RaiseResponseEvent();
-        }
-
-        private void RespondAsRandomizable()
-        {
-            var randomizable = _randomizableGateway.GetActive();
-            
-            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
-            _responseInteractor.Title = randomizable.Name;
-            foreach (var item in randomizable.Items)
-            {
-                _responseInteractor.AddValue(item.Name);
-            }
         }
 
         private void RespondShowLabel()
@@ -58,20 +41,7 @@ namespace Randomizer.UseCases
             }
             
             _randomizableGateway.ActiveId = -1;
-            _responseInteractor.ResponseType = ResponseType.DisplayLabel;
-            var labelId = _labelGateway.ActiveId;
-            var randomizables = _randomizableGateway.GetAll();
-            if (labelId >= 0)
-            {
-                var label = _labelGateway.GetById(labelId);
-                _responseInteractor.Title = label.Name;
-            }
-            
-            foreach (var randomizable in randomizables)
-            {
-                if (randomizable.HasLabel(labelId) || labelId == -1)
-                    _responseInteractor.AddValue(randomizable.Name);
-            }
+            _responseInteractor.RespondDisplayLabel(_labelGateway.ActiveId);
         }
     }
 }

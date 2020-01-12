@@ -6,13 +6,13 @@ namespace Randomizer.UseCases
     public class AddRandomizableInteractor : IInputPortInteractor
     {
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor _responseInteractor;
+        private readonly IResponseInteractor _responseInteractor;
 
         public Action InputHandler => Handle;
 
         private AddRandomizableInteractor(
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor responseInteractor)
+            IResponseInteractor responseInteractor)
         {
             _randomizableGateway = randomizableGateway;
             _responseInteractor = responseInteractor;
@@ -24,10 +24,7 @@ namespace Randomizer.UseCases
             var newId = _randomizableGateway.AddNew(randomizable);
             _randomizableGateway.ActiveId = newId;
 
-            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
-            _responseInteractor.Title = randomizable.Name;
-            _responseInteractor.ClearValue();
-            _responseInteractor.RaiseResponseEvent();
+            _responseInteractor.RespondDisplayRandomizable(newId);
         }
     }
 }

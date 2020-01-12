@@ -8,14 +8,14 @@ namespace Randomizer.UseCases
     {
         private readonly IGateway<Label> _labelGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor _responseInteractor;
+        private readonly IResponseInteractor _responseInteractor;
 
         public Action InputHandler => Handle;
 
         private RandomizeInteractor(
             IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor responseInteractor)
+            IResponseInteractor responseInteractor)
         {
             _labelGateway = labelGateway;
             _randomizableGateway = randomizableGateway;
@@ -24,40 +24,30 @@ namespace Randomizer.UseCases
         
         private void Handle()
         {
-            _responseInteractor.ResponseType = ResponseType.DisplayResult;
-            _responseInteractor.ClearValue();
-
             var randomizableId = _randomizableGateway.ActiveId;
             var labelId = _labelGateway.ActiveId;
             var randomizables = _randomizableGateway.GetAll();
+            var title = "";
             if (randomizableId >= 0)
             {
                 randomizables = new [] { _randomizableGateway.GetById(randomizableId) };
-                _responseInteractor.Title = randomizables[0].Name;
+                title = randomizables[0].Name;
             }
             else
             {
                 if (labelId >= 0)
                 {
                     var label = _labelGateway.GetById(labelId);
-                    _responseInteractor.Title = label.Name;
+                    title = label.Name;
                     randomizables = _randomizableGateway.GetAll().Select(randomizable => randomizable)
                         .Where(randomizable => randomizable.HasLabel(labelId))
                         .ToArray();
                 }
             }
-            
-            foreach (var randomizable in randomizables)
-            {
-                if (randomizable.ItemCount > 0)
-                {
-                    var result = randomizable.Randomize();
-                    _responseInteractor.AddValue(result.Name);
-                }
-            }
 
-            if (_responseInteractor.ValueCount > 0)
-                _responseInteractor.RaiseResponseEvent();
+            var results = randomizables.Select(randomizable => randomizable.Randomize().Name).ToArray();
+            if (results.Any())
+                _responseInteractor.RespondDisplayResult(results, title);
         }
     }
 }
