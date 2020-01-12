@@ -38,8 +38,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
         
         public Label[] GetAll() => _labels.ToArray();
         public Label GetById(int id) => id < _labels.Count ? _labels[id] : null;
-        public Label GetActive() => _labels[ActiveId];
-
+        
         public void Save(int id)
         {
             if (id >= _labels.Count) return;
@@ -49,8 +48,6 @@ namespace Randomizer.InterfaceAdapters.Gateways
                 data.name = label.Name;
         }
         
-        public void SaveActive() => Save(ActiveId);
-
         public int AddNew(Label newInstance)
         {
             _labels.Add(newInstance);

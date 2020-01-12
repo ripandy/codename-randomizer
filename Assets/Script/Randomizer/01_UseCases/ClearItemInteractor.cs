@@ -6,13 +6,13 @@ namespace Randomizer.UseCases
     public class ClearItemInteractor : IInputPortInteractor
     {
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IOutputPortInteractor _responseInteractor;
+        private readonly IResponseInteractor _responseInteractor;
 
         public Action InputHandler => Handle;
 
         private ClearItemInteractor(
             IGateway<Randomizable> randomizableGateway,
-            IOutputPortInteractor responseInteractor)
+            IResponseInteractor responseInteractor)
         {
             _randomizableGateway = randomizableGateway;
             _responseInteractor = responseInteractor;
@@ -20,14 +20,12 @@ namespace Randomizer.UseCases
         
         private void Handle()
         {
-            var randomizable = _randomizableGateway.GetActive();
+            var id = _randomizableGateway.ActiveId;
+            var randomizable = _randomizableGateway.GetById(id);
                 randomizable.Clear();
-            _randomizableGateway.SaveActive();
+            _randomizableGateway.Save(id);
 
-            _responseInteractor.ResponseType = ResponseType.DisplayRandomizable;
-            _responseInteractor.Title = randomizable.Name;
-            _responseInteractor.ClearValue();
-            _responseInteractor.RaiseResponseEvent();
+            _responseInteractor.RespondDisplayRandomizable(id);
         }
     }
 }
