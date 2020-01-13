@@ -1,18 +1,25 @@
 using Randomizer.ExternalFrameworks.Handlers;
 using Randomizer.InterfaceAdapters.Controllers;
+using Randomizer.UseCases;
 using Zenject;
 
-public class SelectRandomizableInstaller : Installer<SelectRandomizableInstaller>
+public class ItemInstaller : Installer<ItemInstaller>
 {
     public override void InstallBindings()
     {
+        InstallUseCases();
         InstallInterfaceAdapters();
         InstallExternalFrameworks();
     }
 
+    private void InstallUseCases()
+    {
+        Container.BindInterfacesTo<RemoveItemInteractor>().AsSingle().WhenInjectedInto<RemoveItemInputController>();
+    }
+    
     private void InstallInterfaceAdapters()
     {
-        Container.BindInterfacesTo<SelectRandomizableInputController>().AsSingle();
+        Container.BindInterfacesTo<RemoveItemInputController>().AsSingle();
     }
 
     private void InstallExternalFrameworks()

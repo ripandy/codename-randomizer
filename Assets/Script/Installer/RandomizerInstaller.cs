@@ -8,7 +8,6 @@ using Randomizer.InterfaceAdapters.Controllers;
 using Randomizer.InterfaceAdapters.Gateways;
 using Randomizer.InterfaceAdapters.Presenters;
 using Randomizer.UseCases;
-using Script.Installer;
 using UnityEngine;
 using Zenject;
 
@@ -79,7 +78,7 @@ public class RandomizerInstaller : MonoInstaller
             .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
-                .ByNewContextPrefab(itemPrefab)
+                .ByNewPrefabInstaller<ItemInstaller>(itemPrefab)
                 .UnderTransform(verticalItemContainer)
             );
         
