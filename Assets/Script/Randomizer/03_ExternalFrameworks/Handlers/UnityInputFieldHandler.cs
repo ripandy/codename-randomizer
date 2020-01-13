@@ -9,10 +9,13 @@ namespace Randomizer.ExternalFrameworks.Handlers
     public class UnityInputFieldHandler : MonoBehaviour, IActionHandler<string>
     {
         [SerializeField] private TMP_InputField inputField;
-        [SerializeField] private bool showPlaceholderWhenActiveAndEmpty;
+        [SerializeField] private bool clearOnDeselect;
+        [SerializeField] private bool showPlaceholderWhenEmptyAndActive;
 
         private EventSystem _eventSystem;
+        
         private string _value;
+        private string _prevValue;
 
         public Action<string> OnAction { get; set; }
 
@@ -21,13 +24,9 @@ namespace Randomizer.ExternalFrameworks.Handlers
             set { OnAction = _ => OnAction.Invoke(_value); }
         }
 
-        protected virtual void Awake()
-        {
-            _eventSystem = EventSystem.current;
-        }
-
         private void Start()
         {
+            _eventSystem = EventSystem.current;
             BindReactive();
         }
 
@@ -40,25 +39,42 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         private void OnSubmit(string value)
         {
-            _value = value;
-            OnAction.Invoke(value);
-            _eventSystem.SetSelectedGameObject(null);
+            Debug.Log($"OnSubmit value : {value}, Event System? {_eventSystem == null}");
+            if (inputField.isFocused)
+                _eventSystem.SetSelectedGameObject(null);
         }
 
         private void OnSelect(string value)
         {
-            ShowPlaceholder(showPlaceholderWhenActiveAndEmpty && string.IsNullOrEmpty(value));
+            Debug.Log($"OnSelect value : {value}");
+            var isEmpty = string.IsNullOrEmpty(value);
+            var show = isEmpty && showPlaceholderWhenEmptyAndActive;
+            ShowPlaceholder(show);
         }
         
         private void OnDeselect(string value)
         {
-            inputField.text = "";
-            ShowPlaceholder(true);
+            Debug.Log($"OnDeselect value : {value}");
+            _value = value;
+            InvokeAction();
+            if (clearOnDeselect)
+                inputField.text = "";
+            var isEmpty = string.IsNullOrEmpty(inputField.text);
+            ShowPlaceholder(isEmpty);
         }
-        
+
         private void ShowPlaceholder(bool show)
         {
             inputField.placeholder.gameObject.SetActive(show);
+        }
+
+        private void InvokeAction()
+        {
+            if (_value.Equals(_prevValue)) return;
+            
+            Debug.Log($"Invoking value : {_value}");
+            OnAction.Invoke(_value);
+            _prevValue = _value;
         }
     }
 }
