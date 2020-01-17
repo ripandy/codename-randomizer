@@ -47,14 +47,12 @@ namespace Randomizer.ExternalFrameworks.Handlers
         {
             if (copyPlaceholder)
             {
-                inputField.text = placeholderText.text;
-                ShowPlaceholder(false);
+                var text = placeholderText.text;
+                inputField.text = text;
+                _prevValue = text;
             }
-            else
-            {
-                var isEmpty = string.IsNullOrEmpty(value);
-                ShowPlaceholder(isEmpty);
-            }
+            
+            ShowPlaceholder(false);
         }
         
         private void OnDeselect(string value)
@@ -62,7 +60,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
             _value = value;
             InvokeAction();
             inputField.text = "";
-            ShowPlaceholder(false);
+            ShowPlaceholder(true);
         }
 
         private void ShowPlaceholder(bool show)

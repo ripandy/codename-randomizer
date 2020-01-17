@@ -38,6 +38,7 @@ public class RandomizerInstaller : MonoInstaller
         // Use case interactors
         Container.BindInterfacesTo<LoadSessionInteractor>().AsSingle().WhenNotInjectedInto<InputController>();
         // must to be in order -> check for the order of IActionHandler too!!
+        Container.BindInterfacesTo<EditTitleInteractor>().AsSingle();
         Container.BindInterfacesTo<AddItemInteractor>().AsSingle();
         Container.BindInterfacesTo<AddRandomizableInteractor>().AsSingle();
         Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
@@ -51,7 +52,7 @@ public class RandomizerInstaller : MonoInstaller
     {
         // controllers
         // must to be in order -> check for the order of IActionHandler too!!
-        var inputTypeCodes = new List<TypeCode> {TypeCode.String, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty};
+        var inputTypeCodes = new List<TypeCode> {TypeCode.String, TypeCode.String, TypeCode.Empty, TypeCode.Empty, TypeCode.Empty};
         Container.BindInterfacesTo<InputController>().AsSingle().WithArguments(inputTypeCodes);
         
         // presenters
