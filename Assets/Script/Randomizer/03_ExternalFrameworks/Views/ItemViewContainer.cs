@@ -35,7 +35,6 @@ namespace Randomizer.ExternalFrameworks.Views
                 contentContainers[i].gameObject.SetActive(i == contentIdx);
             }
             title.SetParent(contentContainers[contentIdx]);
-            title.SetAsFirstSibling();
 
             scrollRect.content = contentContainers[contentIdx];
         }

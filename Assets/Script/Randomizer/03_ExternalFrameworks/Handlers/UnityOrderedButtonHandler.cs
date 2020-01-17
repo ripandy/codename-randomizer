@@ -14,7 +14,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
         
         Action IActionHandler.OnAction
         {
-            set => OnAction = _ => OnAction.Invoke(ActionParam);
+            set => OnAction = _ => OnAction?.Invoke(ActionParam);
         }
 
         private void Start()
@@ -27,7 +27,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
             button.onClick.AddListener(() =>
             {
                 if (gameObject.activeInHierarchy)
-                    OnAction.Invoke(ActionParam);
+                    OnAction?.Invoke(ActionParam);
             });
         }
     }

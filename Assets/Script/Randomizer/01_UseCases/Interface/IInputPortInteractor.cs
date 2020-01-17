@@ -11,4 +11,9 @@ namespace Randomizer.UseCases
     {
         new Action<T> InputHandler { get; }
     }
+    
+    public interface IInputPortInteractor<in TParam1, in TParam2> : IInputPortInteractor
+    {
+        new Action<TParam1, TParam2> InputHandler { get; }
+    }
 }

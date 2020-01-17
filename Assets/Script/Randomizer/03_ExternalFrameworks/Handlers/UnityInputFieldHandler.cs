@@ -9,10 +9,13 @@ namespace Randomizer.ExternalFrameworks.Handlers
     public class UnityInputFieldHandler : MonoBehaviour, IActionHandler<string>
     {
         [SerializeField] private TMP_InputField inputField;
-        [SerializeField] private bool showPlaceholderWhenActiveAndEmpty;
+        [SerializeField] private TMP_Text placeholderText;
+        [SerializeField] private bool copyPlaceholder;
 
         private EventSystem _eventSystem;
+        
         private string _value;
+        private string _prevValue;
 
         public Action<string> OnAction { get; set; }
 
@@ -21,13 +24,9 @@ namespace Randomizer.ExternalFrameworks.Handlers
             set { OnAction = _ => OnAction.Invoke(_value); }
         }
 
-        protected virtual void Awake()
-        {
-            _eventSystem = EventSystem.current;
-        }
-
         private void Start()
         {
+            _eventSystem = EventSystem.current;
             BindReactive();
         }
 
@@ -40,25 +39,43 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         private void OnSubmit(string value)
         {
-            _value = value;
-            OnAction.Invoke(value);
-            _eventSystem.SetSelectedGameObject(null);
+            if (inputField.isFocused)
+                _eventSystem.SetSelectedGameObject(null);
         }
 
         private void OnSelect(string value)
         {
-            ShowPlaceholder(showPlaceholderWhenActiveAndEmpty && string.IsNullOrEmpty(value));
+            if (copyPlaceholder)
+            {
+                inputField.text = placeholderText.text;
+                ShowPlaceholder(false);
+            }
+            else
+            {
+                var isEmpty = string.IsNullOrEmpty(value);
+                ShowPlaceholder(isEmpty);
+            }
         }
         
         private void OnDeselect(string value)
         {
+            _value = value;
+            InvokeAction();
             inputField.text = "";
-            ShowPlaceholder(true);
+            ShowPlaceholder(false);
         }
-        
+
         private void ShowPlaceholder(bool show)
         {
             inputField.placeholder.gameObject.SetActive(show);
+        }
+
+        private void InvokeAction()
+        {
+            if (_value.Equals(_prevValue)) return;
+            
+            OnAction.Invoke(_value);
+            _prevValue = _value;
         }
     }
 }

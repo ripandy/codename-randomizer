@@ -3,28 +3,34 @@ using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
-    public class ClearItemInteractor : IInputPortInteractor
+    public class RemoveItemInteractor : IInputPortInteractor<int>
     {
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IResponseInteractor _responseInteractor;
+        
+        public Action<int> InputHandler => Handle;
+        
+        private const int Data = 0;
+        Action IInputPortInteractor.InputHandler => () => Handle(Data);
 
-        public Action InputHandler => Handle;
-
-        private ClearItemInteractor(
+        private RemoveItemInteractor(
             IGateway<Randomizable> randomizableGateway,
-            IResponseInteractor responseInteractor)
+            IResponseInteractor responseInteractor
+        )
         {
             _randomizableGateway = randomizableGateway;
             _responseInteractor = responseInteractor;
         }
-        
-        private void Handle()
+
+        private void Handle(int request)
         {
+            if (_randomizableGateway.ActiveId < 0) return;
+
             var id = _randomizableGateway.ActiveId;
             var randomizable = _randomizableGateway.GetById(id);
-                randomizable.Clear();
+                randomizable.RemoveItem(request);
             _randomizableGateway.Save(id);
-
+            
             _responseInteractor.RespondDisplayRandomizable(id);
         }
     }
