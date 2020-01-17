@@ -3913,5 +3913,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputField: {fileID: 616670980}
-  clearOnDeselect: 1
+  placeholderText: {fileID: 1832164218}
+  copyPlaceholder: 0
   showPlaceholderWhenEmptyAndActive: 0
