@@ -3,7 +3,7 @@ using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
-    public class AddItemInteractor : IInputPortInteractor<string>
+    public class EditTitleInteractor : IInputPortInteractor<string>
     {
         private readonly IGateway<Randomizable> _randomizableGateway;
         private readonly IResponseInteractor _responseInteractor;
@@ -12,7 +12,7 @@ namespace Randomizer.UseCases
         private const string Data = "";
         Action IInputPortInteractor.InputHandler => () => InputHandler(Data);
 
-        private AddItemInteractor(
+        private EditTitleInteractor(
             IGateway<Randomizable> randomizableGateway,
             IResponseInteractor responseInteractor)
         {
@@ -22,14 +22,13 @@ namespace Randomizer.UseCases
 
         private void Handle(string request)
         {
-            if (string.IsNullOrEmpty(request)) return; // move control to presenter?
-            
             var id = _randomizableGateway.ActiveId;
-            var randomizable = _randomizableGateway.GetById(id);
-            var newItem = new Item { Name = request };
-            randomizable.AddItem(newItem);
-            _randomizableGateway.Save(id);
+            if (id <= 0) return;
             
+            var randomizable = _randomizableGateway.GetById(id);
+            randomizable.Name = request;
+            _randomizableGateway.Save(id);
+
             _responseInteractor.RespondDisplayRandomizable(id);
         }
     }
