@@ -2,8 +2,9 @@ namespace Randomizer.UseCases
 {
     public enum ResponseType
     {
-        DisplayLabel,
+        DisplayResult,
         DisplayRandomizable,
-        DisplayResult
+        DisplayLabel,
+        DisplaySelectLabel
     }
 }
