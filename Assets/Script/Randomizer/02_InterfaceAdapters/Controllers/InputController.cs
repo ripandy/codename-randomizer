@@ -8,12 +8,12 @@ namespace Randomizer.InterfaceAdapters.Controllers
     {
         public bool IsInitialized { get; private set; }
         
-        private readonly IList<IInputPortInteractor> _inputPortInteractors;
+        private readonly IList<IRequestInteractor> _inputPortInteractors;
         private readonly IList<IActionHandler> _actionHandlers;
         private readonly IList<TypeCode> _types;
 
         protected InputController (
-            IList<IInputPortInteractor> inputPortInteractors,
+            IList<IRequestInteractor> inputPortInteractors,
             IList<IActionHandler> actionHandlers,
             IList<TypeCode> types)
         {
@@ -37,9 +37,9 @@ namespace Randomizer.InterfaceAdapters.Controllers
             }
         }
 
-        private IInputPortInteractor<T> GetInputPortInteractor<T>(int idx)
+        private IRequestInteractor GetInputPortInteractor<T>(int idx)
         {
-            return (IInputPortInteractor<T>) _inputPortInteractors[idx];
+            return (IRequestInteractor) _inputPortInteractors[idx];
         }
         
         private IActionHandler<T> GetActionHandler<T>(int idx)
@@ -51,14 +51,14 @@ namespace Randomizer.InterfaceAdapters.Controllers
         {
             var act = GetActionHandler<T>(idx);
             var ip = GetInputPortInteractor<T>(idx);
-            act.OnAction = ip.InputHandler;
+            act.OnAction = ip.HandleRequest;
         }
 
         private void ConnectAction(int idx)
         {
             var act = _actionHandlers[idx];
             var ip = _inputPortInteractors[idx];
-            act.OnAction = ip.InputHandler;
+            act.OnAction = ip.HandleRequest;
         }
     }
 }

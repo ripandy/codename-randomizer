@@ -7,7 +7,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly ITextView _button;
 
         private RandomizePresenter(
-            IOutputPortInteractor responseInteractor,
+            IResponseInteractor responseInteractor,
             ITextView button)
             : base(responseInteractor)
         {

@@ -9,7 +9,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly ITextView _title;
         
         public TitlePresenter(
-            IOutputPortInteractor responseInteractor,
+            IResponseInteractor responseInteractor,
             ITextView title) 
             : base(responseInteractor)
         {

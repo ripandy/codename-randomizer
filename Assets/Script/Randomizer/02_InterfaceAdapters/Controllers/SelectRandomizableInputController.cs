@@ -6,11 +6,11 @@ namespace Randomizer.InterfaceAdapters.Controllers
     {
         public bool IsInitialized { get; private set; }
         
-        private readonly IInputPortInteractor<int> _sessionLoaderInteractor;
+        private readonly IRequestInteractor _sessionLoaderInteractor;
         private readonly IActionHandler<int> _actionHandler;
         
         private SelectRandomizableInputController(
-            IInputPortInteractor<int> sessionLoaderInteractor,
+            IRequestInteractor sessionLoaderInteractor,
             IActionHandler<int> actionHandler)
         {
             _sessionLoaderInteractor = sessionLoaderInteractor;
@@ -21,7 +21,7 @@ namespace Randomizer.InterfaceAdapters.Controllers
         {
             if (IsInitialized) return;
                 IsInitialized = true;
-            _actionHandler.OnAction = _sessionLoaderInteractor.InputHandler;
+            _actionHandler.OnAction = _sessionLoaderInteractor.HandleRequest;
         }
     }
 }

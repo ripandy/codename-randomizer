@@ -11,7 +11,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly IViewContainer _viewContainer;
 
         private ContentPresenter(
-            IOutputPortInteractor responseInteractor,
+            IResponseInteractor responseInteractor,
             IFactoryHandler<IItemView> itemFactory,
             IViewContainer viewContainer)
             : base(responseInteractor)

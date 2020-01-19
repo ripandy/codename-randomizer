@@ -49,6 +49,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
 
         public Randomizable[] GetAll() => _randomizables.ToArray();
         public Randomizable GetById(int id) => id < _randomizables.Count ? _randomizables[id] : null;
+        public Randomizable GetActive() => _randomizables[ActiveId];
 
         public void Save(int id)
         {

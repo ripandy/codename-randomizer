@@ -7,11 +7,11 @@ namespace Randomizer.InterfaceAdapters.Gateways
         public bool IsInitialized { get; private set; }
         
         private readonly IDataStore<RandomizableData> _dataStore;
-        private readonly IInputPortInteractor<int> _sessionLoaderInteractor;
+        private readonly IRequestInteractor _sessionLoaderInteractor;
 
         private SessionGateway(
             IDataStore<RandomizableData> dataStore,
-            IInputPortInteractor<int> sessionLoaderInteractor)
+            IRequestInteractor sessionLoaderInteractor)
         {
             _dataStore = dataStore;
             _sessionLoaderInteractor = sessionLoaderInteractor;
@@ -22,7 +22,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
             if (IsInitialized) return;
                 IsInitialized = true;
             var param = _dataStore.ActiveIndex;
-            _sessionLoaderInteractor.InputHandler(param);
+            _sessionLoaderInteractor.HandleRequest(null);
         }
     }
 }

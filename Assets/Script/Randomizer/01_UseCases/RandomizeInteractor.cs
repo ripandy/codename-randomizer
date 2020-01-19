@@ -1,29 +1,28 @@
-using System;
 using System.Linq;
 using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
-    public class RandomizeInteractor : IInputPortInteractor
+    public class RandomizeInteractor : BaseInteractor
     {
         private readonly IGateway<Label> _labelGateway;
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IResponseInteractor _responseInteractor;
-
-        public Action InputHandler => Handle;
 
         private RandomizeInteractor(
             IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
+            IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
+            : base(requestInteractor, responseInteractor)
         {
             _labelGateway = labelGateway;
             _randomizableGateway = randomizableGateway;
-            _responseInteractor = responseInteractor;
         }
         
-        private void Handle()
+        protected override void OnRequest(RequestMessage requestMessage)
         {
+            if (requestMessage.RequestType != RequestType.Randomize) return;
+            
             var randomizableId = _randomizableGateway.ActiveId;
             var labelId = _labelGateway.ActiveId;
             var randomizables = _randomizableGateway.GetAll();
@@ -47,7 +46,7 @@ namespace Randomizer.UseCases
 
             var results = randomizables.Select(randomizable => randomizable.Randomize().Name).ToArray();
             if (results.Any())
-                _responseInteractor.RespondDisplayResult(results, title);
+                ResponseInteractor.Response(new ResultResponseMessage(title, results));
         }
     }
 }

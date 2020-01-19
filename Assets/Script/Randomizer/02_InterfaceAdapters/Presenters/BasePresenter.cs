@@ -7,9 +7,9 @@ namespace Randomizer.InterfaceAdapters.Presenters
     {
         public bool IsInitialized { get; private set; }
         
-        protected readonly IOutputPortInteractor ResponseInteractor;
+        protected readonly IResponseInteractor ResponseInteractor;
 
-        protected BasePresenter(IOutputPortInteractor responseInteractor)
+        protected BasePresenter(IResponseInteractor responseInteractor)
         {
             ResponseInteractor = responseInteractor;
         }
@@ -26,25 +26,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
             ResponseInteractor.OnResponse -= OnResponse;
         }
 
-        protected virtual void OnResponse()
-        {
-            var responseType = ResponseInteractor.ResponseType;
-            switch (responseType)
-            {
-                case ResponseType.DisplayResult:
-                    OnDisplayResultResponse();
-                    break;
-                case ResponseType.DisplayRandomizable:
-                    OnDisplayRandomizableResponse();
-                    break;
-                case ResponseType.DisplayLabel:
-                    OnDisplayGroupResponse();
-                    break;
-            }
-        }
-
-        protected virtual void OnDisplayResultResponse() { }
-        protected virtual void OnDisplayRandomizableResponse() { }
-        protected virtual void OnDisplayGroupResponse() { }
+        protected abstract void OnResponse(IResponseMessage responseMessage);
     }
 }

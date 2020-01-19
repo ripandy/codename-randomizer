@@ -7,7 +7,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly IOrderedView _button;
 
         private AddRandomizablePresenter(
-            IOutputPortInteractor responseInteractor,
+            IResponseInteractor responseInteractor,
             IOrderedView button)
             : base(responseInteractor)
         {

@@ -36,7 +36,7 @@ public class RandomizerInstaller : MonoInstaller
     private void InstallUseCases()
     {
         // Use case interactors
-        Container.BindInterfacesTo<LoadSessionInteractor>().AsSingle().WhenNotInjectedInto<InputController>();
+        Container.BindInterfacesTo<LoadRandomizableInteractor>().AsSingle().WhenNotInjectedInto<InputController>();
         // must to be in order -> check for the order of IActionHandler too!!
         Container.BindInterfacesTo<EditTitleInteractor>().AsSingle();
         Container.BindInterfacesTo<AddItemInteractor>().AsSingle();

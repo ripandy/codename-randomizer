@@ -1,37 +1,30 @@
-using System;
 using Randomizer.Entities;
 
 namespace Randomizer.UseCases
 {
-    public class RemoveItemInteractor : IInputPortInteractor<int>
+    public class RemoveItemInteractor : BaseInteractor
     {
         private readonly IGateway<Randomizable> _randomizableGateway;
-        private readonly IResponseInteractor _responseInteractor;
         
-        public Action<int> InputHandler => Handle;
-        
-        private const int Data = 0;
-        Action IInputPortInteractor.InputHandler => () => Handle(Data);
-
         private RemoveItemInteractor(
             IGateway<Randomizable> randomizableGateway,
-            IResponseInteractor responseInteractor
-        )
+            IRequestInteractor requestInteractor,
+            IResponseInteractor responseInteractor)
+            : base(requestInteractor, responseInteractor)
         {
             _randomizableGateway = randomizableGateway;
-            _responseInteractor = responseInteractor;
         }
 
-        private void Handle(int request)
+        protected override void OnRequest(RequestMessage<int> requestMessage)
         {
-            if (_randomizableGateway.ActiveId < 0) return;
-
             var id = _randomizableGateway.ActiveId;
+            if (requestMessage.RequestType != RequestType.RemoveItem || id < 0) return;
+            
             var randomizable = _randomizableGateway.GetById(id);
-                randomizable.RemoveItem(request);
+                randomizable.RemoveItem(requestMessage.Value);
             _randomizableGateway.Save(id);
             
-            _responseInteractor.RespondDisplayRandomizable(id);
+            RespondRandomizable(randomizable);
         }
     }
 }
