@@ -32,8 +32,6 @@ namespace Randomizer.InterfaceAdapters.Gateways
                 var label = new Label { Name = data.name };
                 _labels.Add(label);
             }
-
-            ActiveId = _dataStore.ActiveIndex;
         }
         
         public Label[] GetAll() => _labels.ToArray();

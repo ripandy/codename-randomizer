@@ -43,8 +43,6 @@ namespace Randomizer.InterfaceAdapters.Gateways
                 
                 _randomizables.Add(randomizable);
             }
-
-            ActiveId = _dataStore.ActiveIndex;
         }
 
         public Randomizable[] GetAll() => _randomizables.ToArray();
