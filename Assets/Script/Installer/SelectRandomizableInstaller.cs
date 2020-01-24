@@ -12,7 +12,7 @@ public class SelectRandomizableInstaller : Installer<SelectRandomizableInstaller
 
     private void InstallInterfaceAdapters()
     {
-        Container.BindInterfacesTo<SelectRandomizableInputController>().AsSingle();
+        Container.BindInterfacesTo<RandomizableController>().AsSingle();
     }
 
     private void InstallExternalFrameworks()

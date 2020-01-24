@@ -7,7 +7,7 @@ namespace Randomizer.ExternalFrameworks.Views
 {
     public class ItemViewContainer : MonoBehaviour, IViewContainer
     {
-        public ContentType Type { get; set; }
+        public DisplayState Type { get; set; }
 
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private RectTransform[] contentContainers;
@@ -27,7 +27,7 @@ namespace Randomizer.ExternalFrameworks.Views
                 .AddTo(this);
         }
 
-        private void UpdateContentType(ContentType type)
+        private void UpdateContentType(DisplayState type)
         {
             var contentIdx = (int) type;
             for (var i = 0; i < contentContainers.Length; i++)

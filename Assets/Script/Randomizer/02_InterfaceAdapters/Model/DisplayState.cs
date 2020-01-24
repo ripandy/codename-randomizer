@@ -1,0 +1,10 @@
+namespace Randomizer.InterfaceAdapters
+{
+    public enum DisplayState
+    {
+        DisplayLabel,
+        DisplayRandomizable,
+        DisplayResult,
+        DisplayResults
+    }
+}

@@ -14,13 +14,13 @@ public class ItemInstaller : Installer<ItemInstaller>
 
     private void InstallUseCases()
     {
-        Container.BindInterfacesTo<EditItemInteractor>().AsSingle().WhenInjectedInto<ItemInputController>();
-        Container.BindInterfacesTo<RemoveItemInteractor>().AsSingle().WhenInjectedInto<ItemInputController>();
+        Container.BindInterfacesTo<EditItemInteractor>().AsSingle().WhenInjectedInto<ItemController>();
+        Container.BindInterfacesTo<RemoveItemInteractor>().AsSingle().WhenInjectedInto<ItemController>();
     }
     
     private void InstallInterfaceAdapters()
     {
-        Container.BindInterfacesTo<ItemInputController>().AsSingle();
+        Container.BindInterfacesTo<ItemController>().AsSingle();
     }
 
     private void InstallExternalFrameworks()
