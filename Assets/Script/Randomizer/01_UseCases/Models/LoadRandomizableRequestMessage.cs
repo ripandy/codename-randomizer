@@ -1,23 +1,20 @@
 namespace Randomizer.UseCases
 {
-    public class LoadRandomizableRequestMessage : IRequestMessage
+    public class LoadRandomizableRequestMessage : RequestMessage<int>
     {
         public static readonly LoadRandomizableRequestMessage RequestActive = new LoadRandomizableRequestMessage();
-        public RequestType RequestType { get; }
-        public int RandomizableId { get; }
+        public int RandomizableId => Value;
         public bool LoadActive { get; }
 
         private LoadRandomizableRequestMessage()
+        : base(RequestType.LoadRandomizable, -1)
         {
-            RequestType = RequestType.LoadRandomizable;
-            RandomizableId = -1;
             LoadActive = true;
         }
         
         public LoadRandomizableRequestMessage(int randomizableId)
+        : base(RequestType.LoadRandomizable, randomizableId)
         {
-            RequestType = RequestType.LoadRandomizable;
-            RandomizableId = randomizableId;
             LoadActive = false;
         }
     }

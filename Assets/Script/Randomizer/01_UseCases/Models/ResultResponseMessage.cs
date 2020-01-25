@@ -1,16 +1,14 @@
 namespace Randomizer.UseCases
 {
-    public class ResultResponseMessage : IResponseMessage
+    public class ResultResponseMessage : ResponseMessage<string>
     {
-        public ResponseType ResponseType { get; }
-        public string Title { get; }
+        public string Title => Value;
         public string[] Items { get; }
         public int ItemCount => Items.Length;
 
         public ResultResponseMessage(string title, string[] items)
+        : base(ResponseType.DisplayResult, title)
         {
-            ResponseType = ResponseType.DisplayResult;
-            Title = title;
             Items = items;
         }
     }
