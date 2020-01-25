@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Randomizer.UseCases;
-using UnityEngine;
 
 namespace Randomizer.InterfaceAdapters.Presenters
 {
@@ -20,41 +19,38 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _viewContainer = viewContainer;
         }
 
-        protected override void OnResponse()
+        protected override void OnResponse(LabelResponseMessage responseMessage)
         {
-            base.OnResponse();
-            var prevType = _viewContainer.Type;
-            _viewContainer.Type = ResponseInteractor.ResponseType == ResponseType.DisplayLabel ? DisplayState.Grid : DisplayState.Vertical;
-            if (prevType != _viewContainer.Type)
-                ClearItems();
-            UpdateContents();
+            UpdateContents(ContainerType.Grid, responseMessage.Items);
         }
 
-        private void UpdateContents()
+        protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            var values = ResponseInteractor.Values;
-            var count = ResponseInteractor.ValueCount;
+            UpdateContents(ContainerType.Vertical, responseMessage.Items);
+        }
+
+        protected override void OnResponse(ResultResponseMessage responseMessage)
+        {
+            UpdateContents(ContainerType.Vertical, responseMessage.Items);
+        }
+
+        private void UpdateContents(ContainerType newType, string[] values)
+        {
+            _viewContainer.Type = newType;
+            
+            ClearItems();
+            
+            var count = values.Length;
             for (var i = 0; i < count; i++)
             {
-                if (i < _itemViews.Count)
-                {
-                    var item = _itemViews[i];
-                        item.Text = values[i];
-                        item.Order = i;
-                }
-                else
-                    AddItem(values[i], i);
-            }
-
-            for (var i = _itemViews.Count - 1; i >= count; i--)
-            {
-                RemoveItem(i);
+                AddItem(values[i], i);
             }
         }
 
         private void AddItem(string itemName, int order)
         {
-            var newItem = _itemFactory.Create((int) _viewContainer.Type);
+            var itemType = DisplayState == DisplayState.DisplayLabel ? ItemType.Randomizable : ItemType.Item;
+            var newItem = _itemFactory.Create((int) itemType);
                 newItem.Text = itemName;
                 newItem.Order = order;
             _itemViews.Add(newItem);
@@ -67,20 +63,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 itemView.Dispose();
             }
             _itemViews.Clear();
-        }
-
-        private void RemoveItem(int index)
-        {
-            _itemViews[index].Dispose();
-            _itemViews.RemoveAt(index);
-        }
-
-        private void ShowAllItems(bool show = true)
-        {
-            foreach (var item in _itemViews)
-            {
-                item.Visible = show;
-            }
         }
     }
 }

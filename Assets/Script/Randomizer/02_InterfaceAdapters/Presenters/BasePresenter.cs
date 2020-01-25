@@ -46,6 +46,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
                     OnResponse(responseMessage as LabelResponseMessage);
                     break;
             }
+            FinalizeResponse();
         }
 
         private void AdjustResultState(ResultResponseMessage responseMessage)
@@ -56,6 +57,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
         protected virtual void OnResponse(ResultResponseMessage responseMessage) { }
         protected virtual void OnResponse(RandomizableResponseMessage responseMessage) { }
         protected virtual void OnResponse(LabelResponseMessage responseMessage) { }
-        
+        protected virtual void FinalizeResponse() { }
     }
 }

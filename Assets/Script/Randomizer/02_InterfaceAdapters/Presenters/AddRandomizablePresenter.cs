@@ -4,25 +4,20 @@ namespace Randomizer.InterfaceAdapters.Presenters
 {
     public class AddRandomizablePresenter : BasePresenter
     {
-        private readonly IOrderedView _button;
+        private readonly IOrderedView _addRandomizableView;
 
         private AddRandomizablePresenter(
             IResponseInteractor responseInteractor,
-            IOrderedView button)
+            IOrderedView addRandomizableView)
             : base(responseInteractor)
         {
-            _button = button;
+            _addRandomizableView = addRandomizableView;
         }
 
-        protected override void OnResponse()
+        protected override void OnResponse(LabelResponseMessage responseMessage)
         {
-            base.OnResponse();
-            _button.Visible = ResponseInteractor.ResponseType == ResponseType.DisplayLabel;
-        }
-
-        protected override void OnDisplayGroupResponse()
-        {
-            _button.Order = ResponseInteractor.ValueCount;
+            _addRandomizableView.Visible = DisplayState == DisplayState.DisplayRandomizable;
+            _addRandomizableView.Order = responseMessage.ItemCount;
         }
     }
 }

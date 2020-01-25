@@ -16,13 +16,24 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _title = title;
         }
 
-        protected override void OnResponse()
+        protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            _title.Text =
-                string.IsNullOrEmpty(ResponseInteractor.Title) &&
-                ResponseInteractor.ResponseType != ResponseType.DisplayRandomizable
-                    ? DefaultTitle
-                    : ResponseInteractor.Title;
+            UpdateTitle(responseMessage.Title);
+        }
+
+        protected override void OnResponse(LabelResponseMessage responseMessage)
+        {
+            UpdateTitle(responseMessage.Title);
+        }
+
+        protected override void OnResponse(ResultResponseMessage responseMessage)
+        {
+            UpdateTitle(responseMessage.Title);
+        }
+
+        private void UpdateTitle(string title)
+        {
+            _title.Text = string.IsNullOrEmpty(title) ? DefaultTitle : title;
         }
     }
 }
