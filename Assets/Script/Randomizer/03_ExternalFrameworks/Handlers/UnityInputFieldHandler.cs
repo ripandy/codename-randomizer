@@ -14,15 +14,10 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         private EventSystem _eventSystem;
         
-        private string _value;
         private string _prevValue;
 
-        public Action<string> OnAction { get; set; }
-
-        Action IActionHandler.OnAction
-        {
-            set { OnAction = _ => OnAction.Invoke(_value); }
-        }
+        public string Value { get; private set; }
+        public Action OnAction { get; set; }
 
         private void Start()
         {
@@ -57,7 +52,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
         
         private void OnDeselect(string value)
         {
-            _value = value;
+            Value = value;
             InvokeAction();
             inputField.text = "";
             ShowPlaceholder(true);
@@ -70,10 +65,10 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         private void InvokeAction()
         {
-            if (_value.Equals(_prevValue)) return;
+            if (Value.Equals(_prevValue)) return;
             
-            OnAction.Invoke(_value);
-            _prevValue = _value;
+            OnAction.Invoke();
+            _prevValue = Value;
         }
     }
 }
