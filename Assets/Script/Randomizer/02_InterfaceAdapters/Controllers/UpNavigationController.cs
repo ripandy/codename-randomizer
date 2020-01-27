@@ -3,9 +3,10 @@ using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Controllers
 {
-    public class UpNavigationController
+    public class UpNavigationController : IInitializable
     {
         private readonly IRequestInteractor _requestInteractor;
+        private readonly IActionHandler _actionHandler;
         private readonly BasePresenter _presenter;
         
         private UpNavigationController(
@@ -14,7 +15,7 @@ namespace Randomizer.InterfaceAdapters.Controllers
             BasePresenter presenter)
         {
             _requestInteractor = requestInteractor;
-            actionHandler.OnAction = RequestUpNavigation;
+            _actionHandler = actionHandler;
             _presenter = presenter;
         }
 
@@ -30,6 +31,14 @@ namespace Randomizer.InterfaceAdapters.Controllers
                     _requestInteractor.Request(LoadRandomizableRequestMessage.RequestActive);
                     break;
             }
+        }
+
+        public bool IsInitialized { get; private set; }
+        public void Initialize()
+        {
+            if (IsInitialized) return;
+                IsInitialized = true;
+            _actionHandler.OnAction = RequestUpNavigation;
         }
     }
 }

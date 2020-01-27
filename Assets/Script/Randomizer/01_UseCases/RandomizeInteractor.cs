@@ -44,7 +44,11 @@ namespace Randomizer.UseCases
                 }
             }
 
-            var results = randomizables.Select(randomizable => randomizable.Randomize().Name).ToArray();
+            var filtered = randomizables.Select(randomizable => randomizable)
+                .Where(randomizable => randomizable.ItemCount > 1)
+                .ToArray();
+
+            var results = filtered.Select(randomizable => randomizable.Randomize().Name).ToArray();
             if (results.Any())
                 ResponseInteractor.Response(new ResultResponseMessage(title, results));
         }

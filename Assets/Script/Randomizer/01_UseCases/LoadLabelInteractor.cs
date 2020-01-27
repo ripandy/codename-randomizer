@@ -25,10 +25,17 @@ namespace Randomizer.UseCases
             
             if (!requestMessage.LoadActive)
                 _labelGateway.ActiveId = requestMessage.LabelId;
+            if (_randomizableGateway.ActiveId >= 0)
+            {
+                var randomizable = _randomizableGateway.GetActive();
+                if (string.IsNullOrEmpty(randomizable.Name) && randomizable.ItemCount == 0)
+                    _randomizableGateway.Remove(_randomizableGateway.ActiveId);
+                _randomizableGateway.ActiveId = -1;
+            }
             
             var labelId = _labelGateway.ActiveId;
             var title = "";
-
+            
             var randomizables = _randomizableGateway.GetAll()
                 .Select(randomizable => randomizable)
                 .Where(randomizable => randomizable.HasLabel(labelId) || labelId == -1);

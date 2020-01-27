@@ -4,7 +4,7 @@ namespace Randomizer.UseCases
 {
     public class LoadRandomizableInteractor : BaseInteractor
     {
-        protected readonly IGateway<Randomizable> RandomizableGateway;
+        private readonly IGateway<Randomizable> _randomizableGateway;
 
         protected LoadRandomizableInteractor(
             IGateway<Randomizable> randomizableGateway,
@@ -12,15 +12,15 @@ namespace Randomizer.UseCases
             IResponseInteractor responseInteractor)
             : base(requestInteractor, responseInteractor)
         {
-            RandomizableGateway = randomizableGateway;
+            _randomizableGateway = randomizableGateway;
         }
 
         protected override void OnRequest(LoadRandomizableRequestMessage requestMessage)
         {
             if (requestMessage.RequestType != RequestType.LoadRandomizable) return;
             if (!requestMessage.LoadActive)
-                RandomizableGateway.ActiveId = requestMessage.RandomizableId;
-            RespondRandomizable(RandomizableGateway.GetActive());
+                _randomizableGateway.ActiveId = requestMessage.RandomizableId;
+            RespondRandomizable(_randomizableGateway.GetActive());
         }
     }
 }

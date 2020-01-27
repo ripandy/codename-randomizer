@@ -16,8 +16,12 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse(LabelResponseMessage responseMessage)
         {
-            _addRandomizableView.Visible = DisplayState == DisplayState.DisplayRandomizable;
             _addRandomizableView.Order = responseMessage.ItemCount;
+        }
+
+        protected override void FinalizeResponse()
+        {
+            _addRandomizableView.Visible = DisplayState == DisplayState.DisplayLabel;
         }
     }
 }

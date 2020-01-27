@@ -7,13 +7,13 @@ namespace Randomizer.UseCases
         public bool LoadActive { get; }
 
         private LoadLabelRequestMessage()
-        : base(RequestType.LoadRandomizable, -1)
+        : base(RequestType.LoadLabel, -1)
         {
             LoadActive = true;
         }
         
         public LoadLabelRequestMessage(int labelId)
-        : base(RequestType.LoadRandomizable, labelId)
+        : base(RequestType.LoadLabel, labelId)
         {
             LoadActive = false;
         }

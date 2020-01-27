@@ -34,17 +34,17 @@ namespace Randomizer.InterfaceAdapters.Presenters
             UpdateContents(ContainerType.Vertical, responseMessage.Items);
         }
 
-        private void UpdateContents(ContainerType newType, string[] values)
+        private void UpdateContents(ContainerType newType, IReadOnlyList<string> values)
         {
-            _viewContainer.Type = newType;
-            
             ClearItems();
             
-            var count = values.Length;
+            var count = values.Count;
             for (var i = 0; i < count; i++)
             {
                 AddItem(values[i], i);
             }
+
+            _viewContainer.Type = newType;
         }
 
         private void AddItem(string itemName, int order)

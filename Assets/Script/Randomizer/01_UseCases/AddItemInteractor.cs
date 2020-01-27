@@ -17,7 +17,7 @@ namespace Randomizer.UseCases
 
         protected override void OnRequest(RequestMessage<string> requestMessage)
         {
-            if (requestMessage.RequestType != RequestType.AddItem) return;
+            if (requestMessage.RequestType != RequestType.AddItem || string.IsNullOrEmpty(requestMessage.Value)) return;
 
             var id = _randomizableGateway.ActiveId;
             var randomizable = _randomizableGateway.GetById(id);

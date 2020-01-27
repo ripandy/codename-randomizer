@@ -4,7 +4,12 @@ namespace Randomizer.InterfaceAdapters.Presenters
 {
     public class TitlePresenter : BasePresenter
     {
-        private const string DefaultTitle = "Randomizer";
+        private readonly string[] _defaultTitles = {
+            "Randomizer",
+            "",
+            "Result",
+            "Results"
+        };
         
         private readonly ITextView _title;
         
@@ -28,12 +33,13 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse(ResultResponseMessage responseMessage)
         {
-            UpdateTitle(responseMessage.Title);
+            var title = $" of {responseMessage.Title}";
+            _title.Text = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(responseMessage.Title) ? "" : title)}";
         }
 
         private void UpdateTitle(string title)
         {
-            _title.Text = string.IsNullOrEmpty(title) ? DefaultTitle : title;
+            _title.Text = string.IsNullOrEmpty(title) ? _defaultTitles[(int) DisplayState] : title;
         }
     }
 }
