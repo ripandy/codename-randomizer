@@ -9,6 +9,6 @@ namespace Randomizer.InterfaceAdapters
 
     public interface IActionHandler<out T> : IActionHandler
     {
-        new Action<T> OnAction { set; }
+        T Value { get; }
     }
 }

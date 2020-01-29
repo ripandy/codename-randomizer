@@ -6,23 +6,29 @@ namespace Randomizer.InterfaceAdapters.Gateways
     {
         public bool IsInitialized { get; private set; }
         
-        private readonly IDataStore<RandomizableData> _dataStore;
-        private readonly IInputPortInteractor<int> _sessionLoaderInteractor;
+        private readonly IDataStore<RandomizableData> _randomizableDataStore;
+        private readonly IDataStore<LabelData> _labelDataStore;
+        private readonly IRequestInteractor _requestInteractor;
 
         private SessionGateway(
-            IDataStore<RandomizableData> dataStore,
-            IInputPortInteractor<int> sessionLoaderInteractor)
+            IDataStore<RandomizableData> randomizableDataStore,
+            IDataStore<LabelData> labelDataStore,
+            IRequestInteractor requestInteractor)
         {
-            _dataStore = dataStore;
-            _sessionLoaderInteractor = sessionLoaderInteractor;
+            _randomizableDataStore = randomizableDataStore;
+            _labelDataStore = labelDataStore;
+            _requestInteractor = requestInteractor;
         }
 
         public void Initialize()
         {
             if (IsInitialized) return;
                 IsInitialized = true;
-            var param = _dataStore.ActiveIndex;
-            _sessionLoaderInteractor.InputHandler(param);
+                
+            if (_randomizableDataStore.ActiveIndex >= 0)
+                _requestInteractor.Request(new LoadRandomizableRequestMessage(_randomizableDataStore.ActiveIndex));
+            else
+                _requestInteractor.Request(new LoadLabelRequestMessage(_labelDataStore.ActiveIndex));
         }
     }
 }

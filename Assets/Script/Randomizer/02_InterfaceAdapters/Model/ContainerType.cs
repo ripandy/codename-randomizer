@@ -1,7 +1,8 @@
 namespace Randomizer.InterfaceAdapters
 {
-    public enum ContentType
+    public enum ContainerType
     {
+        None = -1,
         Vertical,
         Grid
     }

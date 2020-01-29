@@ -12,7 +12,7 @@ namespace Randomizer.ExternalFrameworks.Views
         [SerializeField] private Color emptyColor = Color.gray;
         private Color activeColor;
 
-        private void Start()
+        private void Awake()
         {
             activeColor = text.color;
         }

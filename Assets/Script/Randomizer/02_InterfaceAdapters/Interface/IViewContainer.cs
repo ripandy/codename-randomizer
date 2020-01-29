@@ -2,6 +2,6 @@ namespace Randomizer.InterfaceAdapters
 {
     public interface IViewContainer
     {
-        ContentType Type { get; set; }
+        ContainerType Type { get; set; }
     }
 }

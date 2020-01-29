@@ -4,25 +4,42 @@ namespace Randomizer.InterfaceAdapters.Presenters
 {
     public class TitlePresenter : BasePresenter
     {
-        private const string DefaultTitle = "Randomizer";
+        private readonly string[] _defaultTitles = {
+            "Randomizer",
+            "",
+            "Result",
+            "Results"
+        };
         
         private readonly ITextView _title;
         
         public TitlePresenter(
-            IOutputPortInteractor responseInteractor,
+            IResponseInteractor responseInteractor,
             ITextView title) 
             : base(responseInteractor)
         {
             _title = title;
         }
 
-        protected override void OnResponse()
+        protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            _title.Text =
-                string.IsNullOrEmpty(ResponseInteractor.Title) &&
-                ResponseInteractor.ResponseType != ResponseType.DisplayRandomizable
-                    ? DefaultTitle
-                    : ResponseInteractor.Title;
+            UpdateTitle(responseMessage.Title);
+        }
+
+        protected override void OnResponse(LabelResponseMessage responseMessage)
+        {
+            UpdateTitle(responseMessage.Title);
+        }
+
+        protected override void OnResponse(ResultResponseMessage responseMessage)
+        {
+            var title = $" of {responseMessage.Title}";
+            _title.Text = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(responseMessage.Title) ? "" : title)}";
+        }
+
+        private void UpdateTitle(string title)
+        {
+            _title.Text = string.IsNullOrEmpty(title) ? _defaultTitles[(int) DisplayState] : title;
         }
     }
 }

@@ -7,22 +7,21 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly IOrderedView _addItemView;
 
         private AddItemPresenter(
-            IOutputPortInteractor responseInteractor,
+            IResponseInteractor responseInteractor,
             IOrderedView addItemView)
             : base(responseInteractor)
         {
             _addItemView = addItemView;
         }
 
-        protected override void OnResponse()
+        protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            base.OnResponse();
-            _addItemView.Visible = ResponseInteractor.ResponseType == ResponseType.DisplayRandomizable;
+            _addItemView.Order = responseMessage.ItemCount;
         }
 
-        protected override void OnDisplayRandomizableResponse()
+        protected override void FinalizeResponse()
         {
-            _addItemView.Order = ResponseInteractor.ValueCount; 
+            _addItemView.Visible = DisplayState == DisplayState.DisplayRandomizable;
         }
     }
 }

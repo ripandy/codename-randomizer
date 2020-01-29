@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Randomizer.UseCases;
 
@@ -6,59 +5,51 @@ namespace Randomizer.InterfaceAdapters.Controllers
 {
     public class InputController : IInitializable
     {
-        public bool IsInitialized { get; private set; }
-        
-        private readonly IList<IInputPortInteractor> _inputPortInteractors;
+        private readonly IRequestInteractor _requestInteractor;
         private readonly IList<IActionHandler> _actionHandlers;
-        private readonly IList<TypeCode> _types;
+        private readonly IList<RequestType> _requestTypes;
 
-        protected InputController (
-            IList<IInputPortInteractor> inputPortInteractors,
+        private InputController (
+            IRequestInteractor requestInteractor,
             IList<IActionHandler> actionHandlers,
-            IList<TypeCode> types)
+            IList<RequestType> requestTypes)
         {
-            _inputPortInteractors = inputPortInteractors;
+            _requestInteractor = requestInteractor;
             _actionHandlers = actionHandlers;
-            _types = types;
+            _requestTypes = requestTypes;
+        }
+        
+        private void BindAction(RequestType type, IActionHandler actionHandler)
+        {
+            actionHandler.OnAction = () => _requestInteractor.Request(new RequestMessage(type));
         }
 
+        private void BindAction<T>(RequestType type, IActionHandler<T> actionHandler)
+        {
+            actionHandler.OnAction = () => _requestInteractor.Request(new RequestMessage<T>(type, actionHandler.Value));
+        }
+
+        public bool IsInitialized { get; private set; }
         public void Initialize()
         {
             if (IsInitialized) return;
                 IsInitialized = true;
-            for (int i = 0; i < _types.Count; i++)
+                
+            for (var i = 0; i < _requestTypes.Count; i++)
             {
-                if (_types[i] == TypeCode.Empty)
-                    ConnectAction(i);
-                else if (_types[i] == TypeCode.Int32)
-                    ConnectAction<int>(i);
-                else if (_types[i] == TypeCode.String)
-                    ConnectAction<string>(i);
+                var type = _requestTypes[i];
+                switch (type)
+                {
+                    case RequestType.AddItem:
+                    case RequestType.EditTitle:
+                        BindAction(type, _actionHandlers[i] as IActionHandler<string>);
+                        break;
+                    case RequestType.AddRandomizable:
+                    case RequestType.Randomize:
+                        BindAction(type, _actionHandlers[i]);
+                        break;
+                }
             }
-        }
-
-        private IInputPortInteractor<T> GetInputPortInteractor<T>(int idx)
-        {
-            return (IInputPortInteractor<T>) _inputPortInteractors[idx];
-        }
-        
-        private IActionHandler<T> GetActionHandler<T>(int idx)
-        {
-            return (IActionHandler<T>) _actionHandlers[idx];
-        }
-
-        private void ConnectAction<T>(int idx)
-        {
-            var act = GetActionHandler<T>(idx);
-            var ip = GetInputPortInteractor<T>(idx);
-            act.OnAction = ip.InputHandler;
-        }
-
-        private void ConnectAction(int idx)
-        {
-            var act = _actionHandlers[idx];
-            var ip = _inputPortInteractors[idx];
-            act.OnAction = ip.InputHandler;
         }
     }
 }
