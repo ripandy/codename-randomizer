@@ -8,13 +8,19 @@ namespace Randomizer.UseCases
     {
         protected readonly IRequestInteractor RequestInteractor;
         protected readonly IResponseInteractor ResponseInteractor;
+        protected readonly IGateway<Label> LabelGateway;
+        protected readonly IGateway<Randomizable> RandomizableGateway;
 
         protected BaseInteractor(
             IRequestInteractor requestInteractor,
-            IResponseInteractor responseInteractor)
+            IResponseInteractor responseInteractor,
+            IGateway<Label> labelGateway,
+            IGateway<Randomizable> randomizableGateway)
         {
             RequestInteractor = requestInteractor;
             ResponseInteractor = responseInteractor;
+            LabelGateway = labelGateway;
+            RandomizableGateway = randomizableGateway;
             RequestInteractor.OnRequest += OnRequest;
         }
 
@@ -59,10 +65,17 @@ namespace Randomizer.UseCases
         protected virtual void OnRequest(LoadLabelRequestMessage requestMessage) { }
         protected virtual void OnRequest(LoadRandomizableRequestMessage requestMessage) { }
 
+        protected void RespondRandomizable(int randomizableId)
+        {
+            var randomizable = RandomizableGateway.GetById(randomizableId);
+            RespondRandomizable(randomizable);
+        }
+
         protected void RespondRandomizable(Randomizable randomizable)
         {
             var items = randomizable.Items.Select(item => item.Name).ToArray();
-            ResponseInteractor.Response(new RandomizableResponseMessage(randomizable.Name, items));
+            var labels = randomizable.LabelIds.Select(id => LabelGateway.GetById(id).Name).ToArray();
+            ResponseInteractor.Response(new RandomizableResponseMessage(randomizable.Name, items, labels));
         }
     }
 }

@@ -2,7 +2,7 @@ using Randomizer.ExternalFrameworks.Handlers;
 using Randomizer.InterfaceAdapters.Controllers;
 using Zenject;
 
-public class ItemInstaller : Installer<ItemInstaller>
+public class PickLabelButtonInstaller : Installer<PickLabelButtonInstaller>
 {
     public override void InstallBindings()
     {
@@ -12,9 +12,9 @@ public class ItemInstaller : Installer<ItemInstaller>
     
     private void InstallInterfaceAdapters()
     {
-        Container.BindInterfacesTo<ItemListController>().AsSingle();
+        Container.BindInterfacesTo<PickLabelButtonController>().AsSingle();
     }
-
+    
     private void InstallExternalFrameworks()
     {
         Container.BindInterfacesTo<ZenjectInitializers>().AsSingle();

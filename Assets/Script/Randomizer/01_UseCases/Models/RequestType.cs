@@ -10,6 +10,11 @@ namespace Randomizer.UseCases
         LoadLabel,
         Randomize,
         RemoveItem,
-        UpNavigation
+        PickLabelNavigate,
+        PickLabel,
+        ManageLabelNavigate,
+        AddLabel,
+        EditLabel,
+        RemoveLabel
     }
 }

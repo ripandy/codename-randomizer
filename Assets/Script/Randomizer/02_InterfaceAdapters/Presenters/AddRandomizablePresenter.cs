@@ -14,12 +14,13 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _addRandomizableView = addRandomizableView;
         }
 
-        protected override void OnResponse(LabelResponseMessage responseMessage)
+        protected override void OnResponse(ItemListResponseMessage responseMessage)
         {
+            if (responseMessage.ResponseType != ResponseType.DisplayLabel) return;
             _addRandomizableView.Order = responseMessage.ItemCount;
         }
 
-        protected override void FinalizeResponse()
+        protected override void PostResponse()
         {
             _addRandomizableView.Visible = DisplayState == DisplayState.DisplayLabel;
         }

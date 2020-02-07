@@ -8,7 +8,7 @@ namespace Randomizer.ExternalFrameworks.Handlers
         private void Awake()
         {
             QualitySettings.vSyncCount = 0;
-            Application.targetFrameRate = 24;
+            Application.targetFrameRate = 15;
             Input.backButtonLeavesApp = true;
         }
 

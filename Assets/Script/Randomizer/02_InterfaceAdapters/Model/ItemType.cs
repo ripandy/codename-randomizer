@@ -3,6 +3,9 @@ namespace Randomizer.InterfaceAdapters
     public enum ItemType
     {
         Item,
-        Randomizable
+        Randomizable,
+        Result,
+        PickLabelButton,
+        LabelList
     }
 }

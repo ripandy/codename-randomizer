@@ -5,40 +5,35 @@ namespace Randomizer.UseCases
 {
     public class RandomizeInteractor : BaseInteractor
     {
-        private readonly IGateway<Label> _labelGateway;
-        private readonly IGateway<Randomizable> _randomizableGateway;
-
         private RandomizeInteractor(
             IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
-            : base(requestInteractor, responseInteractor)
+            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
         {
-            _labelGateway = labelGateway;
-            _randomizableGateway = randomizableGateway;
         }
         
         protected override void OnRequest(RequestMessage requestMessage)
         {
             if (requestMessage.RequestType != RequestType.Randomize) return;
             
-            var randomizableId = _randomizableGateway.ActiveId;
-            var labelId = _labelGateway.ActiveId;
-            var randomizables = _randomizableGateway.GetAll();
+            var randomizableId = RandomizableGateway.ActiveId;
+            var labelId = LabelGateway.ActiveId;
+            var randomizables = RandomizableGateway.GetAll();
             var title = "";
             if (randomizableId >= 0)
             {
-                randomizables = new [] { _randomizableGateway.GetById(randomizableId) };
+                randomizables = new [] { RandomizableGateway.GetById(randomizableId) };
                 title = randomizables[0].Name;
             }
             else
             {
                 if (labelId >= 0)
                 {
-                    var label = _labelGateway.GetById(labelId);
+                    var label = LabelGateway.GetById(labelId);
                     title = label.Name;
-                    randomizables = _randomizableGateway.GetAll().Select(randomizable => randomizable)
+                    randomizables = RandomizableGateway.GetAll().Select(randomizable => randomizable)
                         .Where(randomizable => randomizable.HasLabel(labelId))
                         .ToArray();
                 }

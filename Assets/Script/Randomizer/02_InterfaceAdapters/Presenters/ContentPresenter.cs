@@ -7,6 +7,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
     {
         private readonly IFactoryHandler<IItemView> _itemFactory;
         private readonly IList<IItemView> _itemViews = new List<IItemView>();
+        private readonly IList<IItemView> _subItemViews = new List<IItemView>();
         private readonly IViewContainer _viewContainer;
 
         private ContentPresenter(
@@ -19,41 +20,82 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _viewContainer = viewContainer;
         }
 
-        protected override void OnResponse(LabelResponseMessage responseMessage)
+        protected override void PreResponse()
         {
-            UpdateContents(ContainerType.Grid, responseMessage.Items);
+            ClearItems();
+            ClearSubItems();
+        }
+
+        protected override void OnResponse(ItemListResponseMessage responseMessage)
+        {
+            var containerType = ContainerType.Vertical;
+            var itemType = ItemType.Item;
+            switch (responseMessage.ResponseType)
+            {
+                case ResponseType.DisplayLabel:
+                    containerType = ContainerType.Grid;
+                    itemType = ItemType.Randomizable;
+                    break;
+                case ResponseType.DisplayRandomizable:
+                    itemType = ItemType.Item;
+                    break;
+                case ResponseType.DisplayPickLabel:
+                    itemType = ItemType.PickLabelButton;
+                    break;
+                case ResponseType.DisplayResult:
+                    itemType = ItemType.Result;
+                    break;
+            }
+            UpdateContents(containerType, itemType, responseMessage.Items);
         }
 
         protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            UpdateContents(ContainerType.Vertical, responseMessage.Items);
+            UpdateContents(ContainerType.Vertical, ItemType.Randomizable, responseMessage.Items);
+            UpdateSubContents(ItemType.PickLabelButton, responseMessage.Labels);
         }
 
-        protected override void OnResponse(ResultResponseMessage responseMessage)
+        private void UpdateContents(ContainerType containerType, ItemType itemType, IReadOnlyList<string> values)
         {
-            UpdateContents(ContainerType.Vertical, responseMessage.Items);
-        }
-
-        private void UpdateContents(ContainerType newType, IReadOnlyList<string> values)
-        {
-            ClearItems();
-            
             var count = values.Count;
             for (var i = 0; i < count; i++)
             {
-                AddItem(values[i], i);
+                AddItem(itemType, values[i], i);
             }
 
-            _viewContainer.Type = newType;
+            _viewContainer.Type = containerType;
         }
 
-        private void AddItem(string itemName, int order)
+        private void UpdateSubContents(ItemType itemType, IReadOnlyList<string> values)
         {
-            var itemType = DisplayState == DisplayState.DisplayLabel ? ItemType.Randomizable : ItemType.Item;
+            var count = values.Count;
+            if (count > 0)
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    AddSubItem(itemType, values[i], i);
+                }
+            }
+            else
+            {
+                AddSubItem(itemType, "", 0);
+            }
+        }
+
+        private void AddItem(ItemType itemType, string itemName, int order)
+        {
             var newItem = _itemFactory.Create((int) itemType);
                 newItem.Text = itemName;
                 newItem.Order = order;
             _itemViews.Add(newItem);
+        }
+        
+        private void AddSubItem(ItemType itemType, string itemName, int order)
+        {
+            var newItem = _itemFactory.Create((int) itemType);
+                newItem.Text = itemName;
+                newItem.Order = order;
+            _subItemViews.Add(newItem);
         }
 
         private void ClearItems()
@@ -63,6 +105,15 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 itemView.Dispose();
             }
             _itemViews.Clear();
+        }
+
+        private void ClearSubItems()
+        {
+            foreach (var itemView in _subItemViews)
+            {
+                itemView.Dispose();
+            }
+            _subItemViews.Clear();
         }
     }
 }

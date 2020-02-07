@@ -15,10 +15,14 @@ using IInitializable = Randomizer.InterfaceAdapters.IInitializable;
 public class RandomizerInstaller : MonoInstaller
 {
     [Header("Factories")]
-    [SerializeField] private GameObject itemPrefab;
-    [SerializeField] private GameObject gridItemPrefab;
+    [SerializeField] private GameObject itemListPrefab;
+    [SerializeField] private GameObject randomizableListPrefab;
+    [SerializeField] private GameObject resultListPrefab;
+    [SerializeField] private GameObject pickLabelButtonPrefab;
+    [SerializeField] private GameObject labelListPrefab;
     [SerializeField] private Transform verticalItemContainer;
     [SerializeField] private Transform gridItemContainer;
+    [SerializeField] private Transform subContainer;
     
     [Header("Handlers")]
     [SerializeField] private UnityButtonHandler upNavigationButton;
@@ -48,6 +52,7 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
         Container.BindInterfacesTo<EditItemInteractor>().AsSingle();
         Container.BindInterfacesTo<RemoveItemInteractor>().AsSingle();
+        Container.BindInterfacesTo<PickLabelNavigateInteractor>().AsSingle();
         
         // Use case shared "port" interactor
         Container.BindInterfacesTo<RequestInteractor>().AsSingle();
@@ -89,7 +94,7 @@ public class RandomizerInstaller : MonoInstaller
             .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
-                .ByNewPrefabInstaller<ItemInstaller>(itemPrefab)
+                .ByNewPrefabInstaller<ItemInstaller>(itemListPrefab)
                 .UnderTransform(verticalItemContainer)
             );
         
@@ -97,8 +102,32 @@ public class RandomizerInstaller : MonoInstaller
             .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
-                .ByNewPrefabInstaller<RandomizableInstaller>(gridItemPrefab)
+                .ByNewPrefabInstaller<RandomizableListInstaller>(randomizableListPrefab)
                 .UnderTransform(gridItemContainer)
+            );
+        
+        Container.BindFactory<ItemView, ItemView.Factory>()
+            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+                .WithInitialSize(4)
+                .FromSubContainerResolve()
+                .ByNewContextPrefab(resultListPrefab)
+                .UnderTransform(verticalItemContainer)
+            );
+        
+        Container.BindFactory<ItemView, ItemView.Factory>()
+            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+                .WithInitialSize(4)
+                .FromSubContainerResolve()
+                .ByNewPrefabInstaller<PickLabelButtonInstaller>(pickLabelButtonPrefab)
+                .UnderTransform(subContainer)
+            );
+        
+        Container.BindFactory<ItemView, ItemView.Factory>()
+            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+                .WithInitialSize(4)
+                .FromSubContainerResolve()
+                .ByNewContextPrefab(labelListPrefab)
+                .UnderTransform(verticalItemContainer)
             );
 
         // Bind Handlers
