@@ -244,6 +244,7 @@ MonoBehaviour:
   text: {fileID: 9204455857009477629}
   handleEmpty: 0
   emptyText: (Untitled)
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
   emptyColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &3609029768465541307
 GameObject:

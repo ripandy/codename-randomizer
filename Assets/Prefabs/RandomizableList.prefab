@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 119001946408747641}
   - component: {fileID: 6482548599385157856}
   m_Layer: 5
-  m_Name: Randomizable
+  m_Name: RandomizableList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,6 +163,7 @@ MonoBehaviour:
   text: {fileID: 5885468000579924564}
   handleEmpty: 1
   emptyText: (Untitled)
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
   emptyColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &6482548599385157856
 MonoBehaviour:

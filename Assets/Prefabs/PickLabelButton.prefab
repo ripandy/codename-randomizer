@@ -76,6 +76,7 @@ MonoBehaviour:
   text: {fileID: 8605366254406635111}
   handleEmpty: 1
   emptyText: Add Label
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
   emptyColor: {r: 1, g: 1, b: 1, a: 0.5019608}
 --- !u!114 &9153001621107996240
 MonoBehaviour:

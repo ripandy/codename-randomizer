@@ -11,15 +11,9 @@ namespace Randomizer.ExternalFrameworks.Views
         
         [SerializeField] private bool handleEmpty;
         [SerializeField] private string emptyText = "(Untitled)";
+        [SerializeField] private Color activeColor = Color.white;
         [SerializeField] private Color emptyColor = Color.gray;
         
-        private Color activeColor;
-
-        private void Awake()
-        {
-            activeColor = text.color;
-        }
-
         private int _order;
         public int Order
         {
