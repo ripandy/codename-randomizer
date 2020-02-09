@@ -36,9 +36,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
                     containerType = ContainerType.Grid;
                     itemType = ItemType.Randomizable;
                     break;
-                case ResponseType.DisplayRandomizable:
-                    itemType = ItemType.Item;
-                    break;
                 case ResponseType.DisplayPickLabel:
                     itemType = ItemType.PickLabelButton;
                     break;
@@ -51,7 +48,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            UpdateContents(ContainerType.Vertical, ItemType.Randomizable, responseMessage.Items);
+            UpdateContents(ContainerType.Vertical, ItemType.Item, responseMessage.Items);
             UpdateSubContents(ItemType.PickLabelButton, responseMessage.Labels);
         }
 
