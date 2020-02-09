@@ -9,13 +9,18 @@ namespace Randomizer.ExternalFrameworks.Handlers
     {
         [SerializeField] protected Button button;
 
-        public Action OnAction { get; set; }
+        public Action OnAction { private get; set; }
+        public bool Active
+        {
+            get => button.enabled;
+            set => button.enabled = value;
+        }
 
         private void Start()
         {
             BindReactive();
-            button.enabled = false;
-            button.enabled = true;
+            Active = false;
+            Active = true;
         }
 
         protected virtual void BindReactive()

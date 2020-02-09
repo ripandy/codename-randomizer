@@ -5,12 +5,12 @@ namespace Randomizer.InterfaceAdapters.Controllers
     public class RandomizableListController : BaseController
     {
         private readonly IOrderedView _orderedView;
-        
+
         private RandomizableListController(
             IRequestInteractor requestInteractor,
             IActionHandler actionHandler,
             IOrderedView orderedView)
-        : base(requestInteractor, actionHandler)
+            : base(requestInteractor, actionHandler)
         {
             _orderedView = orderedView;
         }

@@ -18,6 +18,12 @@ namespace Randomizer.ExternalFrameworks.Handlers
 
         public string Value { get; private set; }
         public Action OnAction { get; set; }
+        public bool Active
+        {
+            get => inputField.interactable;
+            set => inputField.interactable = value;
+        }
+
 
         private void Start()
         {

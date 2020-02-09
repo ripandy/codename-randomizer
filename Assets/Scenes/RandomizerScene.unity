@@ -706,6 +706,7 @@ MonoBehaviour:
   gridItemContainer: {fileID: 411230081}
   subContainer: {fileID: 1469837601}
   upNavigationButton: {fileID: 2061364445}
+  editTitleInputField: {fileID: 1442966797}
   addItemButtonView: {fileID: 4801734711955626342}
   addRandomizableButtonView: {fileID: 498528331}
   titleView: {fileID: 1442966795}

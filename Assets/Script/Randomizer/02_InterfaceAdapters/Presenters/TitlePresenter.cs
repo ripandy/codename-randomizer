@@ -13,12 +13,15 @@ namespace Randomizer.InterfaceAdapters.Presenters
         };
         
         private readonly ITextView _title;
+        private readonly IActionHandler _actionHandler;
         
         public TitlePresenter(
             IResponseInteractor responseInteractor,
+            IActionHandler actionHandler,
             ITextView title) 
             : base(responseInteractor)
         {
+            _actionHandler = actionHandler;
             _title = title;
         }
 
@@ -40,6 +43,11 @@ namespace Randomizer.InterfaceAdapters.Presenters
                     break;
             }
             UpdateTitle(title);
+        }
+
+        protected override void PostResponse()
+        {
+            _actionHandler.Active = DisplayState == DisplayState.DisplayRandomizable;
         }
 
         private void UpdateTitle(string title)

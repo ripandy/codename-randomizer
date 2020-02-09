@@ -3,19 +3,16 @@ using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Controllers
 {
-    public class UpNavigationController : IInitializable
+    public class UpNavigationController : BaseController
     {
-        private readonly IRequestInteractor _requestInteractor;
-        private readonly IActionHandler _actionHandler;
         private readonly BasePresenter _presenter;
-        
+
         private UpNavigationController(
             IRequestInteractor requestInteractor,
             IActionHandler actionHandler,
             BasePresenter presenter)
+            : base(requestInteractor, actionHandler)
         {
-            _requestInteractor = requestInteractor;
-            _actionHandler = actionHandler;
             _presenter = presenter;
         }
 
@@ -25,20 +22,17 @@ namespace Randomizer.InterfaceAdapters.Controllers
             {
                 case DisplayState.DisplayRandomizable:
                 case DisplayState.DisplayResults:
-                    _requestInteractor.Request(LoadLabelRequestMessage.RequestActive);
+                    RequestInteractor.Request(LoadLabelRequestMessage.RequestActive);
                     break;
                 case DisplayState.DisplayResult:
-                    _requestInteractor.Request(LoadRandomizableRequestMessage.RequestActive);
+                    RequestInteractor.Request(LoadRandomizableRequestMessage.RequestActive);
                     break;
             }
         }
 
-        public bool IsInitialized { get; private set; }
-        public void Initialize()
+        protected override void BindAction()
         {
-            if (IsInitialized) return;
-                IsInitialized = true;
-            _actionHandler.OnAction = RequestUpNavigation;
+            ActionHandler.OnAction = RequestUpNavigation;
         }
     }
 }

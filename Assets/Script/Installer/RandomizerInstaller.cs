@@ -26,6 +26,7 @@ public class RandomizerInstaller : MonoInstaller
     
     [Header("Handlers")]
     [SerializeField] private UnityButtonHandler upNavigationButton;
+    [SerializeField] private UnityInputFieldHandler editTitleInputField;
 
     [Header("Views")]
     [SerializeField] private OrderedView addItemButtonView;
@@ -134,6 +135,7 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<ItemFactory>().AsSingle();
         Container.BindInterfacesTo<ZenjectInitializers>().AsSingle();
         Container.Bind<IActionHandler>().FromInstance(upNavigationButton).WhenInjectedInto<UpNavigationController>();
+        Container.Bind<IActionHandler>().FromInstance(editTitleInputField).WhenInjectedInto<TitlePresenter>();
         
         // Bind Views
         Container.Bind<IOrderedView>().FromInstance(addItemButtonView).WhenInjectedInto<AddItemPresenter>();
