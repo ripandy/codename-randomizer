@@ -700,7 +700,7 @@ MonoBehaviour:
     type: 3}
   pickLabelButtonPrefab: {fileID: 2496188656286179275, guid: 18765ea4080244ec0a712c4bb225599c,
     type: 3}
-  labelListPrefab: {fileID: 3609029767832358028, guid: 18599c9c7329f44b5abf95652be83511,
+  pickLabelListPrefab: {fileID: 3609029767832358028, guid: 18599c9c7329f44b5abf95652be83511,
     type: 3}
   verticalItemContainer: {fileID: 292069975}
   gridItemContainer: {fileID: 411230081}

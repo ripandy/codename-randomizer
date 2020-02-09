@@ -18,10 +18,11 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.PickLabelNavigate) return;
 
+            var labels = LabelGateway.GetAll().Select(label => label.Name).ToArray();
             var randomizable = RandomizableGateway.GetActive();
             var labelIds = randomizable.LabelIds;
-            var labels = labelIds.Select(i => LabelGateway.GetById(i).Name).ToArray();
-            ResponseInteractor.Response(new ItemListResponseMessage(ResponseType.DisplayPickLabel, randomizable.Name, labels));
+            var pickedLabelIds = labelIds;
+            ResponseInteractor.Response(new PickLabelListResponseMessage(randomizable.Name, labels, pickedLabelIds));
         }
     }
 }

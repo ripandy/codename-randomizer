@@ -25,6 +25,7 @@ namespace Randomizer.InterfaceAdapters.Controllers
                     RequestInteractor.Request(LoadLabelRequestMessage.RequestActive);
                     break;
                 case DisplayState.DisplayResult:
+                case DisplayState.DisplayPickLabel:
                     RequestInteractor.Request(LoadRandomizableRequestMessage.RequestActive);
                     break;
             }

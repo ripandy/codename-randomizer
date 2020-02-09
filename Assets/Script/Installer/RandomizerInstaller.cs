@@ -19,7 +19,7 @@ public class RandomizerInstaller : MonoInstaller
     [SerializeField] private GameObject randomizableListPrefab;
     [SerializeField] private GameObject resultListPrefab;
     [SerializeField] private GameObject pickLabelButtonPrefab;
-    [SerializeField] private GameObject labelListPrefab;
+    [SerializeField] private GameObject pickLabelListPrefab;
     
     [Header("Containers")]
     [SerializeField] private Transform verticalItemContainer;
@@ -129,7 +129,7 @@ public class RandomizerInstaller : MonoInstaller
             .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
-                .ByNewContextPrefab(labelListPrefab)
+                .ByNewContextPrefab(pickLabelListPrefab)
                 .UnderTransform(verticalItemContainer)
             );
 

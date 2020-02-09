@@ -38,8 +38,10 @@ namespace Randomizer.InterfaceAdapters.Presenters
             {
                 case ResponseType.DisplayResult:
                 case ResponseType.DisplayLabel:
-                case ResponseType.DisplayPickLabel:
                     OnResponse(responseMessage as ItemListResponseMessage);
+                    break;
+                case ResponseType.DisplayPickLabel:
+                    OnResponse(responseMessage as PickLabelListResponseMessage);
                     break;
                 case ResponseType.DisplayRandomizable:
                     OnResponse(responseMessage as RandomizableResponseMessage);
@@ -59,6 +61,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected virtual void PreResponse() { }
         protected virtual void OnResponse(RandomizableResponseMessage responseMessage) { }
+        protected virtual void OnResponse(PickLabelListResponseMessage responseMessage) { }
         protected virtual void OnResponse(ItemListResponseMessage responseMessage) { }
         protected virtual void PostResponse() { }
     }

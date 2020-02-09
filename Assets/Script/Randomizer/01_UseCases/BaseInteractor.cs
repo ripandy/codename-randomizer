@@ -41,6 +41,7 @@ namespace Randomizer.UseCases
                     break;
                 case RequestType.AddRandomizable:
                 case RequestType.Randomize:
+                case RequestType.PickLabelNavigate:
                     OnRequest(requestMessage as RequestMessage);
                     break;
                 case RequestType.EditItem:

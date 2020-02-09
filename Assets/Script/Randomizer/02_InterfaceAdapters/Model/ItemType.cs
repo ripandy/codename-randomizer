@@ -6,6 +6,6 @@ namespace Randomizer.InterfaceAdapters
         Randomizable,
         Result,
         PickLabelButton,
-        LabelList
+        PickLabelList
     }
 }

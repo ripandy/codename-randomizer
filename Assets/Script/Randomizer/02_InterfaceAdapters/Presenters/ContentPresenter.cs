@@ -36,9 +36,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
                     containerType = ContainerType.Grid;
                     itemType = ItemType.Randomizable;
                     break;
-                case ResponseType.DisplayPickLabel:
-                    itemType = ItemType.PickLabelButton;
-                    break;
                 case ResponseType.DisplayResult:
                     itemType = ItemType.Result;
                     break;
@@ -50,6 +47,11 @@ namespace Randomizer.InterfaceAdapters.Presenters
         {
             UpdateContents(ContainerType.Vertical, ItemType.Item, responseMessage.Items);
             UpdateSubContents(ItemType.PickLabelButton, responseMessage.Labels);
+        }
+        
+        protected override void OnResponse(PickLabelListResponseMessage responseMessage)
+        {
+            UpdateContents(ContainerType.Vertical, ItemType.PickLabelList, responseMessage.Items);
         }
 
         private void UpdateContents(ContainerType containerType, ItemType itemType, IReadOnlyList<string> values)
