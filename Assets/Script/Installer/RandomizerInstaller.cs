@@ -20,6 +20,8 @@ public class RandomizerInstaller : MonoInstaller
     [SerializeField] private GameObject resultListPrefab;
     [SerializeField] private GameObject pickLabelButtonPrefab;
     [SerializeField] private GameObject labelListPrefab;
+    
+    [Header("Containers")]
     [SerializeField] private Transform verticalItemContainer;
     [SerializeField] private Transform gridItemContainer;
     [SerializeField] private Transform subContainer;
