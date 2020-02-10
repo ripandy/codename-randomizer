@@ -1,3 +1,7 @@
+/*
+ * found this on https://stackoverflow.com/a/38479097
+ s*/
+
 using UnityEngine;
 using UnityEngine.UI;
 

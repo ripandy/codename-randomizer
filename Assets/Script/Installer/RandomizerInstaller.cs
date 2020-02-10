@@ -56,6 +56,7 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<EditItemInteractor>().AsSingle();
         Container.BindInterfacesTo<RemoveItemInteractor>().AsSingle();
         Container.BindInterfacesTo<PickLabelNavigateInteractor>().AsSingle();
+        Container.BindInterfacesTo<PickLabelInteractor>().AsSingle();
         
         // Use case shared "port" interactor
         Container.BindInterfacesTo<RequestInteractor>().AsSingle();
@@ -129,7 +130,7 @@ public class RandomizerInstaller : MonoInstaller
             .FromPoolableMemoryPool<PickLabelView, PickLabelViewPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
-                .ByNewContextPrefab(pickLabelListPrefab)
+                .ByNewPrefabInstaller<PickLabelListInstaller>(pickLabelListPrefab)
                 .UnderTransform(verticalItemContainer)
             );
 

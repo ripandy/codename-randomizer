@@ -1,4 +1,3 @@
-using System.Linq;
 using Randomizer.Entities;
 
 namespace Randomizer.UseCases
@@ -17,12 +16,7 @@ namespace Randomizer.UseCases
         protected override void OnRequest(RequestMessage requestMessage)
         {
             if (requestMessage.RequestType != RequestType.PickLabelNavigate) return;
-
-            var labels = LabelGateway.GetAll().Select(label => label.Name).ToArray();
-            var randomizable = RandomizableGateway.GetActive();
-            var labelIds = randomizable.LabelIds;
-            var pickedLabelIds = labelIds;
-            ResponseInteractor.Response(new PickLabelListResponseMessage(randomizable.Name, labels, pickedLabelIds));
+            RespondPickLabel();
         }
     }
 }

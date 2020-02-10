@@ -54,6 +54,7 @@ namespace Randomizer.UseCases
                     OnRequest(requestMessage as LoadLabelRequestMessage);
                     break;
                 case RequestType.RemoveItem:
+                case RequestType.PickLabel:
                     OnRequest(requestMessage as RequestMessage<int>);
                     break;
             }
@@ -77,6 +78,14 @@ namespace Randomizer.UseCases
             var items = randomizable.Items.Select(item => item.Name).ToArray();
             var labels = randomizable.LabelIds.Select(id => LabelGateway.GetById(id).Name).ToArray();
             ResponseInteractor.Response(new RandomizableResponseMessage(randomizable.Name, items, labels));
+        }
+
+        protected void RespondPickLabel()
+        {
+            var labels = LabelGateway.GetAll().Select(label => label.Name).ToArray();
+            var randomizable = RandomizableGateway.GetActive();
+            var labelIds = randomizable.LabelIds;
+            ResponseInteractor.Response(new PickLabelListResponseMessage(randomizable.Name, labels, labelIds));
         }
     }
 }
