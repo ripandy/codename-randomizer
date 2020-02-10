@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
@@ -52,6 +53,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         protected override void OnResponse(PickLabelListResponseMessage responseMessage)
         {
             UpdateContents(ContainerType.Vertical, ItemType.PickLabelList, responseMessage.Items);
+            UpdateToggles(responseMessage.PickedLabels);
         }
 
         private void UpdateContents(ContainerType containerType, ItemType itemType, IReadOnlyList<string> values)
@@ -78,6 +80,15 @@ namespace Randomizer.InterfaceAdapters.Presenters
             else
             {
                 AddSubItem(itemType, "", 0);
+            }
+        }
+
+        private void UpdateToggles(IReadOnlyList<int> active)
+        {
+            for (var i = 0; i < _itemViews.Count; i++)
+            {
+                var toggleable = (IPickLabelView) _itemViews[i];
+                    toggleable.Toggle = active.Contains(i);
             }
         }
 

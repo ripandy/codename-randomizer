@@ -166,10 +166,10 @@ GameObject:
   - component: {fileID: 3609029767832358029}
   - component: {fileID: -7902280931040040979}
   - component: {fileID: 8279040718568123656}
-  - component: {fileID: 6733796689133471433}
+  - component: {fileID: 8992668394826101116}
   - component: {fileID: 604953293250161528}
   m_Layer: 5
-  m_Name: LabelList
+  m_Name: PickLabelList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,13 +225,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _components:
-  - {fileID: 6733796689133471433}
+  - {fileID: 8992668394826101116}
   - {fileID: 604953293250161528}
   _identifier: 
   _useSceneContext: 0
   _context: {fileID: 0}
   _bindType: 2
---- !u!114 &6733796689133471433
+--- !u!114 &8992668394826101116
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3609029767832358028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e357e837b966466990ccd9797622a475, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ef816589dc245f2aaf921eb97306cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 399859079203669300}
@@ -248,6 +248,9 @@ MonoBehaviour:
   emptyText: (Untitled)
   activeColor: {r: 1, g: 1, b: 1, a: 1}
   emptyColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  toggleImage: {fileID: 1986187648273701863}
+  checkedSprite: {fileID: 21300000, guid: 6575f137c36874de6a364bfc7c22383c, type: 3}
+  uncheckedSprite: {fileID: 21300000, guid: a0d4da2968b8c4a979ea4808d1cf8272, type: 3}
 --- !u!114 &604953293250161528
 MonoBehaviour:
   m_ObjectHideFlags: 0

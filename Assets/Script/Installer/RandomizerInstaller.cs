@@ -94,7 +94,7 @@ public class RandomizerInstaller : MonoInstaller
     {
         // Bind Factories
         Container.BindFactory<ItemView, ItemView.Factory>()
-            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+            .FromPoolableMemoryPool<ItemView, ItemViewPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
                 .ByNewPrefabInstaller<ItemInstaller>(itemListPrefab)
@@ -102,7 +102,7 @@ public class RandomizerInstaller : MonoInstaller
             );
         
         Container.BindFactory<ItemView, ItemView.Factory>()
-            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+            .FromPoolableMemoryPool<ItemView, ItemViewPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
                 .ByNewPrefabInstaller<RandomizableListInstaller>(randomizableListPrefab)
@@ -110,7 +110,7 @@ public class RandomizerInstaller : MonoInstaller
             );
         
         Container.BindFactory<ItemView, ItemView.Factory>()
-            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+            .FromPoolableMemoryPool<ItemView, ItemViewPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
                 .ByNewContextPrefab(resultListPrefab)
@@ -118,15 +118,15 @@ public class RandomizerInstaller : MonoInstaller
             );
         
         Container.BindFactory<ItemView, ItemView.Factory>()
-            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+            .FromPoolableMemoryPool<ItemView, ItemViewPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
                 .ByNewPrefabInstaller<PickLabelButtonInstaller>(pickLabelButtonPrefab)
                 .UnderTransform(subContainer)
             );
         
-        Container.BindFactory<ItemView, ItemView.Factory>()
-            .FromPoolableMemoryPool<ItemView, ItemViewerPool>(poolBinder => poolBinder
+        Container.BindFactory<PickLabelView, PickLabelView.Factory>()
+            .FromPoolableMemoryPool<PickLabelView, PickLabelViewPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
                 .ByNewContextPrefab(pickLabelListPrefab)
@@ -147,7 +147,11 @@ public class RandomizerInstaller : MonoInstaller
         Container.Bind<IView>().FromInstance(upNavigationView).WhenInjectedInto<UpNavigationPresenter>();
     }
     
-    private class ItemViewerPool : MonoPoolableMemoryPool<IMemoryPool, ItemView>
+    private class ItemViewPool : MonoPoolableMemoryPool<IMemoryPool, ItemView>
+    {
+    }
+    
+    private class PickLabelViewPool : MonoPoolableMemoryPool<IMemoryPool, PickLabelView>
     {
     }
 }
