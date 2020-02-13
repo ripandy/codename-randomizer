@@ -33,13 +33,14 @@ namespace Randomizer.InterfaceAdapters.Presenters
         protected override void OnResponse(ItemListResponseMessage responseMessage)
         {
             var title = responseMessage.Title;
-            switch (responseMessage.ResponseType)
+            var responseType = responseMessage.ResponseType;
+            switch (responseType)
             {
                 case ResponseType.DisplayResult:
-                    title = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(title) ? "" : " of " + title)}";
+                    title = $"{_defaultTitles[(int) responseType]}{(string.IsNullOrEmpty(title) ? "" : " of " + title)}";
                     break;
                 case ResponseType.DisplayPickLabel:
-                    title = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(title) ? "" : " for " + title)}";
+                    title = $"{_defaultTitles[(int) responseType]}{(string.IsNullOrEmpty(title) ? "" : " for " + title)}";
                     break;
             }
             UpdateTitle(title);

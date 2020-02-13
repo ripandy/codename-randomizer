@@ -22,7 +22,8 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void PostResponse()
         {
-            _addRandomizableView.Visible = DisplayState == DisplayState.DisplayLabel;
+            _addRandomizableView.Visible =
+                DisplayState == DisplayState.DisplayLabel || DisplayState == DisplayState.DisplayMenu;
         }
     }
 }

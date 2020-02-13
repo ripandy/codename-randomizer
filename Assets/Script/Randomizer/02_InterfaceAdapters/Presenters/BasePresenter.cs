@@ -38,6 +38,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
             {
                 case ResponseType.DisplayResult:
                 case ResponseType.DisplayLabel:
+                case ResponseType.DisplayMenu:
                     OnResponse(responseMessage as ItemListResponseMessage);
                     break;
                 case ResponseType.DisplayPickLabel:
