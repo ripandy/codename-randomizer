@@ -1,7 +1,6 @@
 namespace Randomizer.InterfaceAdapters
 {
-    public interface IPickLabelView : IItemView
+    public interface IPickLabelView : IItemView, IToggleView
     {
-        bool Toggle { get; set; }
     }
 }

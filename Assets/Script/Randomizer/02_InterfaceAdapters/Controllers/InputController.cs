@@ -23,13 +23,18 @@ namespace Randomizer.InterfaceAdapters.Controllers
                 var type = _requestTypes[i];
                 switch (type)
                 {
+                    case RequestType.AddRandomizable:
+                    case RequestType.Randomize:
+                    case RequestType.MenuNavigate:
+                    case RequestType.ManageLabelNavigate:
+                        BindAction(type, ActionHandlers[i]);
+                        break;
                     case RequestType.AddItem:
                     case RequestType.EditTitle:
                         BindAction(type, ActionHandlers[i] as IActionHandler<string>);
                         break;
-                    case RequestType.AddRandomizable:
-                    case RequestType.Randomize:
-                        BindAction(type, ActionHandlers[i]);
+                    case RequestType.DeselectLabel:
+                        BindDeselectLabelAction(ActionHandlers[i]);
                         break;
                 }
             }
@@ -43,6 +48,11 @@ namespace Randomizer.InterfaceAdapters.Controllers
         private void BindAction<T>(RequestType type, IActionHandler<T> actionHandler)
         {
             actionHandler.OnAction = () => RequestInteractor.Request(new RequestMessage<T>(type, actionHandler.Value));
+        }
+        
+        private void BindDeselectLabelAction(IActionHandler actionHandler)
+        {
+            actionHandler.OnAction = () => RequestInteractor.Request(new LoadLabelRequestMessage(-1));
         }
     }
 }

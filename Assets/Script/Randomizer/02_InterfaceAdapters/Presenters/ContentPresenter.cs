@@ -23,48 +23,55 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void PreResponse()
         {
+            if (DisplayState == DisplayState.DisplayMenu) return;
+            
             ClearItems();
             ClearSubItems();
         }
 
         protected override void OnResponse(ItemListResponseMessage responseMessage)
         {
-            var containerType = ContainerType.Vertical;
-            var itemType = ItemType.Item;
             switch (responseMessage.ResponseType)
             {
                 case ResponseType.DisplayLabel:
-                    containerType = ContainerType.Grid;
-                    itemType = ItemType.Randomizable;
+                    UpdateContents(ItemType.Randomizable, responseMessage.Items);
                     break;
                 case ResponseType.DisplayResult:
-                    itemType = ItemType.Result;
+                    UpdateContents(ItemType.Result, responseMessage.Items);
                     break;
             }
-            UpdateContents(containerType, itemType, responseMessage.Items);
         }
 
         protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            UpdateContents(ContainerType.Vertical, ItemType.Item, responseMessage.Items);
+            UpdateContents(ItemType.Item, responseMessage.Items);
             UpdateSubContents(ItemType.PickLabelButton, responseMessage.Labels);
         }
         
         protected override void OnResponse(PickLabelListResponseMessage responseMessage)
         {
-            UpdateContents(ContainerType.Vertical, ItemType.PickLabelList, responseMessage.Items);
+            UpdateContents(ItemType.PickLabelList, responseMessage.Items);
             UpdateToggles(responseMessage.PickedLabels);
         }
 
-        private void UpdateContents(ContainerType containerType, ItemType itemType, IReadOnlyList<string> values)
+        protected override void PostResponse()
+        {
+            if (DisplayState == DisplayState.DisplayMenu) return;
+            
+            var containerType = ContainerType.Vertical;
+            if (DisplayState == DisplayState.DisplayLabel)
+                containerType = ContainerType.Grid;
+            
+            _viewContainer.Type = containerType;
+        }
+
+        private void UpdateContents(ItemType itemType, IReadOnlyList<string> values)
         {
             var count = values.Count;
             for (var i = 0; i < count; i++)
             {
                 AddItem(itemType, values[i], i);
             }
-
-            _viewContainer.Type = containerType;
         }
 
         private void UpdateSubContents(ItemType itemType, IReadOnlyList<string> values)

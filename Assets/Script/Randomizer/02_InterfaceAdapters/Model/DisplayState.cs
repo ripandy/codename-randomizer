@@ -5,6 +5,7 @@ namespace Randomizer.InterfaceAdapters
         DisplayLabel,
         DisplayRandomizable,
         DisplayPickLabel,
+        DisplayMenu,
         DisplayResult,
         DisplayResults
     }

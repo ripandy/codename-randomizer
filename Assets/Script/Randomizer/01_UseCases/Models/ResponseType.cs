@@ -5,6 +5,7 @@ namespace Randomizer.UseCases
         DisplayLabel,
         DisplayRandomizable,
         DisplayPickLabel,
+        DisplayMenu,
         DisplayResult
     }
 }
