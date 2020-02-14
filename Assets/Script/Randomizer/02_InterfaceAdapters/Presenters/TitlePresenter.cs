@@ -7,7 +7,9 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly string[] _defaultTitles = {
             "Randomizer",
             "",
+            "Edit Label",
             "Select Label",
+            "",
             "Result",
             "Results"
         };
@@ -32,15 +34,17 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse(ItemListResponseMessage responseMessage)
         {
-            var title = responseMessage.Title;
             var responseType = responseMessage.ResponseType;
+            if (responseType == ResponseType.DisplayMenu) return;
+            
+            var title = responseMessage.Title;
             switch (responseType)
             {
                 case ResponseType.DisplayResult:
-                    title = $"{_defaultTitles[(int) responseType]}{(string.IsNullOrEmpty(title) ? "" : " of " + title)}";
+                    title = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(title) ? "" : " of " + title)}";
                     break;
                 case ResponseType.DisplayPickLabel:
-                    title = $"{_defaultTitles[(int) responseType]}{(string.IsNullOrEmpty(title) ? "" : " for " + title)}";
+                    title = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(title) ? "" : " for " + title)}";
                     break;
             }
             UpdateTitle(title);

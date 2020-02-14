@@ -1,3 +1,4 @@
+using System.Linq;
 using Randomizer.Entities;
 
 namespace Randomizer.UseCases
@@ -16,8 +17,7 @@ namespace Randomizer.UseCases
         protected override void OnRequest(RequestMessage requestMessage)
         {
             if (requestMessage.RequestType != RequestType.ManageLabelNavigate) return;
-            
-            // TODO : respond manage label
+            RespondManageLabel();
         }
     }
 }

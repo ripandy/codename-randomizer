@@ -22,6 +22,7 @@ namespace Randomizer.InterfaceAdapters.Controllers
             {
                 case DisplayState.DisplayRandomizable:
                 case DisplayState.DisplayResults:
+                case DisplayState.DisplayManageLabel:
                     RequestInteractor.Request(LoadLabelRequestMessage.RequestActive);
                     break;
                 case DisplayState.DisplayResult:

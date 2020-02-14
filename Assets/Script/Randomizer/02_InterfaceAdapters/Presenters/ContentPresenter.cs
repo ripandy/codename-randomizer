@@ -39,6 +39,9 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 case ResponseType.DisplayResult:
                     UpdateContents(ItemType.Result, responseMessage.Items);
                     break;
+                case ResponseType.DisplayManageLabel:
+                    UpdateContents(ItemType.LabelList, responseMessage.Items);
+                    break;
             }
         }
 

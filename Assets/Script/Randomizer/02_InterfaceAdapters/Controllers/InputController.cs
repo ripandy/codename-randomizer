@@ -30,6 +30,7 @@ namespace Randomizer.InterfaceAdapters.Controllers
                         BindAction(type, ActionHandlers[i]);
                         break;
                     case RequestType.AddItem:
+                    case RequestType.AddLabel:
                     case RequestType.EditTitle:
                         BindAction(type, ActionHandlers[i] as IActionHandler<string>);
                         break;

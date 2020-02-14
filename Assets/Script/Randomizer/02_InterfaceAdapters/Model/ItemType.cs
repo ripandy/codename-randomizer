@@ -5,6 +5,7 @@ namespace Randomizer.InterfaceAdapters
         Item,
         Randomizable,
         Result,
+        LabelList,
         MenuLabelList,
         PickLabelButton,
         PickLabelList

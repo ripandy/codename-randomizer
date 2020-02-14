@@ -43,10 +43,14 @@ namespace Randomizer.UseCases
                 case RequestType.Randomize:
                 case RequestType.PickLabelNavigate:
                 case RequestType.MenuNavigate:
+                case RequestType.ManageLabelNavigate:
                     OnRequest(requestMessage as RequestMessage);
                     break;
                 case RequestType.EditItem:
                     OnRequest(requestMessage as EditItemRequestMessage);
+                    break;
+                case RequestType.EditLabel:
+                    OnRequest(requestMessage as EditLabelRequestMessage);
                     break;
                 case RequestType.LoadRandomizable:
                     OnRequest(requestMessage as LoadRandomizableRequestMessage);
@@ -65,6 +69,7 @@ namespace Randomizer.UseCases
         protected virtual void OnRequest(RequestMessage<int> requestMessage) { }
         protected virtual void OnRequest(RequestMessage<string> requestMessage) { }
         protected virtual void OnRequest(EditItemRequestMessage requestMessage) { }
+        protected virtual void OnRequest(EditLabelRequestMessage requestMessage) { }
         protected virtual void OnRequest(LoadLabelRequestMessage requestMessage) { }
         protected virtual void OnRequest(LoadRandomizableRequestMessage requestMessage) { }
 
@@ -87,6 +92,12 @@ namespace Randomizer.UseCases
             var randomizable = RandomizableGateway.GetActive();
             var labelIds = randomizable.LabelIds;
             ResponseInteractor.Response(new PickLabelListResponseMessage(randomizable.Name, labels, labelIds));
+        }
+
+        protected void RespondManageLabel()
+        {
+            var labels = LabelGateway.GetAll().Select(label => label.Name).ToArray();
+            ResponseInteractor.Response(new ItemListResponseMessage(ResponseType.DisplayManageLabel, "", labels));
         }
     }
 }

@@ -18,6 +18,7 @@ public class RandomizerInstaller : MonoInstaller
     [SerializeField] private GameObject itemListPrefab;
     [SerializeField] private GameObject randomizableListPrefab;
     [SerializeField] private GameObject resultListPrefab;
+    [SerializeField] private GameObject labelListPrefab;
     [SerializeField] private GameObject pickLabelButtonPrefab;
     [SerializeField] private GameObject pickLabelListPrefab;
     [SerializeField] private GameObject selectLabelListPrefab;
@@ -35,6 +36,7 @@ public class RandomizerInstaller : MonoInstaller
     [Header("Views")]
     [SerializeField] private SlideView menuContainerView;
     [SerializeField] private OrderedView addItemButtonView;
+    [SerializeField] private OrderedView addLabelButtonView;
     [SerializeField] private OrderedView addRandomizableButtonView;
     [SerializeField] private OrderedView menuBottomView;
     [SerializeField] private TextView titleView;
@@ -56,6 +58,7 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<LoadLabelInteractor>().AsSingle();
         Container.BindInterfacesTo<EditTitleInteractor>().AsSingle();
         Container.BindInterfacesTo<AddItemInteractor>().AsSingle();
+        Container.BindInterfacesTo<AddLabelInteractor>().AsSingle();
         Container.BindInterfacesTo<AddRandomizableInteractor>().AsSingle();
         Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
         Container.BindInterfacesTo<EditItemInteractor>().AsSingle();
@@ -78,6 +81,7 @@ public class RandomizerInstaller : MonoInstaller
         {
             RequestType.EditTitle,
             RequestType.AddItem,
+            RequestType.AddLabel,
             RequestType.AddRandomizable,
             RequestType.Randomize,
             RequestType.MenuNavigate,
@@ -90,6 +94,7 @@ public class RandomizerInstaller : MonoInstaller
         // presenters
         Container.BindInterfacesTo<TitlePresenter>().AsSingle();
         Container.BindInterfacesTo<AddItemPresenter>().AsSingle();
+        Container.BindInterfacesTo<AddLabelPresenter>().AsSingle();
         Container.BindInterfacesTo<AddRandomizablePresenter>().AsSingle();
         Container.BindInterfacesTo<RandomizePresenter>().AsSingle();
         Container.BindInterfacesTo<ContentPresenter>().AsSingle();
@@ -134,6 +139,14 @@ public class RandomizerInstaller : MonoInstaller
             .FromPoolableMemoryPool<ItemView, ItemViewPool>(poolBinder => poolBinder
                 .WithInitialSize(4)
                 .FromSubContainerResolve()
+                .ByNewPrefabInstaller<LabelListInstaller>(labelListPrefab)
+                .UnderTransform(verticalItemContainer)
+            );
+        
+        Container.BindFactory<ItemView, ItemView.Factory>()
+            .FromPoolableMemoryPool<ItemView, ItemViewPool>(poolBinder => poolBinder
+                .WithInitialSize(4)
+                .FromSubContainerResolve()
                 .ByNewPrefabInstaller<SelectLabelListInstaller>(selectLabelListPrefab)
                 .UnderTransform(selectLabelListContainer)
             );
@@ -162,6 +175,7 @@ public class RandomizerInstaller : MonoInstaller
         
         // Bind Views
         Container.Bind<IOrderedView>().FromInstance(addItemButtonView).WhenInjectedInto<AddItemPresenter>();
+        Container.Bind<IOrderedView>().FromInstance(addLabelButtonView).WhenInjectedInto<AddLabelPresenter>();
         Container.Bind<IOrderedView>().FromInstance(addRandomizableButtonView).WhenInjectedInto<AddRandomizablePresenter>();
         Container.Bind<IOrderedView>().FromInstance(menuBottomView).WhenInjectedInto<MenuPresenter>();
         Container.Bind<ITextView>().FromInstance(titleView).WhenInjectedInto<TitlePresenter>();
