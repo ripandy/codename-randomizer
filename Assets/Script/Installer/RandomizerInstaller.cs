@@ -62,7 +62,9 @@ public class RandomizerInstaller : MonoInstaller
         Container.BindInterfacesTo<AddRandomizableInteractor>().AsSingle();
         Container.BindInterfacesTo<RandomizeInteractor>().AsSingle();
         Container.BindInterfacesTo<EditItemInteractor>().AsSingle();
+        Container.BindInterfacesTo<EditLabelInteractor>().AsSingle();
         Container.BindInterfacesTo<RemoveItemInteractor>().AsSingle();
+        Container.BindInterfacesTo<RemoveLabelInteractor>().AsSingle();
         Container.BindInterfacesTo<PickLabelNavigateInteractor>().AsSingle();
         Container.BindInterfacesTo<PickLabelInteractor>().AsSingle();
         Container.BindInterfacesTo<MenuNavigateInteractor>().AsSingle();

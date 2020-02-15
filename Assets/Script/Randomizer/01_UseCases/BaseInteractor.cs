@@ -36,6 +36,7 @@ namespace Randomizer.UseCases
             switch (requestMessage.RequestType)
             {
                 case RequestType.AddItem:
+                case RequestType.AddLabel:
                 case RequestType.EditTitle:
                     OnRequest(requestMessage as RequestMessage<string>);
                     break;
@@ -59,6 +60,7 @@ namespace Randomizer.UseCases
                     OnRequest(requestMessage as LoadLabelRequestMessage);
                     break;
                 case RequestType.RemoveItem:
+                case RequestType.RemoveLabel:
                 case RequestType.PickLabel:
                     OnRequest(requestMessage as RequestMessage<int>);
                     break;
@@ -72,12 +74,6 @@ namespace Randomizer.UseCases
         protected virtual void OnRequest(EditLabelRequestMessage requestMessage) { }
         protected virtual void OnRequest(LoadLabelRequestMessage requestMessage) { }
         protected virtual void OnRequest(LoadRandomizableRequestMessage requestMessage) { }
-
-        protected void RespondRandomizable(int randomizableId)
-        {
-            var randomizable = RandomizableGateway.GetById(randomizableId);
-            RespondRandomizable(randomizable);
-        }
 
         protected void RespondRandomizable(Randomizable randomizable)
         {

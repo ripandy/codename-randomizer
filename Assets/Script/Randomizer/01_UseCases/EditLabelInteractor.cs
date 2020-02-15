@@ -1,5 +1,5 @@
-using System.Linq;
 using Randomizer.Entities;
+using UnityEngine;
 
 namespace Randomizer.UseCases
 {
@@ -16,6 +16,7 @@ namespace Randomizer.UseCases
         
         protected override void OnRequest(EditLabelRequestMessage requestMessage)
         {
+            Debug.Log($"request : {requestMessage.RequestType}, value : {requestMessage.NewLabelName}");
             if (requestMessage.RequestType != RequestType.EditLabel) return;
             
             var id = requestMessage.LabelId;
