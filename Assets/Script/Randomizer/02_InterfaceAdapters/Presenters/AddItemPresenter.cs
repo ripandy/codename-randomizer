@@ -19,7 +19,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _addItemView.Order = responseMessage.ItemCount;
         }
 
-        protected override void FinalizeResponse()
+        protected override void PostResponse()
         {
             _addItemView.Visible = DisplayState == DisplayState.DisplayRandomizable;
         }

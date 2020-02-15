@@ -2,7 +2,7 @@ using Randomizer.ExternalFrameworks.Handlers;
 using Randomizer.InterfaceAdapters.Controllers;
 using Zenject;
 
-public class RandomizableInstaller : Installer<RandomizableInstaller>
+public class RandomizableListInstaller : Installer<RandomizableListInstaller>
 {
     public override void InstallBindings()
     {
@@ -12,7 +12,7 @@ public class RandomizableInstaller : Installer<RandomizableInstaller>
     
     private void InstallInterfaceAdapters()
     {
-        Container.BindInterfacesTo<RandomizableController>().AsSingle();
+        Container.BindInterfacesTo<RandomizableListController>().AsSingle();
     }
     
     private void InstallExternalFrameworks()

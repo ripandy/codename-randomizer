@@ -4,25 +4,23 @@ namespace Randomizer.UseCases
 {
     public class EditItemInteractor : BaseInteractor
     {
-        private readonly IGateway<Randomizable> _randomizableGateway;
-        
         private EditItemInteractor(
             IGateway<Randomizable> randomizableGateway,
+            IGateway<Label> labelGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor) 
-            : base(requestInteractor, responseInteractor)
+            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
         {
-            _randomizableGateway = randomizableGateway;
         }
 
         protected override void OnRequest(EditItemRequestMessage requestMessage)
         {
             if (requestMessage.RequestType != RequestType.EditItem) return;
             
-            var id = _randomizableGateway.ActiveId;
-            var randomizable = _randomizableGateway.GetById(id);
+            var id = RandomizableGateway.ActiveId;
+            var randomizable = RandomizableGateway.GetById(id);
             randomizable.Items[requestMessage.ItemId].Name = requestMessage.NewItemName;
-            _randomizableGateway.Save(id);
+            RandomizableGateway.Save(id);
             
             RespondRandomizable(randomizable);
         }

@@ -14,7 +14,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _upButtonView = upButtonView;
         }
 
-        protected override void FinalizeResponse()
+        protected override void PostResponse()
         {
             _upButtonView.Visible = DisplayState != DisplayState.DisplayLabel;
         }

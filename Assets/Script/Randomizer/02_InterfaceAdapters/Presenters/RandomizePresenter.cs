@@ -4,6 +4,9 @@ namespace Randomizer.InterfaceAdapters.Presenters
 {
     public class RandomizePresenter : BasePresenter
     {
+        private const string Randomize = "Randomize";
+        private const string RandomizeAll = Randomize + " All";
+        
         private readonly ITextView _randomizeView;
 
         private RandomizePresenter(
@@ -16,12 +19,13 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
         protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            _randomizeView.Text = "Randomize";
+            _randomizeView.Text = Randomize;
         }
 
-        protected override void OnResponse(LabelResponseMessage responseMessage)
+        protected override void OnResponse(ItemListResponseMessage responseMessage)
         {
-            _randomizeView.Text = "Randomize All";
+            if (responseMessage.ResponseType != ResponseType.DisplayLabel) return;
+            _randomizeView.Text = RandomizeAll;
         }
     }
 }

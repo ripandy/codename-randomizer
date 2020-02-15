@@ -7,17 +7,23 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly string[] _defaultTitles = {
             "Randomizer",
             "",
+            "Edit Label",
+            "Select Label",
+            "",
             "Result",
             "Results"
         };
         
         private readonly ITextView _title;
+        private readonly IActionHandler _actionHandler;
         
         public TitlePresenter(
             IResponseInteractor responseInteractor,
+            IActionHandler actionHandler,
             ITextView title) 
             : base(responseInteractor)
         {
+            _actionHandler = actionHandler;
             _title = title;
         }
 
@@ -26,15 +32,27 @@ namespace Randomizer.InterfaceAdapters.Presenters
             UpdateTitle(responseMessage.Title);
         }
 
-        protected override void OnResponse(LabelResponseMessage responseMessage)
+        protected override void OnResponse(ItemListResponseMessage responseMessage)
         {
-            UpdateTitle(responseMessage.Title);
+            var responseType = responseMessage.ResponseType;
+            if (responseType == ResponseType.DisplayMenu) return;
+            
+            var title = responseMessage.Title;
+            switch (responseType)
+            {
+                case ResponseType.DisplayResult:
+                    title = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(title) ? "" : " of " + title)}";
+                    break;
+                case ResponseType.DisplayPickLabel:
+                    title = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(title) ? "" : " for " + title)}";
+                    break;
+            }
+            UpdateTitle(title);
         }
 
-        protected override void OnResponse(ResultResponseMessage responseMessage)
+        protected override void PostResponse()
         {
-            var title = $" of {responseMessage.Title}";
-            _title.Text = $"{_defaultTitles[(int) DisplayState]}{(string.IsNullOrEmpty(responseMessage.Title) ? "" : title)}";
+            _actionHandler.Active = DisplayState == DisplayState.DisplayRandomizable;
         }
 
         private void UpdateTitle(string title)

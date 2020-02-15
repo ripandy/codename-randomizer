@@ -4,25 +4,23 @@ namespace Randomizer.UseCases
 {
     public class RemoveItemInteractor : BaseInteractor
     {
-        private readonly IGateway<Randomizable> _randomizableGateway;
-        
         private RemoveItemInteractor(
             IGateway<Randomizable> randomizableGateway,
+            IGateway<Label> labelGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
-            : base(requestInteractor, responseInteractor)
+            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
         {
-            _randomizableGateway = randomizableGateway;
         }
 
         protected override void OnRequest(RequestMessage<int> requestMessage)
         {
-            var id = _randomizableGateway.ActiveId;
+            var id = RandomizableGateway.ActiveId;
             if (requestMessage.RequestType != RequestType.RemoveItem || id < 0) return;
             
-            var randomizable = _randomizableGateway.GetById(id);
+            var randomizable = RandomizableGateway.GetById(id);
                 randomizable.RemoveItem(requestMessage.Value);
-            _randomizableGateway.Save(id);
+            RandomizableGateway.Save(id);
             
             RespondRandomizable(randomizable);
         }

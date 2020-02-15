@@ -7,15 +7,21 @@ namespace Randomizer.ExternalFrameworks.Factories
     public class ItemFactory : IFactoryHandler<IItemView>
     {
         private readonly IList<ItemView.Factory> _factories;
+        private readonly PickLabelView.Factory _pickLabelFactory;
 
-        private ItemFactory(IList<ItemView.Factory> factories)
+        private ItemFactory(
+            IList<ItemView.Factory> factories,
+            PickLabelView.Factory pickLabelFactory)
         {
             _factories = factories;
+            _pickLabelFactory = pickLabelFactory;
         }
 
         public IItemView Create(int variant)
         {
-            var item = _factories[variant].Create();
+            IItemView item = variant == (int) ItemType.PickLabelList
+                ? _pickLabelFactory.Create()
+                : _factories[variant].Create();
             return item;
         }
     }

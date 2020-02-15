@@ -12,7 +12,7 @@ public class ItemInstaller : Installer<ItemInstaller>
     
     private void InstallInterfaceAdapters()
     {
-        Container.BindInterfacesTo<ItemController>().AsSingle();
+        Container.BindInterfacesTo<ItemListController>().AsSingle();
     }
 
     private void InstallExternalFrameworks()

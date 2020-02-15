@@ -10,7 +10,7 @@ namespace Randomizer.ExternalFrameworks.Views
         public ContainerType Type { get; set; }
 
         [SerializeField] private ScrollRect scrollRect;
-        [SerializeField] private ContentContainerHandler[] contentContainers;
+        [SerializeField] private RectTransform[] contentContainers;
         [SerializeField] private RectTransform title;
         
         private void Start()
@@ -32,9 +32,8 @@ namespace Randomizer.ExternalFrameworks.Views
             {
                 contentContainers[i].gameObject.SetActive(i == contentIdx);
             }
-            contentContainers[contentIdx].FinalizeOrder();
             
-            var container = contentContainers[contentIdx].Container;
+            var container = contentContainers[contentIdx];
             title.SetParent(container);
             scrollRect.content = container;
         }

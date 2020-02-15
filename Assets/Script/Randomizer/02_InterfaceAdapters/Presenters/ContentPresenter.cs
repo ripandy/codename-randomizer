@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Randomizer.UseCases;
 
 namespace Randomizer.InterfaceAdapters.Presenters
@@ -7,6 +8,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
     {
         private readonly IFactoryHandler<IItemView> _itemFactory;
         private readonly IList<IItemView> _itemViews = new List<IItemView>();
+        private readonly IList<IItemView> _subItemViews = new List<IItemView>();
         private readonly IViewContainer _viewContainer;
 
         private ContentPresenter(
@@ -19,41 +21,101 @@ namespace Randomizer.InterfaceAdapters.Presenters
             _viewContainer = viewContainer;
         }
 
-        protected override void OnResponse(LabelResponseMessage responseMessage)
+        protected override void PreResponse()
         {
-            UpdateContents(ContainerType.Grid, responseMessage.Items);
+            if (DisplayState == DisplayState.DisplayMenu) return;
+            
+            ClearItems();
+            ClearSubItems();
+        }
+
+        protected override void OnResponse(ItemListResponseMessage responseMessage)
+        {
+            switch (responseMessage.ResponseType)
+            {
+                case ResponseType.DisplayLabel:
+                    UpdateContents(ItemType.Randomizable, responseMessage.Items);
+                    break;
+                case ResponseType.DisplayResult:
+                    UpdateContents(ItemType.Result, responseMessage.Items);
+                    break;
+                case ResponseType.DisplayManageLabel:
+                    UpdateContents(ItemType.LabelList, responseMessage.Items);
+                    break;
+            }
         }
 
         protected override void OnResponse(RandomizableResponseMessage responseMessage)
         {
-            UpdateContents(ContainerType.Vertical, responseMessage.Items);
+            UpdateContents(ItemType.Item, responseMessage.Items);
+            UpdateSubContents(ItemType.PickLabelButton, responseMessage.Labels);
+        }
+        
+        protected override void OnResponse(PickLabelListResponseMessage responseMessage)
+        {
+            UpdateContents(ItemType.PickLabelList, responseMessage.Items);
+            UpdateToggles(responseMessage.PickedLabels);
         }
 
-        protected override void OnResponse(ResultResponseMessage responseMessage)
+        protected override void PostResponse()
         {
-            UpdateContents(ContainerType.Vertical, responseMessage.Items);
-        }
-
-        private void UpdateContents(ContainerType newType, IReadOnlyList<string> values)
-        {
-            ClearItems();
+            if (DisplayState == DisplayState.DisplayMenu) return;
             
+            var containerType = ContainerType.Vertical;
+            if (DisplayState == DisplayState.DisplayLabel)
+                containerType = ContainerType.Grid;
+            
+            _viewContainer.Type = containerType;
+        }
+
+        private void UpdateContents(ItemType itemType, IReadOnlyList<string> values)
+        {
             var count = values.Count;
             for (var i = 0; i < count; i++)
             {
-                AddItem(values[i], i);
+                AddItem(itemType, values[i], i);
             }
-
-            _viewContainer.Type = newType;
         }
 
-        private void AddItem(string itemName, int order)
+        private void UpdateSubContents(ItemType itemType, IReadOnlyList<string> values)
         {
-            var itemType = DisplayState == DisplayState.DisplayLabel ? ItemType.Randomizable : ItemType.Item;
+            var count = values.Count;
+            if (count > 0)
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    AddSubItem(itemType, values[i], i);
+                }
+            }
+            else
+            {
+                AddSubItem(itemType, "", 0);
+            }
+        }
+
+        private void UpdateToggles(IReadOnlyList<int> active)
+        {
+            for (var i = 0; i < _itemViews.Count; i++)
+            {
+                var toggleable = (IPickLabelView) _itemViews[i];
+                    toggleable.Toggle = active.Contains(i);
+            }
+        }
+
+        private void AddItem(ItemType itemType, string itemName, int order)
+        {
             var newItem = _itemFactory.Create((int) itemType);
                 newItem.Text = itemName;
                 newItem.Order = order;
             _itemViews.Add(newItem);
+        }
+        
+        private void AddSubItem(ItemType itemType, string itemName, int order)
+        {
+            var newItem = _itemFactory.Create((int) itemType);
+                newItem.Text = itemName;
+                newItem.Order = order;
+            _subItemViews.Add(newItem);
         }
 
         private void ClearItems()
@@ -63,6 +125,15 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 itemView.Dispose();
             }
             _itemViews.Clear();
+        }
+
+        private void ClearSubItems()
+        {
+            foreach (var itemView in _subItemViews)
+            {
+                itemView.Dispose();
+            }
+            _subItemViews.Clear();
         }
     }
 }

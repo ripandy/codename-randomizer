@@ -8,55 +8,63 @@ namespace Randomizer.InterfaceAdapters.Presenters
         public bool IsInitialized { get; private set; }
         
         public DisplayState DisplayState { get; private set; }
-        
-        protected readonly IResponseInteractor ResponseInteractor;
+
+        private readonly IResponseInteractor _responseInteractor;
 
         protected BasePresenter(IResponseInteractor responseInteractor)
         {
-            ResponseInteractor = responseInteractor;
+            _responseInteractor = responseInteractor;
         }
 
         public virtual void Initialize()
         {
             if (IsInitialized) return;
                 IsInitialized = true;
-            ResponseInteractor.OnResponse += OnResponse;
+            _responseInteractor.OnResponse += OnResponse;
         }
 
         public virtual void Dispose()
         {
-            ResponseInteractor.OnResponse -= OnResponse;
+            _responseInteractor.OnResponse -= OnResponse;
         }
 
         private void OnResponse(IResponseMessage responseMessage)
         {
             if (responseMessage == null) return;
 
-            DisplayState = (DisplayState) responseMessage.ResponseType;
+            SetResultState(responseMessage);
+            PreResponse();
             switch (responseMessage.ResponseType)
             {
                 case ResponseType.DisplayResult:
-                    AdjustResultState(responseMessage as ResultResponseMessage);
-                    OnResponse(responseMessage as ResultResponseMessage);
+                case ResponseType.DisplayManageLabel:
+                case ResponseType.DisplayLabel:
+                case ResponseType.DisplayMenu:
+                    OnResponse(responseMessage as ItemListResponseMessage);
+                    break;
+                case ResponseType.DisplayPickLabel:
+                    OnResponse(responseMessage as PickLabelListResponseMessage);
                     break;
                 case ResponseType.DisplayRandomizable:
                     OnResponse(responseMessage as RandomizableResponseMessage);
                     break;
-                case ResponseType.DisplayLabel:
-                    OnResponse(responseMessage as LabelResponseMessage);
-                    break;
             }
-            FinalizeResponse();
+            PostResponse();
         }
 
-        private void AdjustResultState(ResultResponseMessage responseMessage)
+        private void SetResultState(IResponseMessage responseMessage)
         {
-            DisplayState = responseMessage.ItemCount > 1 ? DisplayState.DisplayResults : DisplayState.DisplayResult;
+            DisplayState = (DisplayState) responseMessage.ResponseType;
+            if (responseMessage.ResponseType == ResponseType.DisplayResult)
+                DisplayState = ((ResultResponseMessage) responseMessage).ItemCount > 1
+                    ? DisplayState.DisplayResults
+                    : DisplayState.DisplayResult;
         }
-        
-        protected virtual void OnResponse(ResultResponseMessage responseMessage) { }
+
+        protected virtual void PreResponse() { }
         protected virtual void OnResponse(RandomizableResponseMessage responseMessage) { }
-        protected virtual void OnResponse(LabelResponseMessage responseMessage) { }
-        protected virtual void FinalizeResponse() { }
+        protected virtual void OnResponse(PickLabelListResponseMessage responseMessage) { }
+        protected virtual void OnResponse(ItemListResponseMessage responseMessage) { }
+        protected virtual void PostResponse() { }
     }
 }
