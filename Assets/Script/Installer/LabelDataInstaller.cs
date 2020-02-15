@@ -2,8 +2,8 @@ using Randomizer.ExternalFrameworks.DataStores;
 using UnityEngine;
 using Zenject;
 
-[CreateAssetMenu(fileName = "GroupDataInstaller", menuName = "Installers/GroupDataInstaller")]
-public class GroupDataInstaller : ScriptableObjectInstaller<GroupDataInstaller>
+[CreateAssetMenu(fileName = "LabelDataInstaller", menuName = "Installers/LabelDataInstaller")]
+public class LabelDataInstaller : ScriptableObjectInstaller<LabelDataInstaller>
 {
     [SerializeField] private LabelDataStore dataStore;
     public override void InstallBindings()
