@@ -18,6 +18,10 @@ namespace Randomizer.UseCases
             if (requestMessage.RequestType != RequestType.AddRandomizable) return;
             
             var randomizable = new Randomizable();
+            
+            if (LabelGateway.ActiveId >= 0)
+                randomizable.AddLabel(LabelGateway.ActiveId);
+            
             var newId = RandomizableGateway.AddNew(randomizable);
             RandomizableGateway.ActiveId = newId;
             
