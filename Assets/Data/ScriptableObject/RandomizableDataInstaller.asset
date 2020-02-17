@@ -19,8 +19,8 @@ MonoBehaviour:
       items:
       - Yes
       - No
-      labelIds: 00000000010000000300000002000000040000000500000008000000060000000700000009000000
-    - name: Colors
+      labelIds: 0000000001000000
+    - name: Simple Colors
       items:
       - Red
       - Green
@@ -48,4 +48,9 @@ MonoBehaviour:
       - 18
       - 19
       - 20
+      labelIds: 00000000
+    - name: Simple Days
+      items:
+      - Sunday
+      - Monday
       labelIds: 00000000
