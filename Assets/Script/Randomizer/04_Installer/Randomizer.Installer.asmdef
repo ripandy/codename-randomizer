@@ -1,0 +1,19 @@
+{
+    "name": "Randomizer.Installer",
+    "references": [
+        "GUID:b37a1e7c9aad346d5aaf532d4621c499",
+        "GUID:d332f6a6a36624dcc92c0ffffa3a045e",
+        "GUID:5aaa624e315b54eafb94407e18fd7eeb",
+        "GUID:21984a2b11a464095a3483bb212aee60",
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
