@@ -7,9 +7,10 @@ namespace Randomizer.UseCases
         protected LoadRandomizableInteractor(
             IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
+            IGateway<Item> itemGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 
@@ -18,7 +19,7 @@ namespace Randomizer.UseCases
             if (requestMessage.RequestType != RequestType.LoadRandomizable) return;
             if (!requestMessage.LoadActive)
                 RandomizableGateway.ActiveId = requestMessage.RandomizableId;
-            RespondRandomizable(RandomizableGateway.GetActive());
+            RespondRandomizable(RandomizableGateway.Active);
         }
     }
 }

@@ -25,10 +25,10 @@ namespace Randomizer.InterfaceAdapters.Gateways
             if (IsInitialized) return;
                 IsInitialized = true;
                 
-            if (_randomizableDataStore.ActiveIndex >= 0)
-                _requestInteractor.Request(new LoadRandomizableRequestMessage(_randomizableDataStore.ActiveIndex));
+            if (_randomizableDataStore.ActiveId >= 0)
+                _requestInteractor.Request(new LoadRandomizableRequestMessage(_randomizableDataStore.ActiveId));
             else
-                _requestInteractor.Request(new LoadLabelRequestMessage(_labelDataStore.ActiveIndex));
+                _requestInteractor.Request(new LoadLabelRequestMessage(_labelDataStore.ActiveId));
         }
     }
 }

@@ -6,11 +6,12 @@ namespace Randomizer.UseCases
     public class RandomizeInteractor : BaseInteractor
     {
         private RandomizeInteractor(
-            IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
+            IGateway<Label> labelGateway,
+            IGateway<Item> itemGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
         
@@ -43,7 +44,7 @@ namespace Randomizer.UseCases
                 .Where(randomizable => randomizable.ItemCount > 1)
                 .ToArray();
 
-            var results = filtered.Select(randomizable => randomizable.Randomize().Name).ToArray();
+            var results = filtered.Select(randomizable => ItemGateway.GetById(randomizable.Randomize()).Name).ToArray();
             if (results.Any())
                 ResponseInteractor.Response(new ResultResponseMessage(title, results));
         }

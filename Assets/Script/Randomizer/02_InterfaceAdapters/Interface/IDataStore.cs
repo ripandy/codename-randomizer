@@ -2,11 +2,10 @@ namespace Randomizer.InterfaceAdapters
 {
     public interface IDataStore<out T> where T : class
     {
-        int ActiveIndex { get; set; }
-        T this[int index] { get; }
+        int ActiveId { get; set; }
+        T this[int id] { get; }
         T[] Data { get; }
-        T ActiveData { get; }
-        int Create();
-        void Delete(int index);
+        void Create(int id);
+        void Delete(int id);
     }
 }

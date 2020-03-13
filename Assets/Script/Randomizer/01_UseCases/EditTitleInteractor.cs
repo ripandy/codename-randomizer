@@ -7,9 +7,10 @@ namespace Randomizer.UseCases
         private EditTitleInteractor(
             IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
+            IGateway<Item> itemGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 

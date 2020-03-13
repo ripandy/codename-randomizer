@@ -5,11 +5,12 @@ namespace Randomizer.UseCases
     public class PickLabelInteractor : BaseInteractor
     {
         public PickLabelInteractor(
-            IRequestInteractor requestInteractor,
-            IResponseInteractor responseInteractor,
+            IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
-            IGateway<Randomizable> randomizableGateway)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            IGateway<Item> itemGateway,
+            IRequestInteractor requestInteractor,
+            IResponseInteractor responseInteractor)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 
@@ -19,7 +20,7 @@ namespace Randomizer.UseCases
 
             var labelId = requestMessage.Value;
             
-            var randomizable = RandomizableGateway.GetActive();
+            var randomizable = RandomizableGateway.Active;
             if (randomizable.HasLabel(labelId))
                 randomizable.RemoveLabel(labelId);
             else

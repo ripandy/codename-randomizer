@@ -6,11 +6,12 @@ namespace Randomizer.UseCases
     public class LoadLabelInteractor : BaseInteractor
     {
         private LoadLabelInteractor(
-            IGateway<Label> labelGateway,
             IGateway<Randomizable> randomizableGateway,
+            IGateway<Label> labelGateway,
+            IGateway<Item> itemGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
         
@@ -22,7 +23,7 @@ namespace Randomizer.UseCases
                 LabelGateway.ActiveId = requestMessage.LabelId;
             if (RandomizableGateway.ActiveId >= 0)
             {
-                var randomizable = RandomizableGateway.GetActive();
+                var randomizable = RandomizableGateway.Active;
                 if (string.IsNullOrEmpty(randomizable.Name) && randomizable.ItemCount == 0)
                     RandomizableGateway.Remove(RandomizableGateway.ActiveId);
                 RandomizableGateway.ActiveId = -1;

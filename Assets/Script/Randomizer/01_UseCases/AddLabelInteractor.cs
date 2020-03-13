@@ -7,9 +7,10 @@ namespace Randomizer.UseCases
         protected AddLabelInteractor(
             IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
+            IGateway<Item> itemGateway,
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 
@@ -17,9 +18,9 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.AddLabel || string.IsNullOrEmpty(requestMessage.Value)) return;
 
-            var newLabel = new Label { Name = requestMessage.Value };
-            var newId = LabelGateway.AddNew(newLabel);
-            LabelGateway.ActiveId = newId;
+            var newLabel = new Label(requestMessage.Value);
+            LabelGateway.AddNew(newLabel);
+            LabelGateway.ActiveId = newLabel.Id;
             
             RespondManageLabel();
         }

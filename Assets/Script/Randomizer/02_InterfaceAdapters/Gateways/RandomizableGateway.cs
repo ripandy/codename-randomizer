@@ -9,14 +9,14 @@ namespace Randomizer.InterfaceAdapters.Gateways
         public bool IsInitialized { get; private set; }
         public int ActiveId
         {
-            get => _dataStore.ActiveIndex;
-            set => _dataStore.ActiveIndex = value;
+            get => _dataStore.ActiveId;
+            set => _dataStore.ActiveId = value;
         }
 
-        private readonly IDataStore<RandomizableData> _dataStore;
-        private readonly IList<Randomizable> _randomizables = new List<Randomizable>();
+        public Randomizable Active => _randomizables[ActiveId];
 
-        public int Length => _randomizables.Count;
+        private readonly IDataStore<RandomizableData> _dataStore;
+        private readonly IDictionary<int, Randomizable> _randomizables = new Dictionary<int, Randomizable>();
 
         private RandomizableGateway(IDataStore<RandomizableData> dataStore)
         {
@@ -29,11 +29,11 @@ namespace Randomizer.InterfaceAdapters.Gateways
                 IsInitialized = true;
             foreach (var data in _dataStore.Data)
             {
-                var randomizable = new Randomizable{ Name = data.name };
+                var randomizable = new Randomizable(data.id, data.name);
                 
-                foreach (var item in data.items)
+                foreach (var itemId in data.itemIds)
                 {
-                    randomizable.AddItem(new Item { Name = item });
+                    randomizable.AddItem(itemId);
                 }
 
                 foreach (var labelId in data.labelIds)
@@ -41,40 +41,34 @@ namespace Randomizer.InterfaceAdapters.Gateways
                     randomizable.AddLabel(labelId);
                 }
                 
-                _randomizables.Add(randomizable);
+                _randomizables.Add(data.id, randomizable);
             }
         }
 
-        public Randomizable[] GetAll() => _randomizables.ToArray();
-        public Randomizable GetById(int id) => id < _randomizables.Count ? _randomizables[id] : null;
-        public Randomizable GetActive() => _randomizables[ActiveId];
+        public Randomizable[] GetAll() => _randomizables.Values.ToArray();
+        public Randomizable GetById(int id) => _randomizables[id];
 
         public void Save(int id)
         {
-            if (id >= _randomizables.Count) return;
-            
             var randomizable = _randomizables[id];
             var data = _dataStore[id];
 
             data.name = randomizable.Name;
-            data.items = randomizable.Items
-                .Select(item => item.Name)
-                .ToArray();
+            data.itemIds = randomizable.ItemIds;
             data.labelIds = randomizable.LabelIds;
         }
 
-        public int AddNew(Randomizable newInstance)
+        public void AddNew(Randomizable newInstance)
         {
-            _randomizables.Add(newInstance);
-            _dataStore.Create();
-            var index = _randomizables.Count - 1;
-            Save(index);
-            return index;
+            var id = newInstance.Id;
+            _randomizables.Add(id, newInstance);
+            _dataStore.Create(id);
+            Save(id);
         }
 
         public void Remove(int id)
         {
-            _randomizables.RemoveAt(id);
+            _randomizables.Remove(id);
             _dataStore.Delete(id);
         }
     }

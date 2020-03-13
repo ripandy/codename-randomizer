@@ -34,19 +34,17 @@ namespace Randomizer.InterfaceAdapters.Presenters
 
             SetResultState(responseMessage);
             PreResponse();
-            switch (responseMessage.ResponseType)
+
+            switch (responseMessage)
             {
-                case ResponseType.DisplayResult:
-                case ResponseType.DisplayManageLabel:
-                case ResponseType.DisplayLabel:
-                case ResponseType.DisplayMenu:
-                    OnResponse(responseMessage as ItemListResponseMessage);
+                case PickLabelListResponseMessage pickLabelListResponseMessage:
+                    OnResponse(pickLabelListResponseMessage);
                     break;
-                case ResponseType.DisplayPickLabel:
-                    OnResponse(responseMessage as PickLabelListResponseMessage);
+                case RandomizableResponseMessage randomizableResponseMessage:
+                    OnResponse(randomizableResponseMessage);
                     break;
-                case ResponseType.DisplayRandomizable:
-                    OnResponse(responseMessage as RandomizableResponseMessage);
+                case ItemListResponseMessage itemListResponseMessage:
+                    OnResponse(itemListResponseMessage);
                     break;
             }
             PostResponse();

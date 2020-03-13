@@ -7,9 +7,10 @@ namespace Randomizer.UseCases
         private AddRandomizableInteractor(
             IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
+            IGateway<Item> itemGateway,
             IRequestInteractor requestInteractor,
-            IResponseInteractor responseInteractor) 
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            IResponseInteractor responseInteractor)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 
@@ -22,8 +23,8 @@ namespace Randomizer.UseCases
             if (LabelGateway.ActiveId >= 0)
                 randomizable.AddLabel(LabelGateway.ActiveId);
             
-            var newId = RandomizableGateway.AddNew(randomizable);
-            RandomizableGateway.ActiveId = newId;
+            RandomizableGateway.AddNew(randomizable);
+            RandomizableGateway.ActiveId = randomizable.Id;
             
             RespondRandomizable(randomizable);
         }

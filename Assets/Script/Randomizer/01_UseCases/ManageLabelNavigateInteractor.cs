@@ -1,4 +1,3 @@
-using System.Linq;
 using Randomizer.Entities;
 
 namespace Randomizer.UseCases
@@ -6,11 +5,12 @@ namespace Randomizer.UseCases
     public class ManageLabelNavigateInteractor : BaseInteractor
     {
         public ManageLabelNavigateInteractor(
-            IRequestInteractor requestInteractor,
-            IResponseInteractor responseInteractor,
+            IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
-            IGateway<Randomizable> randomizableGateway)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            IGateway<Item> itemGateway,
+            IRequestInteractor requestInteractor,
+            IResponseInteractor responseInteractor)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 

@@ -4,7 +4,7 @@ using Randomizer.Entities;
 
 namespace Randomizer.InterfaceAdapters.Gateways
 {
-    public class LabelGateway : IGateway<Label>, IInitializable
+    public class ItemGateway : IGateway<Item>, IInitializable
     {
         public bool IsInitialized { get; private set; }
         public int ActiveId
@@ -12,12 +12,12 @@ namespace Randomizer.InterfaceAdapters.Gateways
             get => _dataStore.ActiveId;
             set => _dataStore.ActiveId = value;
         }
-        public Label Active => _labels[ActiveId];
+        public Item Active => _items[ActiveId];
         
-        private readonly IDataStore<LabelData> _dataStore;
-        private readonly IDictionary<int, Label> _labels = new Dictionary<int, Label>();
+        private readonly IDataStore<ItemData> _dataStore;
+        private readonly IDictionary<int, Item> _items = new Dictionary<int, Item>();
 
-        public LabelGateway(IDataStore<LabelData> dataStore)
+        public ItemGateway(IDataStore<ItemData> dataStore)
         {
             _dataStore = dataStore;
         }
@@ -28,32 +28,32 @@ namespace Randomizer.InterfaceAdapters.Gateways
                 IsInitialized = true;
             foreach (var data in _dataStore.Data)
             {
-                var label = new Label(data.id, data.name);
-                _labels.Add(data.id, label);
+                var item = new Item(data.id, data.name);
+                _items.Add(data.id, item);
             }
         }
         
-        public Label[] GetAll() => _labels.Values.ToArray();
-        public Label GetById(int id) => _labels[id];
+        public Item[] GetAll() => _items.Values.ToArray();
+        public Item GetById(int id) => _items[id];
 
         public void Save(int id)
         {
-            var label = _labels[id];
+            var item = _items[id];
             var data = _dataStore[id];
-                data.name = label.Name;
+            data.name = item.Name;
         }
         
-        public void AddNew(Label newInstance)
+        public void AddNew(Item newInstance)
         {
             var id = newInstance.Id;
-            _labels.Add(id, newInstance);
+            _items.Add(id, newInstance);
             _dataStore.Create(id);
             Save(id);
         }
         
         public void Remove(int id)
         {
-            _labels.Remove(id);
+            _items.Remove(id);
             _dataStore.Delete(id);
         }
     }

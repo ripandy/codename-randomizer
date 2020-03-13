@@ -7,9 +7,10 @@ namespace Randomizer.UseCases
         private EditItemInteractor(
             IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
+            IGateway<Item> itemGateway,
             IRequestInteractor requestInteractor,
-            IResponseInteractor responseInteractor) 
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            IResponseInteractor responseInteractor)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 
@@ -17,12 +18,12 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.EditItem) return;
             
-            var id = RandomizableGateway.ActiveId;
-            var randomizable = RandomizableGateway.GetById(id);
-            randomizable.Items[requestMessage.ItemId].Name = requestMessage.NewItemName;
-            RandomizableGateway.Save(id);
+            var id = requestMessage.ItemId;
+            var item = ItemGateway.GetById(id);
+                item.Name = requestMessage.NewItemName;
+            ItemGateway.Save(id);
             
-            RespondRandomizable(randomizable);
+            RespondRandomizable(RandomizableGateway.Active);
         }
     }
 }

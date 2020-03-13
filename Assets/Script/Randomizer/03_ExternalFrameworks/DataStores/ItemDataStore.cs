@@ -7,10 +7,10 @@ using UnityEngine;
 namespace Randomizer.ExternalFrameworks.DataStores
 {
     [Serializable]
-    public class LabelDataStore : IDataStore<LabelData>
+    public class ItemDataStore : IDataStore<ItemData>
     {
         [SerializeField] private int activeId;
-        [SerializeField] private List<LabelData> labelData;
+        [SerializeField] private List<ItemData> itemData;
 
         public int ActiveId
         {
@@ -18,17 +18,17 @@ namespace Randomizer.ExternalFrameworks.DataStores
             set => activeId = value;
         }
 
-        public LabelData this[int id] => labelData.First(data => data.id == id);
-        public LabelData[] Data => labelData.ToArray();
+        public ItemData this[int id] => itemData.First(data => data.id == id);
+        public ItemData[] Data => itemData.ToArray();
 
         public void Create(int id)
         {
-            labelData.Add(new LabelData {id = id});
+            itemData.Add(new ItemData {id = id});
         }
 
         public void Delete(int id)
         {
-            labelData.Remove(this[id]);
+            itemData.Remove(this[id]);
         }
     }
 }

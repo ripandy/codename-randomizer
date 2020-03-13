@@ -8,19 +8,23 @@ namespace Randomizer.UseCases
     {
         protected readonly IRequestInteractor RequestInteractor;
         protected readonly IResponseInteractor ResponseInteractor;
-        protected readonly IGateway<Label> LabelGateway;
         protected readonly IGateway<Randomizable> RandomizableGateway;
+        protected readonly IGateway<Label> LabelGateway;
+        protected readonly IGateway<Item> ItemGateway;
+
 
         protected BaseInteractor(
             IRequestInteractor requestInteractor,
             IResponseInteractor responseInteractor,
+            IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
-            IGateway<Randomizable> randomizableGateway)
+            IGateway<Item> itemGateway)
         {
             RequestInteractor = requestInteractor;
             ResponseInteractor = responseInteractor;
-            LabelGateway = labelGateway;
             RandomizableGateway = randomizableGateway;
+            LabelGateway = labelGateway;
+            ItemGateway = itemGateway;
             RequestInteractor.OnRequest += OnRequest;
         }
 
@@ -31,38 +35,30 @@ namespace Randomizer.UseCases
 
         private void OnRequest(IRequestMessage requestMessage)
         {
-            if (requestMessage == null) return;
-            
-            switch (requestMessage.RequestType)
+            switch (requestMessage)
             {
-                case RequestType.AddItem:
-                case RequestType.AddLabel:
-                case RequestType.EditTitle:
-                    OnRequest(requestMessage as RequestMessage<string>);
+                case null:
+                    return;
+                case EditItemRequestMessage editItemRequestMessage:
+                    OnRequest(editItemRequestMessage);
                     break;
-                case RequestType.AddRandomizable:
-                case RequestType.Randomize:
-                case RequestType.PickLabelNavigate:
-                case RequestType.MenuNavigate:
-                case RequestType.ManageLabelNavigate:
-                    OnRequest(requestMessage as RequestMessage);
+                case EditLabelRequestMessage editLabelRequestMessage:
+                    OnRequest(editLabelRequestMessage);
                     break;
-                case RequestType.EditItem:
-                    OnRequest(requestMessage as EditItemRequestMessage);
+                case LoadRandomizableRequestMessage loadRandomizableRequestMessage:
+                    OnRequest(loadRandomizableRequestMessage);
                     break;
-                case RequestType.EditLabel:
-                    OnRequest(requestMessage as EditLabelRequestMessage);
+                case LoadLabelRequestMessage loadLabelRequestMessage:
+                    OnRequest(loadLabelRequestMessage);
                     break;
-                case RequestType.LoadRandomizable:
-                    OnRequest(requestMessage as LoadRandomizableRequestMessage);
+                case RequestMessage<string> stringRequestMessage:
+                    OnRequest(stringRequestMessage);
                     break;
-                case RequestType.LoadLabel:
-                    OnRequest(requestMessage as LoadLabelRequestMessage);
+                case RequestMessage<int> intRequestMessage:
+                    OnRequest(intRequestMessage);
                     break;
-                case RequestType.RemoveItem:
-                case RequestType.RemoveLabel:
-                case RequestType.PickLabel:
-                    OnRequest(requestMessage as RequestMessage<int>);
+                case RequestMessage plainRequestMessage:
+                    OnRequest(plainRequestMessage);
                     break;
             }
         }
@@ -77,7 +73,7 @@ namespace Randomizer.UseCases
 
         protected void RespondRandomizable(Randomizable randomizable)
         {
-            var items = randomizable.Items.Select(item => item.Name).ToArray();
+            var items = randomizable.ItemIds.Select(id => ItemGateway.GetById(id).Name).ToArray();
             var labels = randomizable.LabelIds.Select(id => LabelGateway.GetById(id).Name).ToArray();
             ResponseInteractor.Response(new RandomizableResponseMessage(randomizable.Name, items, labels));
         }
@@ -85,7 +81,7 @@ namespace Randomizer.UseCases
         protected void RespondPickLabel()
         {
             var labels = LabelGateway.GetAll().Select(label => label.Name).ToArray();
-            var randomizable = RandomizableGateway.GetActive();
+            var randomizable = RandomizableGateway.Active;
             var labelIds = randomizable.LabelIds;
             ResponseInteractor.Response(new PickLabelListResponseMessage(randomizable.Name, labels, labelIds));
         }

@@ -6,11 +6,12 @@ namespace Randomizer.UseCases
     public class MenuNavigateInteractor : BaseInteractor
     {
         public MenuNavigateInteractor(
-            IRequestInteractor requestInteractor,
-            IResponseInteractor responseInteractor,
+            IGateway<Randomizable> randomizableGateway,
             IGateway<Label> labelGateway,
-            IGateway<Randomizable> randomizableGateway)
-            : base(requestInteractor, responseInteractor, labelGateway, randomizableGateway)
+            IGateway<Item> itemGateway,
+            IRequestInteractor requestInteractor,
+            IResponseInteractor responseInteractor)
+            : base(requestInteractor, responseInteractor, randomizableGateway, labelGateway, itemGateway)
         {
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Randomizer.InterfaceAdapters;
 using UnityEngine;
 
@@ -8,28 +9,26 @@ namespace Randomizer.ExternalFrameworks.DataStores
     [Serializable]
     public class RandomizableDataStore : IDataStore<RandomizableData>
     {
-        [SerializeField] private int activeIndex;
+        [SerializeField] private int activeId;
         [SerializeField] private List<RandomizableData> randomizableData;
 
-        public int ActiveIndex
+        public int ActiveId
         {
-            get => activeIndex;
-            set => activeIndex = value;
+            get => activeId;
+            set => activeId = value;
         }
 
-        public RandomizableData this[int index] => randomizableData[index];
+        public RandomizableData this[int id] => randomizableData.First(data => data.id == id);
         public RandomizableData[] Data => randomizableData.ToArray();
-        public RandomizableData ActiveData => randomizableData[ActiveIndex];
 
-        public int Create()
+        public void Create(int id)
         {
-            randomizableData.Add(new RandomizableData());
-            return randomizableData.Count - 1;
+            randomizableData.Add(new RandomizableData {id = id});
         }
 
-        public void Delete(int index)
+        public void Delete(int id)
         {
-            randomizableData.RemoveAt(index);
+            randomizableData.Remove(this[id]);
         }
     }
 }
