@@ -19,7 +19,8 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.MenuNavigate) return;
             var labels = LabelGateway.GetAll().Select(label => label.Name).ToArray();
-            ResponseInteractor.Response(new ItemListResponseMessage(ResponseType.DisplayMenu, "", labels));
+            var index = LabelGateway.ActiveId >= 0 ? LabelGateway.GetAll().ToList().IndexOf(LabelGateway.Active) : -1;
+            ResponseInteractor.Response(new LoadMenuResponseMessage(labels, index));
         }
     }
 }

@@ -43,6 +43,8 @@ namespace Randomzer.Installer
         [SerializeField] private TextView randomizeButtonView;
         [SerializeField] private BaseView upNavigationView;
         [SerializeField] private BaseView menuNavigationView;
+        [SerializeField] private BaseView menuDeselectView;
+        [SerializeField] private BaseView menuHighlightView;
 
         public override void InstallBindings()
         {
@@ -189,6 +191,8 @@ namespace Randomzer.Installer
             Container.Bind<IView>().FromInstance(upNavigationView).WhenInjectedInto<UpNavigationPresenter>();
             Container.Bind<IView>().FromInstance(menuNavigationView).WhenInjectedInto<MenuNavigationPresenter>();
             Container.Bind<IView>().FromInstance(menuContainerView).WhenInjectedInto<MenuPresenter>();
+            Container.Bind<IView>().FromInstance(menuDeselectView).WhenInjectedInto<MenuPresenter>();
+            Container.Bind<IView>().FromInstance(menuHighlightView).WhenInjectedInto<MenuPresenter>();
         }
 
         private class ItemViewPool : MonoPoolableMemoryPool<IMemoryPool, ItemView>

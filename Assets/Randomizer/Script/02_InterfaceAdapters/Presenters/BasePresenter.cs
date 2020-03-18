@@ -43,6 +43,9 @@ namespace Randomizer.InterfaceAdapters.Presenters
                 case RandomizableResponseMessage randomizableResponseMessage:
                     OnResponse(randomizableResponseMessage);
                     break;
+                case LoadMenuResponseMessage loadMenuResponseMessage:
+                    OnResponse(loadMenuResponseMessage);
+                    break;
                 case ItemListResponseMessage itemListResponseMessage:
                     OnResponse(itemListResponseMessage);
                     break;
@@ -62,6 +65,7 @@ namespace Randomizer.InterfaceAdapters.Presenters
         protected virtual void PreResponse() { }
         protected virtual void OnResponse(RandomizableResponseMessage responseMessage) { }
         protected virtual void OnResponse(PickLabelListResponseMessage responseMessage) { }
+        protected virtual void OnResponse(LoadMenuResponseMessage responseMessage) { }
         protected virtual void OnResponse(ItemListResponseMessage responseMessage) { }
         protected virtual void PostResponse() { }
     }

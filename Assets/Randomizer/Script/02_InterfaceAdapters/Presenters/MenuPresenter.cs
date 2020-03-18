@@ -8,32 +8,38 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private readonly IFactoryHandler<IItemView> _itemFactory;
         private readonly IList<IItemView> _itemViews = new List<IItemView>();
         private readonly IView _container;
+        private readonly IView _deselectView;
+        private readonly IView _highlightView;
         private readonly IOrderedView _bottom;
 
         private MenuPresenter(
             IResponseInteractor responseInteractor,
             IFactoryHandler<IItemView> itemFactory,
-            IView container,
+            IList<IView> views,
             IOrderedView bottom)
             : base(responseInteractor)
         {
             _itemFactory = itemFactory;
-            _container = container;
+            _container = views[0];
+            _deselectView = views[1];
+            _highlightView = views[2];
             _bottom = bottom;
         }
-
-        protected override void OnResponse(ItemListResponseMessage responseMessage)
+        
+        protected override void OnResponse(LoadMenuResponseMessage responseMessage)
         {
-            _container.Visible = responseMessage.ResponseType == ResponseType.DisplayMenu;
-            
-            if (responseMessage.ResponseType != ResponseType.DisplayMenu) return;
-            
             ClearItems();
             UpdateContents(ItemType.MenuLabelList, responseMessage.Items);
             _container.Visible = true;
             _bottom.Order = responseMessage.ItemCount;
+            _highlightView.Position = responseMessage.ActiveIndex >= 0 ? _itemViews[responseMessage.ActiveIndex].Position : _deselectView.Position;
         }
         
+        protected override void PostResponse()
+        {
+            _container.Visible = DisplayState == DisplayState.DisplayMenu;
+        }
+
         private void UpdateContents(ItemType itemType, IReadOnlyList<string> values)
         {
             var count = values.Count;

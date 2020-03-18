@@ -1,10 +1,9 @@
 using DG.Tweening;
-using Randomizer.InterfaceAdapters;
 using UnityEngine;
 
 namespace Randomizer.ExternalFrameworks.Views
 {
-    public class SlideView : MonoBehaviour, IView
+    public class SlideView : BaseView
     {
         private enum SlideViewPosition
         {
@@ -29,7 +28,7 @@ namespace Randomizer.ExternalFrameworks.Views
                 : size.y;
         }
 
-        public bool Visible
+        public override bool Visible
         {
             get => _visible;
             set => AnimateSlide(value);
