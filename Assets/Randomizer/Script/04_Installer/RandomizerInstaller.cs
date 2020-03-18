@@ -108,6 +108,7 @@ namespace Randomzer.Installer
             // gateways
             Container.BindInterfacesTo<RandomizableGateway>().AsSingle();
             Container.BindInterfacesTo<LabelGateway>().AsSingle();
+            Container.BindInterfacesTo<ItemGateway>().AsSingle();
             Container.BindInterfacesTo<SessionGateway>().AsSingle();
         }
 

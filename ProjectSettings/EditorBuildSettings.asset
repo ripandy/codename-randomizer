@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SplashScene.unity
+    path: Assets/Randomizer/Scenes/SplashScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/RandomizerScene.unity
+    path: Assets/Randomizer/Scenes/RandomizerScene.unity
     guid: 34095ea3d0a7a4a7eae9c17721636785
   m_configObjects: {}

@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcb882e4835cb45519230bceb1d5146a, type: 3}
-  m_Name: LabelDataInstaller
+  m_Script: {fileID: 11500000, guid: c6d42e40d3d04f2ea259b1ae02798308, type: 3}
+  m_Name: ItemDataInstaller
   m_EditorClassIdentifier: 
   dataStore:
-    activeIndex: -1
-    labelData:
-    - name: Simple
-    - name: Color-Number
+    activeId: 0
+    itemData:
+    - id: 0
+      name: Left
+    - id: 1
+      name: Right

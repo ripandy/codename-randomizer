@@ -21,23 +21,12 @@ namespace Randomizer.InterfaceAdapters.Controllers
             for (var i = 0; i < _requestTypes.Count; i++)
             {
                 var type = _requestTypes[i];
-                switch (type)
-                {
-                    case RequestType.AddRandomizable:
-                    case RequestType.Randomize:
-                    case RequestType.MenuNavigate:
-                    case RequestType.ManageLabelNavigate:
-                        BindAction(type, ActionHandlers[i]);
-                        break;
-                    case RequestType.AddItem:
-                    case RequestType.AddLabel:
-                    case RequestType.EditTitle:
-                        BindAction(type, ActionHandlers[i] as IActionHandler<string>);
-                        break;
-                    case RequestType.DeselectLabel:
-                        BindDeselectLabelAction(ActionHandlers[i]);
-                        break;
-                }
+                if (type == RequestType.DeselectLabel)
+                    BindDeselectLabelAction(ActionHandlers[i]);
+                else if (ActionHandlers[i] is IActionHandler<string> stringAction)
+                    BindAction(type, stringAction);
+                else
+                    BindAction(type, ActionHandlers[i]);
             }
         }
 
