@@ -17,9 +17,9 @@ namespace Randomizer.UseCases
 
         protected override void OnRequest(RequestMessage<int> requestMessage)
         {
-            var id = requestMessage.Value;
-            if (requestMessage.RequestType != RequestType.RemoveLabel || id < 0) return;
+            if (requestMessage.RequestType != RequestType.RemoveLabel || requestMessage.Value < 0) return;
             
+            var id = LabelGateway[requestMessage.Value].Id;
             var randomizables = RandomizableGateway.GetAll()
                 .Select(randomizable => randomizable)
                 .Where(randomizable => randomizable.HasLabel(id));

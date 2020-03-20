@@ -18,7 +18,7 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.PickLabel) return;
 
-            var labelId = requestMessage.Value;
+            var labelId = LabelGateway[requestMessage.Value].Id;
             
             var randomizable = RandomizableGateway.Active;
             if (randomizable.HasLabel(labelId))

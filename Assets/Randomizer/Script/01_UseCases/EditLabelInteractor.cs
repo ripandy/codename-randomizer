@@ -18,10 +18,9 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.EditLabel) return;
             
-            var id = requestMessage.LabelId;
-            var label = LabelGateway.GetById(id);
+            var label = LabelGateway[requestMessage.LabelIndex];
                 label.Name = requestMessage.NewLabelName;
-            LabelGateway.Save(id);
+            LabelGateway.Save(label.Id);
             
             RespondManageLabel();
         }

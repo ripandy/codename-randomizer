@@ -3,7 +3,7 @@ namespace Randomizer.UseCases
     public class LoadRandomizableRequestMessage : RequestMessage<int>
     {
         public static readonly LoadRandomizableRequestMessage RequestActive = new LoadRandomizableRequestMessage();
-        public int RandomizableId => Value;
+        public int RandomizableIndex => Value;
         public bool LoadActive { get; }
 
         private LoadRandomizableRequestMessage()

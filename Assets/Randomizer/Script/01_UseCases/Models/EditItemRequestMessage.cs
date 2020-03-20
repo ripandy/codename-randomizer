@@ -3,13 +3,13 @@ namespace Randomizer.UseCases
     public class EditItemRequestMessage : IRequestMessage
     {
         public RequestType RequestType { get; }
-        public int ItemId { get; }
+        public int ItemIndex { get; }
         public string NewItemName { get; }
 
-        public EditItemRequestMessage(int itemId, string newItemName)
+        public EditItemRequestMessage(int itemIndex, string newItemName)
         {
             RequestType = RequestType.EditItem;
-            ItemId = itemId;
+            ItemIndex = itemIndex;
             NewItemName = newItemName;
         }
     }

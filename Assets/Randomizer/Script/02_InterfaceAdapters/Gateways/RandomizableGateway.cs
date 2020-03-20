@@ -45,8 +45,10 @@ namespace Randomizer.InterfaceAdapters.Gateways
             }
         }
 
+        public Randomizable this[int index] => _randomizables.ElementAt(index).Value;
         public Randomizable[] GetAll() => _randomizables.Values.ToArray();
         public Randomizable GetById(int id) => _randomizables[id];
+        public int GetIndex(int id) => _randomizables.Keys.ToList().IndexOf(id);
 
         public void Save(int id)
         {

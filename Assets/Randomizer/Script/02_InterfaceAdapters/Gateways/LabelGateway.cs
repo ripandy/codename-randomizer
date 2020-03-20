@@ -32,9 +32,11 @@ namespace Randomizer.InterfaceAdapters.Gateways
                 _labels.Add(data.id, label);
             }
         }
-        
+
+        public Label this[int index] => _labels.ElementAt(index).Value;
         public Label[] GetAll() => _labels.Values.ToArray();
         public Label GetById(int id) => _labels[id];
+        public int GetIndex(int id) => _labels.Keys.ToList().IndexOf(id);
 
         public void Save(int id)
         {

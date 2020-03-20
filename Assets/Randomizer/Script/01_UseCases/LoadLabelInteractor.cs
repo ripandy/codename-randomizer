@@ -20,7 +20,7 @@ namespace Randomizer.UseCases
             if (requestMessage.RequestType != RequestType.LoadLabel) return;
             
             if (!requestMessage.LoadActive)
-                LabelGateway.ActiveId = requestMessage.LabelId;
+                LabelGateway.ActiveId = LabelGateway[requestMessage.LabelIndex].Id;
             if (RandomizableGateway.ActiveId >= 0)
             {
                 var randomizable = RandomizableGateway.Active;

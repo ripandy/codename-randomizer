@@ -18,7 +18,7 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.LoadRandomizable) return;
             if (!requestMessage.LoadActive)
-                RandomizableGateway.ActiveId = RandomizableGateway.GetAll()[requestMessage.RandomizableId].Id;
+                RandomizableGateway.ActiveId = RandomizableGateway[requestMessage.RandomizableIndex].Id;
             RespondRandomizable(RandomizableGateway.Active);
         }
     }

@@ -18,10 +18,9 @@ namespace Randomizer.UseCases
         {
             if (requestMessage.RequestType != RequestType.EditItem) return;
             
-            var id = requestMessage.ItemId;
-            var item = ItemGateway.GetById(id);
+            var item = ItemGateway[requestMessage.ItemIndex];
                 item.Name = requestMessage.NewItemName;
-            ItemGateway.Save(id);
+            ItemGateway.Save(item.Id);
             
             RespondRandomizable(RandomizableGateway.Active);
         }

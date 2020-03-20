@@ -21,10 +21,9 @@ namespace Randomizer.UseCases
             var newItem = new Item(requestMessage.Value);
             ItemGateway.AddNew(newItem);
 
-            var id = RandomizableGateway.ActiveId;
-            var randomizable = RandomizableGateway.GetById(id);
+            var randomizable = RandomizableGateway.Active;
                 randomizable.AddItem(newItem.Id);
-            RandomizableGateway.Save(id);
+            RandomizableGateway.Save(randomizable.Id);
             
             RespondRandomizable(randomizable);
         }

@@ -3,7 +3,7 @@ namespace Randomizer.UseCases
     public class LoadLabelRequestMessage : RequestMessage<int>
     {
         public static readonly LoadLabelRequestMessage RequestActive = new LoadLabelRequestMessage();
-        public int LabelId => Value;
+        public int LabelIndex => Value;
         public bool LoadActive { get; }
 
         private LoadLabelRequestMessage()
