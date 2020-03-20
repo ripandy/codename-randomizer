@@ -45,6 +45,7 @@ namespace Randomzer.Installer
         [SerializeField] private BaseView menuNavigationView;
         [SerializeField] private BaseView menuDeselectView;
         [SerializeField] private BaseView menuHighlightView;
+        [SerializeField] private BaseView removeRandomizableButtonView;
 
         public override void InstallBindings()
         {
@@ -67,6 +68,7 @@ namespace Randomzer.Installer
             Container.BindInterfacesTo<EditLabelInteractor>().AsSingle();
             Container.BindInterfacesTo<RemoveItemInteractor>().AsSingle();
             Container.BindInterfacesTo<RemoveLabelInteractor>().AsSingle();
+            Container.BindInterfacesTo<RemoveRandomizableInteractor>().AsSingle();
             Container.BindInterfacesTo<PickLabelNavigateInteractor>().AsSingle();
             Container.BindInterfacesTo<PickLabelInteractor>().AsSingle();
             Container.BindInterfacesTo<MenuNavigateInteractor>().AsSingle();
@@ -90,7 +92,8 @@ namespace Randomzer.Installer
                 RequestType.Randomize,
                 RequestType.MenuNavigate,
                 RequestType.DeselectLabel,
-                RequestType.ManageLabelNavigate
+                RequestType.ManageLabelNavigate,
+                RequestType.RemoveRandomizable
             };
             Container.BindInterfacesTo<InputController>().AsSingle().WithArguments(inputTypeCodes);
             Container.BindInterfacesTo<UpNavigationController>().AsSingle();
@@ -104,6 +107,7 @@ namespace Randomzer.Installer
             Container.BindInterfacesTo<ContentPresenter>().AsSingle();
             Container.BindInterfacesTo<MenuNavigationPresenter>().AsSingle();
             Container.BindInterfacesTo<MenuPresenter>().AsSingle();
+            Container.BindInterfacesTo<RemoveRandomizablePresenter>().AsSingle();
             Container.Bind(typeof(IInitializable), typeof(IDisposable), typeof(BasePresenter))
                 .To<UpNavigationPresenter>().AsSingle();
 
@@ -193,6 +197,7 @@ namespace Randomzer.Installer
             Container.Bind<IView>().FromInstance(menuContainerView).WhenInjectedInto<MenuPresenter>();
             Container.Bind<IView>().FromInstance(menuDeselectView).WhenInjectedInto<MenuPresenter>();
             Container.Bind<IView>().FromInstance(menuHighlightView).WhenInjectedInto<MenuPresenter>();
+            Container.Bind<IView>().FromInstance(removeRandomizableButtonView).WhenInjectedInto<RemoveRandomizablePresenter>();
         }
 
         private class ItemViewPool : MonoPoolableMemoryPool<IMemoryPool, ItemView>

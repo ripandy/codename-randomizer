@@ -52,8 +52,8 @@ namespace Randomizer.InterfaceAdapters.Presenters
         private void AddItem(ItemType itemType, string itemName, int order)
         {
             var newItem = _itemFactory.Create((int) itemType);
-            newItem.Text = itemName;
-            newItem.Order = order;
+                newItem.Text = itemName;
+                newItem.Order = order;
             _itemViews.Add(newItem);
         }
 

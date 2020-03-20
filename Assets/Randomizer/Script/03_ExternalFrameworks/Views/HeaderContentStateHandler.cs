@@ -32,7 +32,7 @@ namespace Randomizer.ExternalFrameworks.Views
             
             foreach (var content in contents)
             {
-                if (!content.gameObject.activeInHierarchy) continue;
+                if (!content.gameObject.activeInHierarchy || content == firstVisible) continue;
 
                 var anchorMin = content.anchorMin;
                 var anchorMax = content.anchorMax;

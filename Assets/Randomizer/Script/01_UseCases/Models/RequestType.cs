@@ -10,6 +10,7 @@ namespace Randomizer.UseCases
         LoadLabel,
         DeselectLabel,
         Randomize,
+        RemoveRandomizable,
         RemoveItem,
         PickLabelNavigate,
         PickLabel,
