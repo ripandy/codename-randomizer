@@ -11,6 +11,7 @@ namespace Randomzer.Installer
 
         public override void InstallBindings()
         {
+            dataStore.LoadFromJson();
             Container.BindInterfacesTo<LabelDataStore>().FromInstance(dataStore);
         }
     }

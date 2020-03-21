@@ -7,5 +7,7 @@ namespace Randomizer.InterfaceAdapters
         T[] Data { get; }
         void Create(int id);
         void Delete(int id);
+        void SaveToJson();
+        void LoadFromJson();
     }
 }
