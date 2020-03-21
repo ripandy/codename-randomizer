@@ -2018,8 +2018,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 2.4, y: -2.4}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0}
+  m_EffectDistance: {x: 0, y: -4}
   m_UseGraphicAlpha: 0
 --- !u!1 &563545850
 GameObject:
@@ -4252,6 +4252,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1071289789}
   - component: {fileID: 1071289790}
+  - component: {fileID: 1071289791}
   m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
@@ -4297,6 +4298,20 @@ MonoBehaviour:
   - {fileID: 2061364443}
   - {fileID: 887847773}
   - {fileID: 393668434}
+--- !u!114 &1071289791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071289788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34cc2b2e1484440c483d929f2cb9f44e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 726119901}
+  shadow: {fileID: 560333678}
 --- !u!1 &1086638974
 GameObject:
   m_ObjectHideFlags: 0

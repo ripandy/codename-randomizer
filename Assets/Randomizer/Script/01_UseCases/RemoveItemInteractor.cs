@@ -20,8 +20,8 @@ namespace Randomizer.UseCases
             var id = RandomizableGateway.ActiveId;
             if (requestMessage.RequestType != RequestType.RemoveItem || id < 0) return;
 
-            var itemId = ItemGateway[requestMessage.Value].Id;
             var randomizable = RandomizableGateway.GetById(id);
+            var itemId = randomizable.ItemIds[requestMessage.Value];
                 randomizable.RemoveItem(itemId);
             RandomizableGateway.Save(id);
             if (!RandomizableGateway.GetAll().Any(r => randomizable.HasItem(itemId)))

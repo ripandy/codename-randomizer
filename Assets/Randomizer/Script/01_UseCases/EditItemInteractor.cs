@@ -17,10 +17,11 @@ namespace Randomizer.UseCases
         protected override void OnRequest(EditItemRequestMessage requestMessage)
         {
             if (requestMessage.RequestType != RequestType.EditItem) return;
-            
-            var item = ItemGateway[requestMessage.ItemIndex];
+
+            var itemId = RandomizableGateway.Active.ItemIds[requestMessage.ItemIndex];
+            var item = ItemGateway.GetById(itemId);
                 item.Name = requestMessage.NewItemName;
-            ItemGateway.Save(item.Id);
+            ItemGateway.Save(itemId);
             
             RespondRandomizable(RandomizableGateway.Active);
         }
