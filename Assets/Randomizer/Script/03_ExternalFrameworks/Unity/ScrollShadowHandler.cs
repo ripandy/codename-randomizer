@@ -16,7 +16,6 @@ public class ScrollShadowHandler : MonoBehaviour
 
     private void UpdateShadow(Vector2 distance)
     {
-        Debug.Log($"scrolling.. {distance.x}, {distance.y}");
         var c = _defaultColor;
             c.a = Mathf.Clamp01((1 - distance.y) * 10);
         shadow.effectColor = c;

@@ -13,11 +13,7 @@ namespace Randomizer.ExternalFrameworks.DataStores
         [SerializeField] private int activeId;
         [SerializeField] private List<LabelData> labelData;
 
-#if UNITY_ANDROID
-        private readonly string _jsonFilename = Application.persistentDataPath + "/LabelData.json";        
-#else
-        private readonly string _jsonFilename = Application.dataPath + "/LabelData.json";
-#endif
+        private const string JsonFilename = "LabelData.json";
         
         public int ActiveId
         {
@@ -40,13 +36,15 @@ namespace Randomizer.ExternalFrameworks.DataStores
         
         public void SaveToJson()
         {
-            ExternalJsonHandler.SaveToJson(this, _jsonFilename);
+            ExternalJsonHandler.SaveToJson(this, JsonFilename);
         }
 
         public void LoadFromJson()
         {
-            if (ExternalJsonHandler.IsJsonExist(_jsonFilename))
-                ExternalJsonHandler.LoadFromJson(this, _jsonFilename);
+            if (ExternalJsonHandler.IsJsonExist(JsonFilename))
+                ExternalJsonHandler.LoadFromJson(this, JsonFilename);
+            else
+                SaveToJson();
         }
     }
 }
