@@ -19,6 +19,7 @@ namespace Randomizer.UseCases
             if (requestMessage.RequestType != RequestType.AddLabel || string.IsNullOrEmpty(requestMessage.Value)) return;
 
             var newLabel = new Label(requestMessage.Value);
+            
             LabelGateway.AddNew(newLabel);
             LabelGateway.ActiveId = newLabel.Id;
             

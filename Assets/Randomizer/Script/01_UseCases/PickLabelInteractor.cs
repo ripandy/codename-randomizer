@@ -26,6 +26,8 @@ namespace Randomizer.UseCases
             else
                 randomizable.AddLabel(labelId);
             
+            RandomizableGateway.Save(randomizable.Id);
+            
             RespondPickLabel();
         }
     }
