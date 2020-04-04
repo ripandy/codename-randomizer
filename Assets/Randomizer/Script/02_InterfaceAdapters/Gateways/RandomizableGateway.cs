@@ -74,6 +74,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
         {
             _randomizables.Remove(id);
             _dataStore.Delete(id);
+            _dataStore.SaveToJson();
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Randomizer.UseCases
 
             var randomizable = RandomizableGateway.Active;
                 randomizable.AddItem(newItem.Id);
+                
             RandomizableGateway.Save(randomizable.Id);
             
             RespondRandomizable(randomizable);

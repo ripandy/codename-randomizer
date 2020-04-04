@@ -59,6 +59,7 @@ namespace Randomizer.InterfaceAdapters.Gateways
         {
             _items.Remove(id);
             _dataStore.Delete(id);
+            _dataStore.SaveToJson();
         }
     }
 }
