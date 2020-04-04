@@ -42,7 +42,9 @@ namespace Randomizer.InterfaceAdapters.Gateways
         {
             var item = _items[id];
             var data = _dataStore[id];
-            data.name = item.Name;
+                data.name = item.Name;
+            
+            _dataStore.SaveToJson();
         }
         
         public void AddNew(Item newInstance)

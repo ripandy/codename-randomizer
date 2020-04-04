@@ -58,6 +58,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
             data.name = randomizable.Name;
             data.itemIds = randomizable.ItemIds;
             data.labelIds = randomizable.LabelIds;
+            
+            _dataStore.SaveToJson();
         }
 
         public void AddNew(Randomizable newInstance)

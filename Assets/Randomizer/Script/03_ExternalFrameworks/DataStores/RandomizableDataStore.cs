@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Randomizer.ExternalFrameworks.DataStores
 {
     [Serializable]
-    public class RandomizableDataStore : IDataStore<RandomizableData>
+    public class RandomizableDataStore : IDataStore<RandomizableData>, IDisposable
     {
         [SerializeField] private int activeId;
         [SerializeField] private List<RandomizableData> randomizableData;
@@ -45,6 +45,11 @@ namespace Randomizer.ExternalFrameworks.DataStores
                 ExternalJsonHandler.LoadFromJson(this, JsonFilename);
             else
                 SaveToJson();
+        }
+        
+        public void Dispose()
+        {
+            SaveToJson();
         }
     }
 }

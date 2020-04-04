@@ -43,6 +43,8 @@ namespace Randomizer.InterfaceAdapters.Gateways
             var label = _labels[id];
             var data = _dataStore[id];
                 data.name = label.Name;
+                
+            _dataStore.SaveToJson();
         }
         
         public void AddNew(Label newInstance)
