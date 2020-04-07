@@ -28,7 +28,6 @@ namespace Randomizer.InterfaceAdapters.Presenters
         
         protected override void OnResponse(LoadMenuResponseMessage responseMessage)
         {
-            ClearItems();
             UpdateContents(ItemType.MenuLabelList, responseMessage.Items);
             _container.Visible = true;
             _bottom.Order = responseMessage.ItemCount;
@@ -45,25 +44,30 @@ namespace Randomizer.InterfaceAdapters.Presenters
             var count = values.Count;
             for (var i = 0; i < count; i++)
             {
-                AddItem(itemType, values[i], i);
+                if (i >= _itemViews.Count)
+                    AddNextBatch(itemType);
+                var item = _itemViews[i];
+                    item.Text = values[i];
+                    item.Order = i;
+                    item.Visible = true;
+            }
+
+            for (var i = count; i < _itemViews.Count; i++)
+            {
+                _itemViews[i].Visible = false;
             }
         }
         
-        private void AddItem(ItemType itemType, string itemName, int order)
+        private void AddNextBatch(ItemType itemType)
         {
-            var newItem = _itemFactory.Create((int) itemType);
-                newItem.Text = itemName;
-                newItem.Order = order;
-            _itemViews.Add(newItem);
-        }
-
-        private void ClearItems()
-        {
-            foreach (var itemView in _itemViews)
+            var index = _itemViews.Count;
+            for (var i = 0; i < 4; i++)
             {
-                itemView.Dispose();
+                var newItem = _itemFactory.Create((int) itemType);
+                    newItem.Order = index + i;
+                    newItem.Visible = false;
+                _itemViews.Add(newItem);
             }
-            _itemViews.Clear();
         }
     }
 }
